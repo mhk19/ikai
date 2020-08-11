@@ -1,22 +1,45 @@
-import {View, Text, Button} from 'react-native';
-import ScanbotSDK from 'react-native-scanbot-sdk';
-import React from 'react';
-import {Colors} from './android/app/model/Colors';
-import initScanBotSdk from './src/camscanner/init';
-import {ScannerMainPage} from './src/camscanner/components/mainpage';
+import React, { createContext, useState } from "react";
+import Connection from "./src/filetransfer/components/connection";
 
-export class App extends React.Component {
-  constructor(props) {
-    super(props);
-    initScanBotSdk().then((r) => console.log(r));
-  }
-  render() {
-    return (
-      <View>
-        <ScannerMainPage />
-      </View>
-    );
-  }
-}
+const ConnectionContext = createContext({
+  connection: null,
+  updateConnection: () => {},
+});
+const ChannelContext = createContext({
+  channel: null,
+  updateChannel: () => {},
+});
+const ConnectionConsumer = ConnectionContext.Consumer;
+const ChannelConsumer = ChannelContext.Consumer;
+const App = () => {
+  const [connection, setconnection] = useState(null);
+  const [channel, setChannel] = useState(null);
+  const updateConnection = (conn) => {
+    setconnection(conn);
+  };
+  const updateChannel = (chn) => {
+    setChannel(chn);
+  };
 
+  return (
+    <ConnectionContext.Provider value={{ connection, updateConnection }}>
+      <ChannelContext.Provider value={{ channel, updateChannel }}>
+        <ConnectionConsumer>
+          {({ connection, updateConnection }) => (
+            <ChannelConsumer>
+              {({ channel, updateChannel }) => (
+                <Connection
+                  connection={connection}
+                  updateConnection={updateConnection}
+                  channel={channel}
+                  updateChannel={updateChannel}
+                />
+              )}
+            </ChannelConsumer>
+          )}
+        </ConnectionConsumer>
+      </ChannelContext.Provider>
+    </ConnectionContext.Provider>
+  );
+};
 export default App;

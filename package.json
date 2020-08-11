@@ -12,8 +12,10 @@
   "dependencies": {
     "react": "16.13.1",
     "react-native": "^0.62.2",
+    "react-native-document-picker": "^3.5.4",
     "react-native-fs": "^2.16.6",
-    "react-native-scanbot-sdk": "^4.2.0"
+    "react-native-scanbot-sdk": "^4.2.0",
+    "react-native-webrtc": "^1.84.0"
   },
   "devDependencies": {
     "@babel/core": "^7.11.1",
