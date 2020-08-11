@@ -8,6 +8,8 @@ target 'learnNative' do
 
   use_react_native!(:path => config["reactNativePath"])
 
+  pod 'TcpSockets', :path => '../node_modules/react-native-tcp'
+
   target 'learnNativeTests' do
     inherit! :complete
     # Pods for testing

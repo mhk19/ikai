@@ -1,5 +1,13 @@
 rootProject.name = 'learnNative'
+include ':react-native-android-wifi'
+project(':react-native-android-wifi').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-android-wifi/android')
+include ':react-native-tcp'
+project(':react-native-tcp').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-tcp/android')
+include ':react-native-wifi-hotspot'
+project(':react-native-wifi-hotspot').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-wifi-hotspot/android')
 apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
 include ':app'
 include ':react-native-scanbot-sdk'
 project(':react-native-scanbot-sdk').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-scanbot-sdk/android/app')
+include ':hotspotmanager'
+project(':hotspotmanager').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-wifi-hotspot/android/hotspotmanager')
