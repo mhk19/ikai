@@ -9,6 +9,8 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
 import {Scanner} from './src/camscanner/components/mainpage';
 import {ChatMainPage} from './src/chat/components/mainpage';
+import {ShareMainPage} from './src/share/mainpage';
+import {MenuMainPage} from './src/menu/components/mainpage';
 import {navigationRef} from './RootNavigation';
 import * as RootNavigation from './RootNavigation.js';
 
@@ -29,8 +31,8 @@ export class App extends React.Component {
           initialRouteName={InitialPage}
           tabBar={(prop) => <IkaiFooter {...prop} />}
           swipeEnabled={true}>
-          <Tab.Screen name="menu" component={Scanner}></Tab.Screen>
-          <Tab.Screen name="share" component={Scanner}></Tab.Screen>
+          <Tab.Screen name="menu" component={MenuMainPage}></Tab.Screen>
+          <Tab.Screen name="share" component={ShareMainPage}></Tab.Screen>
           <Tab.Screen name="scan" component={Scanner}></Tab.Screen>
           <Tab.Screen name="chat" component={ChatMainPage}></Tab.Screen>
         </Tab.Navigator>

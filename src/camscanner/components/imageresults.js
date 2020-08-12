@@ -31,7 +31,7 @@ export class ImageResultScreen extends BaseScreen {
         <SafeAreaView style={Styles.INSTANCE.imageResults.container}>
           <ActivityIndicator
             size="large"
-            color={CamScannerColour}
+            color="#13C2C2"
             style={Styles.INSTANCE.common.progress}
             animating={this.progressVisible}
           />

@@ -95,8 +95,8 @@ export class ImageDetailScreen extends BaseScreen {
     }
     const result = await ScanbotSDK.UI.startCroppingScreen(Pages.selectedPage, {
       doneButtonTitle: 'Apply',
-      topBarBackgroundColor: CamScannerColour,
-      bottomBarBackgroundColor: CamScannerColour,
+      topBarBackgroundColor: '#13C2C2',
+      bottomBarBackgroundColor: '#13C2C2',
       // See further config properties ...
     });
 

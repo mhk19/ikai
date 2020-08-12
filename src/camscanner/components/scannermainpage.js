@@ -62,13 +62,6 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 5,
   },
-  orLabel: {
-    backgroundColor: 'white',
-    minHeight: '10%',
-    width: '100%',
-    alignItems: 'center',
-    borderRadius: 5,
-  },
   image: {
     resizeMode: 'contain',
     flex: 2,

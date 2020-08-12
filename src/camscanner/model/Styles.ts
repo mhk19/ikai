@@ -54,8 +54,9 @@ export class Styles {
       flexDirection: 'row',
     },
     bottomBarButton: {
-      flex: 0,
+      flex: 1,
       height: 50,
+      width: 150,
       lineHeight: 50,
       textAlignVertical: 'center',
       textAlign: 'center',
@@ -131,32 +132,6 @@ export class Styles {
       padding: 4,
       paddingRight: 12,
       textAlign: 'right',
-    },
-  });
-
-  public barcodeFormats = StyleSheet.create({
-    list: {
-      paddingTop: '2%',
-      height: '98%',
-    },
-    listItemContainer: {
-      paddingLeft: 20,
-      flexDirection: 'row',
-      height: 40,
-      borderBottomWidth: 1,
-      borderBottomColor: 'gray',
-      marginLeft: 10,
-      marginRight: 10,
-    },
-    listItemText: {
-      fontSize: 12,
-      height: 40,
-      textAlignVertical: 'center',
-      lineHeight: 40,
-      width: '80%',
-    },
-    listItemSwitch: {
-      marginTop: 5,
     },
   });
 
