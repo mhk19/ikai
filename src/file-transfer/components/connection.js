@@ -1,5 +1,3 @@
-/* eslint-disable prettier/prettier */
-// eslint-disable-next-line quotes
 import React, {useState, useEffect, useRef} from 'react';
 import DocumentPicker from 'react-native-document-picker';
 import {View, StyleSheet, Button} from 'react-native';

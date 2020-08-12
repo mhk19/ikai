@@ -8,6 +8,10 @@ target 'learnNative' do
 
   use_react_native!(:path => config["reactNativePath"])
 
+  pod 'react-native-webrtc', :path => '../node_modules/react-native-webrtc'
+
+  pod 'react-native-document-picker', :path => '../node_modules/react-native-document-picker'
+
   target 'learnNativeTests' do
     inherit! :complete
     # Pods for testing
