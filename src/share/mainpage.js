@@ -2,6 +2,7 @@ import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import ShareMainPage from './sharemainpage';
 import ShareMainHeader from './headers';
+import {Connection} from '../file-transfer/components/connection';
 
 const ShareStack = createStackNavigator();
 
@@ -15,7 +16,7 @@ export class Share extends React.Component {
       <ShareStack.Navigator initialRouteName="shareMainscreen">
         <ShareStack.Screen
           name="shareMainscreen"
-          component={ShareMainPage}
+          component={Connection}
           options={{
             header: () => {
               return <ShareMainHeader />;

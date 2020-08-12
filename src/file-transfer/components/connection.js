@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
-import DocumentPicker from 'react-native-document-picker';
+// import DocumentPicker from 'react-native-document-picker';
 import {View, StyleSheet, Button} from 'react-native';
 import {
   RTCPeerConnection,
@@ -223,19 +223,19 @@ const Connection = ({connection, updateConnection, channel, updateChannel}) => {
   };
 
   const selectFile = () => {
-    try {
-      const res = DocumentPicker.pick({
-        type: [DocumentPicker.types.allFiles],
-      });
-      setFile(res);
-    } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
-        alert('Cancelled from single doc picker');
-      } else {
-        alert(err);
-        throw err;
-      }
-    }
+    // try {
+    //   const res = DocumentPicker.pick({
+    //     type: [DocumentPicker.types.allFiles],
+    //   });
+    //   setFile(res);
+    // } catch (err) {
+    //   if (DocumentPicker.isCancel(err)) {
+    //     alert('Cancelled from single doc picker');
+    //   } else {
+    //     alert(err);
+    //     throw err;
+    //   }
+    // }
   };
 
   const downloadFile = (bytes, name) => {

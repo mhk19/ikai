@@ -1,42 +1,70 @@
 import {View, Text, Button} from 'react-native';
-import {Container, Header, Content} from 'native-base';
 import ScanbotSDK from 'react-native-scanbot-sdk';
-import React from 'react';
+import React, {createContext} from 'react';
+import {Colors} from './android/app/model/Colors';
 import initScanBotSdk from './src/camscanner/init';
-// import {ScannerMainPage} from './src/camscanner/components/mainpage';
-import {IkaiFooter} from './src/ikai/components/footer';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {NavigationContainer} from '@react-navigation/native';
-import {Scanner} from './src/camscanner/components/mainpage';
-import {ChatMainPage} from './src/chat/components/mainpage';
-import {Share} from './src/share/mainpage';
-import {MenuMainPage} from './src/menu/components/mainpage';
-import {navigationRef} from './RootNavigation';
-import * as RootNavigation from './RootNavigation.js';
+import {ScannerMainPage} from './src/camscanner/components/mainpage';
+import Connection from './src/file-transfer/components/connection';
 
-const Tab = createBottomTabNavigator();
-const InitialPage = 'scan';
+const ConnectionContext = createContext({
+  connection: null,
+  updateConnection: () => {},
+});
+const ChannelContext = createContext({
+  channel: null,
+  updateChannel: () => {},
+});
+
+const ConnectionConsumer = ConnectionContext.Consumer;
+const ChannelConsumer = ChannelContext.Consumer;
+
 export class App extends React.Component {
   constructor(props) {
     super(props);
     initScanBotSdk().then((r) => console.log(r));
     this.state = {
-      page: InitialPage,
+      connection: null,
+      channel: null,
     };
+    this.updateChannel = this.updateChannel.bind(this);
+    this.updateConnection = this.updateConnection.bind(this);
   }
+
+  updateConnection(conn) {
+    this.setState({connection: conn});
+  }
+
+  updateChannel(chn) {
+    this.setState({channel: chn});
+  }
+
   render() {
     return (
-      <NavigationContainer ref={navigationRef}>
-        <Tab.Navigator
-          initialRouteName={InitialPage}
-          tabBar={(prop) => <IkaiFooter {...prop} />}>
-          <Tab.Screen name="menu" component={MenuMainPage}></Tab.Screen>
-          <Tab.Screen name="share" component={Share}></Tab.Screen>
-          <Tab.Screen name="scan" component={Scanner}></Tab.Screen>
-          <Tab.Screen name="chat" component={ChatMainPage}></Tab.Screen>
-        </Tab.Navigator>
-      </NavigationContainer>
+      <View>
+        <ScannerMainPage />
+        {/* <ConnectionContext.Provider
+          value={(this.state.connection, this.updateConnection)}>
+          <ChannelContext.Provider
+            value={(this.state.channel, this.updateChannel)}>
+            <ConnectionConsumer>
+              {({connection, updateConnection}) => (
+                <ChannelConsumer>
+                  {({channel, updateChannel}) => (
+                    <Connection
+                      connection={connection}
+                      updateConnection={updateConnection}
+                      channel={channel}
+                      updateChannel={updateChannel}
+                    />
+                  )}
+                </ChannelConsumer>
+              )}
+            </ConnectionConsumer>
+          </ChannelContext.Provider>
+        </ConnectionContext.Provider> */}
+      </View>
     );
   }
 }
+
 export default App;
