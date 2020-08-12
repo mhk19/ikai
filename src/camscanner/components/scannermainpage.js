@@ -65,9 +65,9 @@ const styles = StyleSheet.create({
   image: {
     resizeMode: 'contain',
     flex: 2,
-    width: '70%',
-    marginLeft: '15%',
-    marginTop: '0%',
+    width: '80%',
+    marginLeft: '10%',
+    marginTop: '-10%',
   },
 });
 

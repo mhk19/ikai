@@ -30,8 +30,6 @@ const images = {
 };
 
 export function IkaiFooter({state, descriptors, navigation}) {
-  console.log('printing');
-  console.log(state.routeNames);
   return (
     <Footer>
       <FooterTab style={styles.footertab}>

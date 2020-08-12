@@ -3,6 +3,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {ImageDetailScreen} from './imagedetails';
 import {ImageResultScreen} from './imageresults';
 import {ScannerMainPage} from './scannermainpage';
+import {ScannerMainHeader} from './headers';
 
 const CamscannerStack = createStackNavigator();
 
@@ -13,9 +14,7 @@ export class Scanner extends React.Component {
 
   render() {
     return (
-      <CamscannerStack.Navigator
-        initialRouteName="scannerMainscreen"
-        headerMode="none">
+      <CamscannerStack.Navigator initialRouteName="scannerMainscreen">
         <CamscannerStack.Screen
           name="imageDetails"
           component={ImageDetailScreen}></CamscannerStack.Screen>
@@ -24,7 +23,12 @@ export class Scanner extends React.Component {
           component={ImageResultScreen}></CamscannerStack.Screen>
         <CamscannerStack.Screen
           name="scannerMainscreen"
-          component={ScannerMainPage}></CamscannerStack.Screen>
+          component={ScannerMainPage}
+          options={{
+            header: () => {
+              return <ScannerMainHeader />;
+            },
+          }}></CamscannerStack.Screen>
       </CamscannerStack.Navigator>
     );
   }
