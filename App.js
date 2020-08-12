@@ -15,7 +15,7 @@ import {navigationRef} from './RootNavigation';
 import * as RootNavigation from './RootNavigation.js';
 
 const Tab = createBottomTabNavigator();
-const InitialPage = 'scan';
+const InitialPage = 'share';
 export class App extends React.Component {
   constructor(props) {
     super(props);

@@ -86,7 +86,11 @@ export class ShareMainPage extends React.Component {
             </View>
           </View>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.onlineButton}>
+            <TouchableOpacity
+              style={styles.onlineButton}
+              onPress={() => {
+                this.props.navigation.push('shareOnlineContacts');
+              }}>
               <Text
                 style={{
                   color: 'white',
