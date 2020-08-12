@@ -1,19 +1,32 @@
 import React from 'react';
-import startDocumentScanner from '../utils/scanner';
-import {View, Button} from 'react-native';
+import {createStackNavigator} from '@react-navigation/stack';
+import {ImageDetailScreen} from './imagedetails';
+import {ImageResultScreen} from './imageresults';
+import {ScannerMainPage} from './scannermainpage';
 
-function startScanner() {
-  startDocumentScanner();
-}
-export class ScannerMainPage extends React.Component {
+const CamscannerStack = createStackNavigator();
+
+export class Scanner extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
   render() {
     return (
-      <View>
-        <Button title="scanner" onPress={startScanner}>
-          Open Scanner
-        </Button>
-      </View>
+      <CamscannerStack.Navigator
+        initialRouteName="scannerMainscreen"
+        headerMode="none">
+        <CamscannerStack.Screen
+          name="imageDetails"
+          component={ImageDetailScreen}></CamscannerStack.Screen>
+        <CamscannerStack.Screen
+          name="imageResults"
+          component={ImageResultScreen}></CamscannerStack.Screen>
+        <CamscannerStack.Screen
+          name="scannerMainscreen"
+          component={ScannerMainPage}></CamscannerStack.Screen>
+      </CamscannerStack.Navigator>
     );
   }
 }
-export default ScannerMainPage;
+export default Scanner;
