@@ -35,6 +35,7 @@ export class ContactThumbnail extends React.Component {
         style={styles.contactContainer}
         onPress={() => {
           this.props.navigation.push('shareOnlineChatWindow', {
+            username: this.props.username,
             chatname: this.props.name,
             chatroom_id: this.props.chatroom_id,
           });

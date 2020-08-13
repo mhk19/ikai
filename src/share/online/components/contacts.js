@@ -36,7 +36,8 @@ export const ShareOnlineContacts = (props) => {
   const [userLoggedin, setUserLoggedin] = useState(true);
   const [dataReceived, setDataReceived] = useState(false);
   useEffect(() => {
-    callAPI('http://23832adb5a50.ngrok.io/users/chatrooms').then((res) => {
+    callAPI('http://62876c440dd3.ngrok.io/users/chatrooms').then((res) => {
+      console.log('Data is received.');
       setDataReceived(true);
       setChatrooms(res.results);
     });
@@ -69,6 +70,7 @@ export const ShareOnlineContacts = (props) => {
                   time={chatroom.updated_at}
                   chatroom_id={chatroom.id}
                   navigation={props.navigation}
+                  username={username}
                 />
               );
             })}
