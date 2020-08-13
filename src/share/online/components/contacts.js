@@ -68,6 +68,8 @@ export const ShareOnlineContacts = (props) => {
                 <ContactThumbnail
                   name={contactName}
                   time={chatroom.updated_at}
+                  date={chatroom.updated_at_date}
+                  last={chatroom.last_message}
                   chatroom_id={chatroom.id}
                   navigation={props.navigation}
                   username={username}

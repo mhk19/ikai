@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   View,
   StyleSheet,
@@ -8,6 +8,7 @@ import {
   Image,
   TextInput,
   KeyboardAvoidingView,
+  Keyboard,
 } from 'react-native';
 
 const styles = StyleSheet.create({
@@ -38,7 +39,6 @@ const styles = StyleSheet.create({
     maxHeight: '85%',
     backgroundColor: 'white',
     flexDirection: 'column',
-    padding: '4%',
   },
   send: {
     minHeight: '6%',
@@ -63,47 +63,35 @@ const styles = StyleSheet.create({
   sentMessage: {
     minWidth: '10%',
     maxWidth: '45%',
-    minHeight: '7%',
     backgroundColor: '#13C2C2',
     alignSelf: 'flex-end',
     borderRadius: 15,
     padding: '3%',
     marginTop: '2%',
+    marginRight: '2%',
   },
   receivedMessage: {
     minWidth: '10%',
     maxWidth: '45%',
-    minHeight: '7%',
     marginLeft: 0,
     backgroundColor: '#C4C4C4',
     alignSelf: 'flex-start',
     borderRadius: 15,
     padding: '3%',
     marginTop: '1%',
-    marginBottom: '1%',
+    marginLeft: '2%',
   },
 });
-const SendMessageBox = (props) => {
-  return (
-    <View style={styles.sentMessage}>
-      <Text style={{color: 'white', fontSize: 17}}>{props.msg}</Text>
-    </View>
-  );
-};
-const ReceiveMessageBox = (props) => {
-  return (
-    <View style={styles.receivedMessage}>
-      <Text style={{color: 'black', fontSize: 17}}>{props.msg}</Text>
-    </View>
-  );
-};
+
 export const ShareOnlineChatWindow = (props) => {
   let data = props.route.params;
+  const scroller = useRef();
   const [messages, setMessages] = useState([]);
   const chatroom = data.chatroom_id;
   const [chatSocket, setChatSocket] = useState(null);
   const [typedMessage, setTypedMessage] = useState('');
   const [wbConn, setWbConn] = useState(false);
+  const [prevButton, setPrevButton] = useState(true);
   useEffect(() => {
     setChatSocket(
       new WebSocket('ws://62876c440dd3.ngrok.io/ws/chat/' + chatroom + '/'),
@@ -115,7 +103,8 @@ export const ShareOnlineChatWindow = (props) => {
     }
     chatSocket.onopen = function () {
       setWbConn(true);
-      fetchPageMessages(1);
+      setMessages([]);
+      fetchPageMessages();
       chatSocket.onmessage = function (e) {
         messageReceiveHandler(e);
       };
@@ -127,18 +116,35 @@ export const ShareOnlineChatWindow = (props) => {
       return;
     }
     try {
-      console.log('intial messages');
-      console.log(messages);
-      for (let i = 0; i < messageData.messages.length; i++) {
-        setMessages((messages) => [...messages, messageData.messages[i]]);
+      console.log(messageData.messages);
+      if (messageData.typ == 'new') {
+        for (let i = 0; i < messageData.messages.length; i++) {
+          setMessages((messages) => [...messages, messageData.messages[i]]);
+        }
+      } else if (messageData.typ == 'old') {
+        for (let i = 0; i < messageData.messages.length; i++) {
+          setMessages((messages) => [messageData.messages[i], ...messages]);
+        }
       }
-      console.log('received messages');
-      console.log(...messageData.messages);
-      console.log('final message state');
-      console.log(messages);
+      Keyboard.dismiss();
+      setTypedMessage('');
     } catch (e) {
       console.log(e);
     }
+  };
+  const SendMessageBox = (props) => {
+    return (
+      <View style={styles.sentMessage}>
+        <Text style={{color: 'white', fontSize: 17}}>{props.msg}</Text>
+      </View>
+    );
+  };
+  const ReceiveMessageBox = (props) => {
+    return (
+      <View style={styles.receivedMessage}>
+        <Text style={{color: 'black', fontSize: 17}}>{props.msg}</Text>
+      </View>
+    );
   };
   const sendMessage = () => {
     if (wbConn) {
@@ -149,17 +155,23 @@ export const ShareOnlineChatWindow = (props) => {
           command: 'new_message',
         }),
       );
-      setTypedMessage('');
     } else {
       console.log('Websocket connection not made.');
     }
   };
 
-  const fetchPageMessages = (page) => {
+  const fetchPageMessages = () => {
     chatSocket.send(
       JSON.stringify({
-        page: page,
         command: 'fetch_messages',
+      }),
+    );
+  };
+  const fetchPreviousMessages = () => {
+    chatSocket.send(
+      JSON.stringify({
+        command: 'fetch_prev_messages',
+        time: messages[0].timestamp,
       }),
     );
   };
@@ -181,14 +193,48 @@ export const ShareOnlineChatWindow = (props) => {
           style={{width: 40, height: 40, marginRight: '10%'}}></Image>
         <Text style={{color: 'white', fontSize: 25}}>{data.chatname}</Text>
       </View>
-      <ScrollView style={styles.messages}>
+      <ScrollView
+        style={styles.messages}
+        ref={scroller}
+        onContentSizeChange={() => {
+          setPrevButton(true);
+        }}>
+        {wbConn && prevButton && (
+          <TouchableOpacity
+            style={{
+              alignSelf: 'center',
+              width: 100,
+              height: 40,
+              backgroundColor: '#13C2C2',
+              borderRadius: 20,
+              justifyContent: 'center',
+              borderWidth: 1,
+              borderColor: 'white',
+            }}
+            onPress={() => {
+              setPrevButton(false);
+              fetchPreviousMessages();
+            }}>
+            <Text
+              style={{
+                textAlign: 'center',
+                textAlignVertical: 'center',
+                color: 'white',
+                fontSize: 10,
+              }}>
+              Fetch Previous Messages
+            </Text>
+          </TouchableOpacity>
+        )}
         {wbConn &&
           messages.length > 0 &&
           messages.map((message) => {
             if (message.author === data.username) {
-              return <SendMessageBox msg={message.content} />;
+              return <SendMessageBox msg={message.content} typ={message.typ} />;
             }
-            return <ReceiveMessageBox msg={message.content} />;
+            return (
+              <ReceiveMessageBox msg={message.content} typ={message.typ} />
+            );
           })}
         {!wbConn && (
           <View
@@ -222,7 +268,8 @@ export const ShareOnlineChatWindow = (props) => {
           <TouchableOpacity
             onPress={() => {
               sendMessage();
-            }}>
+            }}
+            disabled={typedMessage === ''}>
             <Image
               source={require('../assets/send.png')}
               style={{height: 40, width: 40}}></Image>
