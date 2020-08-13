@@ -28,6 +28,7 @@ const Connection = ({connection, updateConnection, channel, updateChannel}) => {
   const [connecting, setConnecting] = useState(false);
   const [alert, setAlert] = useState(null);
   const [file, setFile] = useState(null);
+  const [receiver, setReceiver] = useState('');
   const connectedRef = useRef();
   const webSocket = useRef(null);
 
@@ -142,7 +143,7 @@ const Connection = ({connection, updateConnection, channel, updateChannel}) => {
       .then(() => connection.createAnswer())
       .then((answer) => connection.setLocalDescription(answer))
       .then(() =>
-        send({type: 'answer', answer: connection.localDescription, name}),
+        send({type: 'answer', answer: connection.localDescription, name: name}),
       )
       .catch((e) => {
         console.log({e});
@@ -163,20 +164,26 @@ const Connection = ({connection, updateConnection, channel, updateChannel}) => {
     };
 
     let dataChannel = connection.createDataChannel('file');
+    console.log('datachannels');
     console.log(dataChannel);
 
     dataChannel.onerror = (error) => {
+      console.log('datachannel error');
       console.log(error);
     };
     dataChannel.binaryType = 'arraybuffer';
     dataChannel.onmessage = handleDataChannelFileReceived;
     updateChannel(dataChannel);
-
+    console.log('reached here');
     connection
       .createOffer()
-      .then((offer) => connection.setLocalDescription(offer))
+      .then((offer) => {
+        console.log('offer');
+        console.log(offer);
+        connection.setLocalDescription(offer);
+      })
       .then(() =>
-        send({type: 'offer', offer: connection.localDescription, name}),
+        send({type: 'offer', offer: connection.localDescription, name: name}),
       )
       .catch((e) => setAlert(e));
   };
@@ -316,13 +323,10 @@ const Connection = ({connection, updateConnection, channel, updateChannel}) => {
         title="Login"
       />
       <Text>Online Users: {users}</Text>
-      <TextInput
-        onChangeText={(text) => setConnectedTo(text)}
-        value={connectedTo}
-      />
+      <TextInput onChangeText={(text) => setReceiver(text)} value={receiver} />
       <Button
         onPress={() => {
-          handleConnection(connectedTo);
+          handleConnection(receiver);
         }}
         title="Connect"
       />
