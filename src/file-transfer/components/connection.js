@@ -8,7 +8,7 @@ import {
 } from 'react-native-webrtc';
 import {DocumentDirectoryPath, writeFile, stat} from 'react-native-fs';
 import RNFetchBlob from 'rn-fetch-blob';
-import { TextInput } from 'react-native-gesture-handler';
+import {TextInput} from 'react-native-gesture-handler';
 
 const configuration = {
   iceServers: [{url: 'stun:stun.1.google.com:19302'}],
@@ -98,12 +98,12 @@ const Connection = ({connection, updateConnection, channel, updateChannel}) => {
     setUsers((prev) => prev.filter((u) => u.username !== user));
   };
 
-  const onLogin = ({success, message, users: loggedIn}) => {
+  const onLogin = ({success, message, user: loggedIn}) => {
     setLoggingIn(false);
     if (success) {
       //alert "logged in successfully"
       setIsLoggedIn(true);
-      setUsers(loggedIn);
+      setUsers(JSON.stringify(loggedIn));
       let localConnection = new RTCPeerConnection(configuration);
       console.log('local connection', localConnection);
       localConnection.onicecandidate = ({candidate}) => {
@@ -161,6 +161,7 @@ const Connection = ({connection, updateConnection, channel, updateChannel}) => {
     };
 
     let dataChannel = connection.createDataChannel('file');
+    console.log(dataChannel);
 
     dataChannel.onerror = (error) => {
       console.log(error);
