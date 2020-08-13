@@ -8,6 +8,7 @@ import {
 } from 'react-native-webrtc';
 import {DocumentDirectoryPath, writeFile, stat} from 'react-native-fs';
 import RNFetchBlob from 'rn-fetch-blob';
+import { TextInput } from 'react-native-gesture-handler';
 
 const configuration = {
   iceServers: [{url: 'stun:stun.1.google.com:19302'}],
@@ -52,7 +53,6 @@ const Connection = ({connection, updateConnection, channel, updateChannel}) => {
       switch (data.type) {
         case 'connect':
           setSocketOpen(true);
-          handleLogin();
           break;
         case 'login':
           onLogin(data);
@@ -259,6 +259,7 @@ const Connection = ({connection, updateConnection, channel, updateChannel}) => {
   // };
 
   const ReadFile = (path) => {
+    console.log('called readfile');
     let realPath = '';
     let data = '';
     if (path !== null) {
@@ -304,9 +305,31 @@ const Connection = ({connection, updateConnection, channel, updateChannel}) => {
   };
   return (
     <View style={styles.container}>
-      <Button onPress={selectFile} title="Select File" />
+      <TextInput onChangeText={(text) => setUserName(text)} value={username} />
+      <Button
+        onPress={() => {
+          handleLogin();
+        }}
+        title="Login"
+      />
+      <Text>Online Users: {users}</Text>
+      <TextInput
+        onChangeText={(text) => setConnectedTo(text)}
+        value={connectedTo}
+      />
+      <Button
+        onPress={() => {
+          handleConnection(connectedTo);
+        }}
+        title="Connect"
+      />
       {file !== null ? (
-        <Button title="Read File" onPress={ReadFile(file.uri)} />
+        <Button
+          title="Read File"
+          onPress={() => {
+            ReadFile(file.name);
+          }}
+        />
       ) : null}
     </View>
   );
