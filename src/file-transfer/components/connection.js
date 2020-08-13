@@ -83,6 +83,7 @@ const Connection = ({connection, updateConnection, channel, updateChannel}) => {
   };
 
   const handleLogin = () => {
+    console.log('logging in with name:', username);
     setLoggingIn(true);
     send({
       type: 'login',
@@ -90,9 +91,10 @@ const Connection = ({connection, updateConnection, channel, updateChannel}) => {
     });
   };
 
-  const updateUsersList = ({user}) => {
-    setUsers((prev) => [...prev, user]);
-  };
+  // const updateUsersList = ({user}) => {
+  //   console.log(user.username, typeof user.username);
+  //   setUsers(...users, user.username);
+  // };
 
   const removeUser = ({user}) => {
     setUsers((prev) => prev.filter((u) => u.username !== user));
