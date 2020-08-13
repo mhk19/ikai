@@ -57,9 +57,9 @@ const Connection = ({connection, updateConnection, channel, updateChannel}) => {
         case 'login':
           onLogin(data);
           break;
-        case 'updateUsers':
-          updateUsersList(data);
-          break;
+        // case 'updateUsers':
+        //   updateUsersList(data);
+        //   break;
         case 'removeUser':
           removeUser(data);
           break;
@@ -87,7 +87,7 @@ const Connection = ({connection, updateConnection, channel, updateChannel}) => {
     setLoggingIn(true);
     send({
       type: 'login',
-      username,
+      name: username,
     });
   };
 
@@ -105,7 +105,7 @@ const Connection = ({connection, updateConnection, channel, updateChannel}) => {
     if (success) {
       //alert "logged in successfully"
       setIsLoggedIn(true);
-      setUsers(JSON.stringify(loggedIn));
+      //setUsers(JSON.stringify(loggedIn));
       let localConnection = new RTCPeerConnection(configuration);
       console.log('local connection', localConnection);
       localConnection.onicecandidate = ({candidate}) => {
@@ -126,8 +126,8 @@ const Connection = ({connection, updateConnection, channel, updateChannel}) => {
           receiveChannel.onmessage = handleDataChannelFileReceived;
           updateChannel(receiveChannel);
         };
-        updateConnection(localConnection);
       };
+      updateConnection(localConnection);
     } else {
       //alert failed
     }
