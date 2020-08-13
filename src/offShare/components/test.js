@@ -1,21 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import {
-  SafeAreaView,
-  StyleSheet,
   ScrollView,
   View,
   Text,
-  Image,
-  TextInput,
-  StatusBar,
 } from 'react-native';
 import Modal from 'react-native-modal';
-import Icon from 'react-native-vector-icons/FontAwesome5';
 import Button from 'apsl-react-native-button';
 import style from '../model/style';
 import { WifiWizard, HotspotWizard } from 'react-native-wifi-and-hotspot-wizard';
 import Toast from 'react-native-simple-toast';
-import { FlatList } from 'react-native-gesture-handler';
 import NearbyDevices from '../utils/NearbyDevices';
 import ConnectToNetwork from '../utils/ConnectToNetwork';
 import { Dimensions } from 'react-native';
@@ -23,22 +16,22 @@ import TurnOnHotspot from '../utils/TurnOnHotspot';
 const Home = () => {
   const win = Dimensions.get('window');
 
-  // * State Variables
   let [GetNearbyNetworksModalState, showGetNearbyNetworksModal] = useState(false);
   let [ConnectToNetworkModalState, showConnectToNetworkModal] = useState(false);
   let [TurnOnHotspotModalState, showTurnOnHotspotModal] = useState(false);
 
-  // * Updates The Nearby Devices Whenever Get Nearby Devices Modal is Open
-
-
   let HotspotSSID, HotspotPassword;
   return (<ScrollView scrollEnabled={true} style={{ padding: 15 }}>
-    <Text style={style.text}>Here you can checkout the various functions provided by this library.</Text>
+    <Text style={style.text}>Send or Receive Files</Text>
     <Text />
-    <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 5 }}> Test Wifi Wizard : </Text>
-    <Button style={{ backgroundColor: '#00e676', borderWidth: 0, elevation: 5 }} onPress={() => { turnOnWifi() }} >
+    <Button style={{ backgroundColor: '#00e676', borderWidth: 0, elevation: 5 }} onPress={() => { sender() }} >
       <View >
-        <Text style={style.buttonText}> TURN ON WIFI</Text>
+        <Text style={style.buttonText}> SEND </Text>
+      </View>
+    </Button>
+    <Button style={{ backgroundColor: '#00e676', borderWidth: 0, elevation: 5 }} onPress={() => { receiver() }} >
+      <View >
+        <Text style={style.buttonText}> RECEIVE </Text>
       </View>
     </Button>
     <Button style={{ backgroundColor: '#e57373', borderWidth: 0, elevation: 5 }} onPress={() => { turnOffWifi() }} >
@@ -46,47 +39,12 @@ const Home = () => {
         <Text style={style.buttonText}> TURN OFF WIFI</Text>
       </View>
     </Button>
-    <Button style={{ backgroundColor: '#42a5f5', borderWidth: 0, elevation: 5 }} onPress={() => { isWifiEnabled() }}>
-      <View >
-        <Text style={style.buttonText}> IS WIFI ENABLED?</Text>
-      </View>
-    </Button>
-    <Button style={{ backgroundColor: '#9575cd', borderWidth: 0, elevation: 5 }} onPress={() => { isReadyForCommunication() }}>
-      <View >
-        <Text style={style.buttonText}> IS READY FOR COMMUNICATION?</Text>
-      </View>
-    </Button>
-    <Button style={{ backgroundColor: '#ffb74d', borderWidth: 0, elevation: 5 }} onPress={() => { disconnectFromNetwork() }}>
-      <View >
-        <Text style={style.buttonText}> DISCONNET FROM NETWORK</Text>
-      </View>
-    </Button>
-    <Button style={{ backgroundColor: '#0091ea', borderWidth: 0, elevation: 5 }} onPress={() => { getNearbyNetworks() }}>
-      <View >
-        <Text style={style.buttonText}> GET NEARBY NETWORKS</Text>
-      </View>
-    </Button>
-    <Button style={{ backgroundColor: '#ffeb3b', borderWidth: 0, elevation: 5 }} onPress={() => { connectToNetwork() }}>
-      <View >
-        <Text style={style.buttonText}> CONNECT TO NETWORK</Text>
-      </View>
-    </Button>
-    <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 5 }}> Test Hotspot Wizard : </Text>
-    <Button style={{ backgroundColor: '#00e676', borderWidth: 0, elevation: 5 }} onPress={() => { turnOnHotspot() }} >
-      <View >
-        <Text style={style.buttonText}> TURN ON HOTSPOT</Text>
-      </View>
-    </Button>
     <Button style={{ backgroundColor: '#e57373', borderWidth: 0, elevation: 5 }} onPress={() => { turnOffHotspot() }} >
       <View >
         <Text style={style.buttonText}> TURN OFF HOTSPOT</Text>
       </View>
     </Button>
-    <Button style={{ backgroundColor: '#42a5f5', borderWidth: 0, elevation: 5 }} onPress={() => { isHotspotEnabled() }}>
-      <View >
-        <Text style={style.buttonText}> IS HOTSPOT ENABLED?</Text>
-      </View>
-    </Button>
+
     <Modal isVisible={GetNearbyNetworksModalState} style={{
       justifyContent: 'flex-end',
       margin: 0,
@@ -122,16 +80,28 @@ const Home = () => {
     </Modal></ScrollView>
   );
 
+  function sender() {
+    turnOnWifi();
+    isWifiEnabled();
+    connectToNetwork();
+  }
+
+  function receiver() {
+    turnOnHotspot();
+  }
+
   function turnOnWifi() {
     WifiWizard.turnOnWifi().then(() => {
       Toast.show('WiFi is now ACTIVE')
     });
   }
+
   function turnOffWifi() {
     WifiWizard.turnOffWifi().then(() => {
       Toast.show('WiFi is now INACTIVE')
     });
   }
+
   function isWifiEnabled() {
     WifiWizard.isWifiEnabled().then((status) => {
       if (status) {
@@ -142,12 +112,15 @@ const Home = () => {
       }
     });
   }
+
   function getNearbyNetworks() {
     showGetNearbyNetworksModal(true);
   }
+
   function connectToNetwork() {
     showConnectToNetworkModal(true);
   }
+
   function disconnectFromNetwork() {
     WifiWizard.disconnectFromNetwork().then(() => {
       Toast.show('Disconnected From Current Network.')
@@ -156,6 +129,7 @@ const Home = () => {
 
     })
   }
+
   function isReadyForCommunication() {
     WifiWizard.isReadyForCommunication().then(status => {
       if (status) {
@@ -166,21 +140,27 @@ const Home = () => {
       }
     })
   }
+
   function turnOnHotspot() {
     showTurnOnHotspotModal(true);
   }
+
   function turnOffHotspot() {
     HotspotWizard.turnOffHotspot().then(data => {
       if (data.status == "failed") {
         Toast.show("Failed to turn off hotspot. Note That, this can only turn off hotspot which is started using this library.", Toast.LONG)
+        return false;
       }
       if (data.status == "success") {
         Toast.show("Turned Off Hotspot.")
+        return true;
       }
     }).catch(err => {
       Toast.show("Something went wrong..")
+      return false;
     })
   }
+
   function isHotspotEnabled() {
     HotspotWizard.isHotspotEnabled().then(status => {
       if (status) {

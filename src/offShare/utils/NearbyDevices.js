@@ -1,20 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
   View,
   Text,
-  Image,
-  TextInput,
-  StatusBar,
 } from 'react-native';
-import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import Button from 'apsl-react-native-button';
 import style from '../model/style';
 import { WifiWizard } from 'react-native-wifi-and-hotspot-wizard';
-import Toast from 'react-native-simple-toast';
 import { FlatList } from 'react-native-gesture-handler';
 
 let NearbyDevices = () => {
