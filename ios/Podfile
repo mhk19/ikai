@@ -12,6 +12,8 @@ target 'learnNative' do
 
   pod 'react-native-document-picker', :path => '../node_modules/react-native-document-picker'
 
+  pod 'rn-fetch-blob', :path => '../node_modules/rn-fetch-blob'
+
   target 'learnNativeTests' do
     inherit! :complete
     # Pods for testing

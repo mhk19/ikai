@@ -40,29 +40,26 @@ export class App extends React.Component {
 
   render() {
     return (
-      <View>
-        <ScannerMainPage />
-        {/* <ConnectionContext.Provider
-          value={(this.state.connection, this.updateConnection)}>
-          <ChannelContext.Provider
-            value={(this.state.channel, this.updateChannel)}>
-            <ConnectionConsumer>
-              {({connection, updateConnection}) => (
-                <ChannelConsumer>
-                  {({channel, updateChannel}) => (
-                    <Connection
-                      connection={connection}
-                      updateConnection={updateConnection}
-                      channel={channel}
-                      updateChannel={updateChannel}
-                    />
-                  )}
-                </ChannelConsumer>
-              )}
-            </ConnectionConsumer>
-          </ChannelContext.Provider>
-        </ConnectionContext.Provider> */}
-      </View>
+      <ConnectionContext.Provider
+        value={(this.state.connection, this.updateConnection)}>
+        <ChannelContext.Provider
+          value={(this.state.channel, this.updateChannel)}>
+          <ConnectionConsumer>
+            {({connection, updateConnection}) => (
+              <ChannelConsumer>
+                {({channel, updateChannel}) => (
+                  <Connection
+                    connection={this.state.connection}
+                    updateConnection={this.updateConnection}
+                    channel={this.state.channel}
+                    updateChannel={this.updateChannel}
+                  />
+                )}
+              </ChannelConsumer>
+            )}
+          </ConnectionConsumer>
+        </ChannelContext.Provider>
+      </ConnectionContext.Provider>
     );
   }
 }

@@ -1,12 +1,13 @@
 import React, {useState, useEffect, useRef} from 'react';
-// import DocumentPicker from 'react-native-document-picker';
-import {View, StyleSheet, Button} from 'react-native';
+import DocumentPicker from 'react-native-document-picker';
+import {View, StyleSheet, Button, Text} from 'react-native';
 import {
   RTCPeerConnection,
   RTCIceCandidate,
   RTCSessionDescription,
 } from 'react-native-webrtc';
-import {DocumentDirectoryPath, writeFile} from 'react-native-fs';
+import {DocumentDirectoryPath, writeFile, stat} from 'react-native-fs';
+import RNFetchBlob from 'rn-fetch-blob';
 
 const configuration = {
   iceServers: [{url: 'stun:stun.1.google.com:19302'}],
@@ -51,6 +52,7 @@ const Connection = ({connection, updateConnection, channel, updateChannel}) => {
       switch (data.type) {
         case 'connect':
           setSocketOpen(true);
+          handleLogin();
           break;
         case 'login':
           onLogin(data);
@@ -103,6 +105,7 @@ const Connection = ({connection, updateConnection, channel, updateChannel}) => {
       setIsLoggedIn(true);
       setUsers(loggedIn);
       let localConnection = new RTCPeerConnection(configuration);
+      console.log('local connection', localConnection);
       localConnection.onicecandidate = ({candidate}) => {
         let connectedTo = connectedRef.current;
         if (candidate && !!connectedTo) {
@@ -192,6 +195,7 @@ const Connection = ({connection, updateConnection, channel, updateChannel}) => {
 
   const sendFile = () => {
     if (file) {
+      // console.log('the selected file is:', file);
       channel.onopen = async () => {
         const arrayBuffer = await file.arrayBuffer();
         for (let i = 0; i < arrayBuffer.byteLength; i += MAXIMUM_MESSAGE_SIZE) {
@@ -222,20 +226,70 @@ const Connection = ({connection, updateConnection, channel, updateChannel}) => {
     }
   };
 
-  const selectFile = () => {
-    // try {
-    //   const res = DocumentPicker.pick({
-    //     type: [DocumentPicker.types.allFiles],
-    //   });
-    //   setFile(res);
-    // } catch (err) {
-    //   if (DocumentPicker.isCancel(err)) {
-    //     alert('Cancelled from single doc picker');
-    //   } else {
-    //     alert(err);
-    //     throw err;
-    //   }
-    // }
+  const selectFile = async () => {
+    try {
+      const res = await DocumentPicker.pick({
+        type: [DocumentPicker.types.allFiles],
+      });
+      // JSON.stringify(res);
+      console.log(JSON.stringify(res));
+      setFile(res);
+      // console.log(readFile(file.uri));
+      console.log('the selected file is:', file);
+    } catch (err) {
+      if (DocumentPicker.isCancel(err)) {
+        alert('Cancelled from single doc picker');
+      } else {
+        console.log(err);
+        throw err;
+      }
+    }
+  };
+
+  // const getPath = (uri) => {
+  //   if (uri !== undefined) {
+  //     const split = uri.split('/');
+  //     const name = split.pop();
+  //     const inbox = split.pop();
+  //     const realPath = `${DocumentDirectoryPath}${inbox}/${name}`;
+  //     return realPath;
+  //   } else {
+  //     console.log('uri not found');
+  //   }
+  // };
+
+  const ReadFile = (path) => {
+    let realPath = '';
+    let data = '';
+    if (path !== null) {
+      console.log('path is', path);
+      stat(path)
+        .then((stats) => {
+          realPath = stats.originalFilepath;
+          console.log(realPath);
+          RNFetchBlob.fs
+            .readStream(realPath, 'utf8', 4096)
+            .then((ifstream) => {
+              ifstream.open();
+              ifstream.onData((chunk) => {
+                console.log('reading file');
+                data += chunk;
+              });
+              ifstream.onError((err) => {
+                console.log('error in reading file', err);
+              });
+              ifstream.onEnd(() => {
+                console.log('read successful');
+              });
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   const downloadFile = (bytes, name) => {
@@ -251,6 +305,9 @@ const Connection = ({connection, updateConnection, channel, updateChannel}) => {
   return (
     <View style={styles.container}>
       <Button onPress={selectFile} title="Select File" />
+      {file !== null ? (
+        <Button title="Read File" onPress={ReadFile(file.uri)} />
+      ) : null}
     </View>
   );
 };
