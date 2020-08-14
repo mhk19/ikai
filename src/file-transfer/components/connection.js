@@ -260,22 +260,34 @@ const Connection = ({connection, updateConnection, channel, updateChannel}) => {
   //   }
   // };
   const readFile = (readFile) => {
-    console.log(readFile);
+    const fileData = [];
     const realPath = file.path;
     if (realPath !== null) {
       console.log('path is', realPath);
       RNFetchBlob.fs
-        .readStream(realPath, 'base64')
+        .readStream(realPath, 'base64', 4095)
         .then((ifstream) => {
           ifstream.open();
           ifstream.onData((chunk) => {
             console.log('reading file');
-            data += chunk;
+            console.log(chunk);
+            fileData.push(chunk);
           });
           ifstream.onError((err) => {
             console.log('error in reading file', err);
           });
           ifstream.onEnd(() => {
+            RNFetchBlob.fs
+              .writeStream(
+                RNFetchBlob.fs.dirs.DownloadDir + '/test2.png',
+                'base64',
+              )
+              .then((stream) => {
+                for (let i = 0; i < fileData.length; i++) {
+                  stream.write(fileData[i]);
+                }
+                return stream.close();
+              });
             console.log('read successful');
           });
         })
@@ -283,7 +295,6 @@ const Connection = ({connection, updateConnection, channel, updateChannel}) => {
           console.log(err);
         });
     }
-    // console.log(uri, filename);
   };
 
   const downloadFile = (bytes, name) => {
