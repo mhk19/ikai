@@ -1,4 +1,4 @@
-import {View, Text, Button} from 'react-native';
+import {View, Text, Button, Animated} from 'react-native';
 import {Container, Header, Content} from 'native-base';
 import ScanbotSDK from 'react-native-scanbot-sdk';
 import React from 'react';
@@ -8,12 +8,12 @@ import {IkaiFooter} from './src/ikai/components/footer';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
 import {Scanner} from './src/camscanner/components/mainpage';
-import {ChatMainPage} from './src/chat/components/mainpage';
+import Chat from './src/chat/mainpage';
 import {Share} from './src/share/mainpage';
-import {MenuMainPage} from './src/menu/components/mainpage';
+import {Menu} from './src/menu/components/mainpage';
 import {navigationRef} from './RootNavigation';
 import * as RootNavigation from './RootNavigation.js';
-
+import Drawer from 'react-native-drawer';
 const Tab = createBottomTabNavigator();
 const InitialPage = 'share';
 export class App extends React.Component {
@@ -24,18 +24,41 @@ export class App extends React.Component {
       page: InitialPage,
     };
   }
+  closeControlPanel = () => {
+    this._drawer.close();
+  };
+  openControlPanel = () => {
+    this._drawer.open();
+  };
   render() {
     return (
-      <NavigationContainer ref={navigationRef}>
-        <Tab.Navigator
-          initialRouteName={InitialPage}
-          tabBar={(prop) => <IkaiFooter {...prop} />}>
-          <Tab.Screen name="menu" component={MenuMainPage}></Tab.Screen>
-          <Tab.Screen name="share" component={Share}></Tab.Screen>
-          <Tab.Screen name="scan" component={Scanner}></Tab.Screen>
-          <Tab.Screen name="chat" component={ChatMainPage}></Tab.Screen>
-        </Tab.Navigator>
-      </NavigationContainer>
+      <Drawer
+        ref={(ref) => (this._drawer = ref)}
+        content={<Menu />}
+        type="overlay"
+        openDrawerOffset={150}
+        disabled={false}
+        side="left">
+        <NavigationContainer ref={navigationRef}>
+          <Tab.Navigator
+            initialRouteName={InitialPage}
+            tabBar={(prop) => <IkaiFooter {...prop} />}>
+            {/* <Tab.Screen name="menu" component={MenuMainPage}></Tab.Screen> */}
+            <Tab.Screen
+              name="share"
+              component={Share}
+              initialParams={{user: this.openControlPanel}}></Tab.Screen>
+            <Tab.Screen
+              name="scan"
+              component={Scanner}
+              initialParams={{user: this.openControlPanel}}></Tab.Screen>
+            <Tab.Screen
+              name="chat"
+              component={Chat}
+              initialParams={{user: this.openControlPanel}}></Tab.Screen>
+          </Tab.Navigator>
+        </NavigationContainer>
+      </Drawer>
     );
   }
 }

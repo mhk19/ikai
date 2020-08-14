@@ -1,11 +1,12 @@
 import React from 'react';
 import {View, Text} from 'native-base';
-export class MenuMainPage extends React.Component {
+export class Menu extends React.Component {
   render() {
     return (
-      <View>
+      <View style={{height: '100%', width: 200, backgroundColor: 'red'}}>
         <Text>Menu here</Text>
       </View>
     );
   }
 }
+export default Menu;

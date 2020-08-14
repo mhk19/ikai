@@ -1,15 +1,13 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import ShareMainPage from './sharemainpage';
-import ShareMainHeader from './headers';
-import ShareOnlineContacts from './online/components/contacts';
-import ShareOnlineChatWindow from './online/components/chatwindow';
-import ShareOnlineChatHeader from './online/components/chatheader';
+import MainHeader from '../ikai/components/header';
 const ShareStack = createStackNavigator();
 
 export class Share extends React.Component {
   constructor(props) {
     super(props);
+    this.open = props.route.params.user;
   }
 
   render() {
@@ -20,23 +18,13 @@ export class Share extends React.Component {
           component={ShareMainPage}
           options={{
             header: () => {
-              return <ShareMainHeader />;
-            },
-          }}></ShareStack.Screen>
-        <ShareStack.Screen
-          name="shareOnlineContacts"
-          component={ShareOnlineContacts}
-          options={{
-            header: (props) => {
-              return <ShareMainHeader />;
-            },
-          }}></ShareStack.Screen>
-        <ShareStack.Screen
-          name="shareOnlineChatWindow"
-          component={ShareOnlineChatWindow}
-          options={{
-            header: () => {
-              return <ShareOnlineChatHeader />;
+              return (
+                <MainHeader
+                  source={require('./assets/share_header.png')}
+                  view={true}
+                  open={this.open}
+                />
+              );
             },
           }}></ShareStack.Screen>
       </ShareStack.Navigator>

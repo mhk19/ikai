@@ -29,7 +29,7 @@ const images = {
   chat_active: require('../assets/chat_active.png'),
 };
 
-export function IkaiFooter({state, descriptors, navigation}) {
+export function IkaiFooter(props) {
   const [keyboardShow, setKeyboardShow] = useState(true);
   useEffect(() => {
     keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
@@ -44,16 +44,16 @@ export function IkaiFooter({state, descriptors, navigation}) {
       <Footer>
         <FooterTab style={styles.footertab}>
           {/* <View> */}
-          {state.routeNames.map((route, index) => {
+          {props.state.routeNames.map((route, index) => {
             return (
               <Button
                 vertical
                 onPress={() => {
-                  navigation.navigate(route);
+                  props.navigation.navigate(route);
                 }}>
                 <Thumbnail
                   source={
-                    index !== state.index
+                    index !== props.state.index
                       ? images[route]
                       : images[route + '_active']
                   }
@@ -61,7 +61,7 @@ export function IkaiFooter({state, descriptors, navigation}) {
                 />
                 <Text
                   style={{
-                    color: index === state.index ? '#13C2C2' : '#595959',
+                    color: index === props.state.index ? '#13C2C2' : '#595959',
                   }}>
                   {route}
                 </Text>

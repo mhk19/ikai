@@ -18,7 +18,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
 });
-
 const callAPI = (url) => {
   return new Promise((resolve, reject) => {
     axios
