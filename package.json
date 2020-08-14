@@ -35,23 +35,47 @@
     "rn-fetch-blob": "^0.12.0",
     "react-native-side-menu": "^1.1.3",
     "react-native-modal": "^11.5.6",
+    "react-native-network-info": "^5.2.1",
     "react-native-reanimated": "^1.9.0",
     "react-native-simple-toast": "^1.1.2",
+    "react-native-tcp": "^4.0.0",
     "react-native-vector-icons": "^7.0.0",
-    "react-native-wifi-and-hotspot-wizard": "^1.0.5-stable"
+    "react-native-wifi-and-hotspot-wizard": "^1.0.5-stable",
+    "readable-stream": "^1.0.33",
+    "rn-fetch-blob": "^0.12.0",
+    "stream-browserify": "^3.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.11.1",
     "@babel/runtime": "^7.11.2",
-    "@types/react-native": "^0.62.0",
     "@react-native-community/eslint-config": "^2.0.0",
+    "@types/react-native": "^0.62.0",
     "babel-jest": "^26.2.2",
     "eslint": "^7.6.0",
     "jest": "^26.2.2",
     "metro-react-native-babel-preset": "^0.61.0",
-    "react-test-renderer": "16.13.1"
+    "react-test-renderer": "16.13.1",
+    "rn-nodeify": "^10.2.0"
   },
   "jest": {
     "preset": "react-native"
+  },
+  "browser": {
+    "net": "react-native-tcp",
+    "_stream_transform": "readable-stream/transform",
+    "_stream_readable": "readable-stream/readable",
+    "_stream_writable": "readable-stream/writable",
+    "_stream_duplex": "readable-stream/duplex",
+    "_stream_passthrough": "readable-stream/passthrough",
+    "stream": "stream-browserify"
+  },
+  "react-native": {
+    "net": "react-native-tcp",
+    "_stream_transform": "readable-stream/transform",
+    "_stream_readable": "readable-stream/readable",
+    "_stream_writable": "readable-stream/writable",
+    "_stream_duplex": "readable-stream/duplex",
+    "_stream_passthrough": "readable-stream/passthrough",
+    "stream": "stream-browserify"
   }
 }

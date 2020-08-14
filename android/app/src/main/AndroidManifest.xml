@@ -2,6 +2,8 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   package="com.learnnative"
 >
+
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
@@ -39,6 +41,7 @@
     >
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
+            <action android:name="android.intent.action.DOWNLOAD_COMPLETE"/>
             <category android:name="android.intent.category.LAUNCHER" />
      <action android:name="android.intent.action.DOWNLOAD_COMPLETE"/>
         </intent-filter>

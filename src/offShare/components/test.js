@@ -3,6 +3,7 @@ import {
   ScrollView,
   View,
   Text,
+  PermissionsAndroid
 } from 'react-native';
 import Modal from 'react-native-modal';
 import Button from 'apsl-react-native-button';
@@ -13,6 +14,10 @@ import NearbyDevices from '../utils/NearbyDevices';
 import ConnectToNetwork from '../utils/ConnectToNetwork';
 import { Dimensions } from 'react-native';
 import TurnOnHotspot from '../utils/TurnOnHotspot';
+import { NetworkInfo } from "react-native-network-info";
+import RctSockets from './tcp'
+var net = require('net');
+
 const Home = () => {
   const win = Dimensions.get('window');
 
@@ -80,17 +85,32 @@ const Home = () => {
     </Modal></ScrollView>
   );
 
-  function sender() {
-    turnOnWifi();
-    isWifiEnabled();
-    connectToNetwork();
+  async function sender() {
+    // TODO: permissions
+    await turnOnWifi();
+    await isWifiEnabled();
+    await connectToNetwork();
+    // Network info
+    NetworkInfo.getIPAddress().then(ipAddress => {
+      console.log(ipAddress);
+    });
+    NetworkInfo.getIPV4Address().then(ipv4Address => {
+      console.log(ipv4Address);
+    });
+    var client = net.createConnection(12345);
+    client.on('data', function(data) {
+      console.log('message was received', data)
+    });
   }
 
-  function receiver() {
-    turnOnHotspot();
+  async function receiver() {
+    await turnOnHotspot();
+    var server = net.createServer(function(socket) {
+      socket.write('excellent!');
+    }).listen(12345);
   }
 
-  function turnOnWifi() {
+  async function turnOnWifi() {
     WifiWizard.turnOnWifi().then(() => {
       Toast.show('WiFi is now ACTIVE')
     });
@@ -102,7 +122,7 @@ const Home = () => {
     });
   }
 
-  function isWifiEnabled() {
+  async function isWifiEnabled() {
     WifiWizard.isWifiEnabled().then((status) => {
       if (status) {
         Toast.show('WiFi is ENABLED')
@@ -117,7 +137,7 @@ const Home = () => {
     showGetNearbyNetworksModal(true);
   }
 
-  function connectToNetwork() {
+  async function connectToNetwork() {
     showConnectToNetworkModal(true);
   }
 
@@ -141,7 +161,7 @@ const Home = () => {
     })
   }
 
-  function turnOnHotspot() {
+  async function turnOnHotspot() {
     showTurnOnHotspotModal(true);
   }
 
