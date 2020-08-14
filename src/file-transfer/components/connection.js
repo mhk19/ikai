@@ -201,37 +201,35 @@ const Connection = ({connection, updateConnection, channel, updateChannel}) => {
   };
 
   const sendFile = () => {
-    // if (file) {
-    // console.log('the selected file is:', file);
-    // channel.onopen = async () => {
-    //   const arrayBuffer = await file.arrayBuffer();
-    //   for (let i = 0; i < 10; i++) {
-    channel.send('hello! this is mahak');
-    // }
-    // channel.send(END_OF_FILE_MESSAGE);
-    //};
-    //}
+    if (file) {
+      console.log('the selected file is:', file);
+      channel.onopen = async () => {
+        ReadFile(file);
+      };
+    }
   };
 
   const handleDataChannelFileReceived = ({data}) => {
     console.log(data);
-    // const receivedBuffers = [];
-    // try {
-    //   if (data !== END_OF_FILE_MESSAGE) {
-    //     receivedBuffers.push(data);
-    //   } else {
-    //     const arrayBuffer = receivedBuffers.reduce((acc, arraybuffer) => {
-    //       const tmp = new Uint8Array(acc.byteLength + arraybuffer.byteLength);
-    //       tmp.set(new Uint8Array(acc), 0);
-    //       tmp.set(new Uint8Array(arraybuffer), acc.byteLength);
-    //       return tmp;
-    //     }, new Uint8Array());
-    //     const blob = new Blob([arrayBuffer]);
-    //     downloadFile(blob, channel.label);
-    //   }
-    // } catch (err) {
-    //   console.log('File transfer failed');
-    // }
+    const receivedBuffers = [];
+    try {
+      if (data !== END_OF_FILE_MESSAGE) {
+        receivedBuffers.push(data);
+      } else if (data === END_OF_FILE_MESSAGE) {
+        RNFetchBlob.fs
+          .writeStream(RNFetchBlob.fs.dirs.DownloadDir + '/test2.png', 'base64')
+          .then((stream) => {
+            for (let i = 0; i < receivedBuffers.length; i++) {
+              stream.write(receivedBuffers[i]);
+            }
+            return stream.close();
+          });
+      } else {
+        console.log('file cannot be received completely');
+      }
+    } catch (err) {
+      console.log('File transfer failed');
+    }
   };
 
   const selectFile = async () => {
@@ -259,35 +257,26 @@ const Connection = ({connection, updateConnection, channel, updateChannel}) => {
   //     console.log('uri not found');
   //   }
   // };
-  const readFile = (readFile) => {
+  const ReadFile = (file) => {
     const fileData = [];
     const realPath = file.path;
     if (realPath !== null) {
       console.log('path is', realPath);
       RNFetchBlob.fs
-        .readStream(realPath, 'base64', 4095)
+        .readStream(realPath, 'base64', MAXIMUM_MESSAGE_SIZE)
         .then((ifstream) => {
           ifstream.open();
           ifstream.onData((chunk) => {
             console.log('reading file');
             console.log(chunk);
-            fileData.push(chunk);
+            //fileData.push(chunk);
+            channel.send(chunk);
           });
           ifstream.onError((err) => {
             console.log('error in reading file', err);
           });
           ifstream.onEnd(() => {
-            RNFetchBlob.fs
-              .writeStream(
-                RNFetchBlob.fs.dirs.DownloadDir + '/test2.png',
-                'base64',
-              )
-              .then((stream) => {
-                for (let i = 0; i < fileData.length; i++) {
-                  stream.write(fileData[i]);
-                }
-                return stream.close();
-              });
+            channel.send(END_OF_FILE_MESSAGE);
             console.log('read successful');
           });
         })
@@ -331,9 +320,9 @@ const Connection = ({connection, updateConnection, channel, updateChannel}) => {
         }}
       />
       <Button
-        title="Read File"
+        title="Send File"
         onPress={() => {
-          readFile(file);
+          sendFile(file);
         }}
       />
     </View>
