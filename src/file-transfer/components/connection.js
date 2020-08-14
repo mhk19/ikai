@@ -31,6 +31,7 @@ const Connection = ({connection, updateConnection, channel, updateChannel}) => {
   const [receiver, setReceiver] = useState('');
   const connectedRef = useRef();
   const webSocket = useRef(null);
+  let receivedBuffers = [];
 
   useEffect(() => {
     webSocket.current = new WebSocket(
@@ -203,25 +204,25 @@ const Connection = ({connection, updateConnection, channel, updateChannel}) => {
   const sendFile = () => {
     if (file) {
       console.log('the selected file is:', file);
-      channel.onopen = async () => {
-        ReadFile(file);
-      };
+
+      ReadFile(file);
     }
   };
 
   const handleDataChannelFileReceived = ({data}) => {
-    console.log(data);
-    const receivedBuffers = [];
     try {
       if (data !== END_OF_FILE_MESSAGE) {
         receivedBuffers.push(data);
       } else if (data === END_OF_FILE_MESSAGE) {
         RNFetchBlob.fs
-          .writeStream(RNFetchBlob.fs.dirs.DownloadDir + '/test2.png', 'base64')
+          .writeStream(RNFetchBlob.fs.dirs.DownloadDir + '/test2.pdf', 'base64')
           .then((stream) => {
             for (let i = 0; i < receivedBuffers.length; i++) {
               stream.write(receivedBuffers[i]);
             }
+            console.log(receivedBuffers);
+            console.log('File completely received');
+            receivedBuffers = [];
             return stream.close();
           });
       } else {
