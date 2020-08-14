@@ -1,5 +1,6 @@
 import React, {useState, useEffect, useRef} from 'react';
 import DocumentPicker from 'react-native-document-picker';
+import FilePickerManager from 'react-native-file-picker';
 import {View, StyleSheet, Button, Text} from 'react-native';
 import {
   RTCPeerConnection,
@@ -9,11 +10,10 @@ import {
 import {DocumentDirectoryPath, writeFile, stat} from 'react-native-fs';
 import RNFetchBlob from 'rn-fetch-blob';
 import {TextInput} from 'react-native-gesture-handler';
-
+import RNFS from 'react-native-fs';
 const configuration = {
   iceServers: [{url: 'stun:stun.1.google.com:19302'}],
 };
-
 const MAXIMUM_MESSAGE_SIZE = 65535;
 const END_OF_FILE_MESSAGE = 'EOF';
 
@@ -202,14 +202,14 @@ const Connection = ({connection, updateConnection, channel, updateChannel}) => {
 
   const sendFile = () => {
     // if (file) {
-      // console.log('the selected file is:', file);
-      // channel.onopen = async () => {
-      //   const arrayBuffer = await file.arrayBuffer();
-      //   for (let i = 0; i < 10; i++) {
-          channel.send('hello! this is mahak');
-        // }
-        // channel.send(END_OF_FILE_MESSAGE);
-      //};
+    // console.log('the selected file is:', file);
+    // channel.onopen = async () => {
+    //   const arrayBuffer = await file.arrayBuffer();
+    //   for (let i = 0; i < 10; i++) {
+    channel.send('hello! this is mahak');
+    // }
+    // channel.send(END_OF_FILE_MESSAGE);
+    //};
     //}
   };
 
@@ -235,23 +235,17 @@ const Connection = ({connection, updateConnection, channel, updateChannel}) => {
   };
 
   const selectFile = async () => {
-    try {
-      const res = await DocumentPicker.pick({
-        type: [DocumentPicker.types.allFiles],
-      });
-      // JSON.stringify(res);
-      console.log(JSON.stringify(res));
-      setFile(res);
-      // console.log(readFile(file.uri));
-      console.log('the selected file is:', file);
-    } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
-        alert('Cancelled from single doc picker');
+    FilePickerManager.showFilePicker(null, (response) => {
+      console.log('Response = ', response);
+
+      if (response.didCancel) {
+        console.log('User cancelled file picker');
+      } else if (response.error) {
+        console.log('FilePickerManager Error: ', response.error);
       } else {
-        console.log(err);
-        throw err;
+        setFile(response);
       }
-    }
+    });
   };
 
   // const getPath = (uri) => {
@@ -265,40 +259,31 @@ const Connection = ({connection, updateConnection, channel, updateChannel}) => {
   //     console.log('uri not found');
   //   }
   // };
-
-  const ReadFile = (path) => {
-    console.log('called readfile');
-    let realPath = '';
-    let data = '';
-    if (path !== null) {
-      console.log('path is', path);
-      stat(path)
-        .then((stats) => {
-          realPath = stats.originalFilepath;
-          console.log(realPath);
-          RNFetchBlob.fs
-            .readStream(realPath, 'utf8', 4096)
-            .then((ifstream) => {
-              ifstream.open();
-              ifstream.onData((chunk) => {
-                console.log('reading file');
-                data += chunk;
-              });
-              ifstream.onError((err) => {
-                console.log('error in reading file', err);
-              });
-              ifstream.onEnd(() => {
-                console.log('read successful');
-              });
-            })
-            .catch((err) => {
-              console.log(err);
-            });
+  const readFile = (readFile) => {
+    console.log(readFile);
+    const realPath = file.path;
+    if (realPath !== null) {
+      console.log('path is', realPath);
+      RNFetchBlob.fs
+        .readStream(realPath, 'base64')
+        .then((ifstream) => {
+          ifstream.open();
+          ifstream.onData((chunk) => {
+            console.log('reading file');
+            data += chunk;
+          });
+          ifstream.onError((err) => {
+            console.log('error in reading file', err);
+          });
+          ifstream.onEnd(() => {
+            console.log('read successful');
+          });
         })
         .catch((err) => {
           console.log(err);
         });
     }
+    // console.log(uri, filename);
   };
 
   const downloadFile = (bytes, name) => {
@@ -328,12 +313,18 @@ const Connection = ({connection, updateConnection, channel, updateChannel}) => {
         }}
         title="Connect"
       />
-        <Button
-          title="Read File"
-          onPress={() => {
-            sendFile();
-          }}
-        />
+      <Button
+        title="Select File"
+        onPress={() => {
+          selectFile();
+        }}
+      />
+      <Button
+        title="Read File"
+        onPress={() => {
+          readFile(file);
+        }}
+      />
     </View>
   );
 };
