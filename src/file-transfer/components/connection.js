@@ -135,17 +135,12 @@ const Connection = ({connection, updateConnection, channel, updateChannel}) => {
   };
 
   const onOffer = ({offer, name}) => {
-    console.log(offer);
     setConnectedTo(name);
     connectedRef.current = name;
-
     connection
       .setRemoteDescription(new RTCSessionDescription(offer))
       .then(() => connection.createAnswer())
-      .then((answer) => {
-        console.log(answer);
-        connection.setLocalDescription(answer);
-      })
+      .then((answer) => connection.setLocalDescription(answer))
       .then(() =>
         send({type: 'answer', answer: connection.localDescription, name: name}),
       )
@@ -181,14 +176,11 @@ const Connection = ({connection, updateConnection, channel, updateChannel}) => {
     console.log('reached here');
     connection
       .createOffer()
-      .then((offer) => {
-        console.log('offer');
-        console.log(offer);
-        connection.setLocalDescription(offer);
+      .then((desc) => {
+        connection.setLocalDescription(desc).then(() => {
+          send({type: 'offer', offer: connection.localDescription, name: name});
+        });
       })
-      .then(() =>
-        send({type: 'offer', offer: connection.localDescription, name: name}),
-      )
       .catch((e) => setAlert(e));
   };
 
