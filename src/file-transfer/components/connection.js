@@ -135,13 +135,17 @@ const Connection = ({connection, updateConnection, channel, updateChannel}) => {
   };
 
   const onOffer = ({offer, name}) => {
+    console.log(offer);
     setConnectedTo(name);
     connectedRef.current = name;
 
     connection
       .setRemoteDescription(new RTCSessionDescription(offer))
       .then(() => connection.createAnswer())
-      .then((answer) => connection.setLocalDescription(answer))
+      .then((answer) => {
+        console.log(answer);
+        connection.setLocalDescription(answer);
+      })
       .then(() =>
         send({type: 'answer', answer: connection.localDescription, name: name}),
       )
