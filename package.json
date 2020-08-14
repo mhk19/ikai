@@ -42,7 +42,6 @@
     "react-native-vector-icons": "^7.0.0",
     "react-native-wifi-and-hotspot-wizard": "^1.0.5-stable",
     "readable-stream": "^1.0.33",
-    "rn-fetch-blob": "^0.12.0",
     "stream-browserify": "^3.0.0"
   },
   "devDependencies": {

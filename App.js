@@ -21,16 +21,6 @@ export class App extends React.Component {
   constructor(props) {
     super(props);
     initScanBotSdk().then((r) => console.log(r));
-    this.state = {
-      connection: null,
-      channel: null,
-    };
-    this.updateChannel = this.updateChannel.bind(this);
-    this.updateConnection = this.updateConnection.bind(this);
-  }
-
-  updateConnection(conn) {
-    this.setState({connection: conn});
   }
   closeControlPanel = () => {
     this._drawer.close();
