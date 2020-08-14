@@ -5,19 +5,13 @@
  */
 import './shim';
 
-import React, { Component } from 'react';
-import {
-  AppRegistry,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View
-} from 'react-native';
+import React, {Component} from 'react';
+import {AppRegistry, ScrollView, StyleSheet, Text, View} from 'react-native';
 
 var net = require('net');
 
 function randomPort() {
-  return Math.random() * 60536 | 0 + 5000; // 60536-65536
+  return (Math.random() * 60536) | (0 + 5000); // 60536-65536
 }
 
 var serverPort = randomPort();
@@ -27,34 +21,40 @@ export class RctSockets extends React.Component {
     super(props);
 
     this.updateChatter = this.updateChatter.bind(this);
-    this.state = { chatter: [] };
+    this.state = {chatter: []};
   }
 
   updateChatter(msg) {
     this.setState({
-        chatter: this.state.chatter.concat([msg])
+      chatter: this.state.chatter.concat([msg]),
     });
   }
 
   componentDidMount() {
-    let server = net.createServer((socket) => {
-      this.updateChatter('server connected on ' + JSON.stringify(socket.address()));
+    let server = net
+      .createServer((socket) => {
+        this.updateChatter(
+          'server connected on ' + JSON.stringify(socket.address()),
+        );
 
-      socket.on('data', (data) => {
-        this.updateChatter('Server Received: ' + data);
-        socket.write('Echo server\r\n');
-      });
+        socket.on('data', (data) => {
+          this.updateChatter('Server Received: ' + data);
+          socket.write('Echo server\r\n');
+        });
 
-      socket.on('error', (error) => {
-        this.updateChatter('error ' + error);
-      });
+        socket.on('error', (error) => {
+          this.updateChatter('error ' + error);
+        });
 
-      socket.on('close', (error) => {
-        this.updateChatter('server client closed ' + (error ? error : ''));
+        socket.on('close', (error) => {
+          this.updateChatter('server client closed ' + (error ? error : ''));
+        });
+      })
+      .listen(serverPort, () => {
+        this.updateChatter(
+          'opened server on ' + JSON.stringify(server.address()),
+        );
       });
-    }).listen(serverPort, () => {
-      this.updateChatter('opened server on ' + JSON.stringify(server.address()));
-    });
 
     server.on('error', (error) => {
       this.updateChatter('error ' + error);
@@ -65,7 +65,9 @@ export class RctSockets extends React.Component {
     });
 
     let client = net.createConnection(serverPort, () => {
-      this.updateChatter('opened client on ' + JSON.stringify(client.address()));
+      this.updateChatter(
+        'opened client on ' + JSON.stringify(client.address()),
+      );
       client.write('Hello, server! Love, Client.');
     });
 
