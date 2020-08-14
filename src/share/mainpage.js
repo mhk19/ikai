@@ -15,7 +15,7 @@ export class Share extends React.Component {
       <ShareStack.Navigator initialRouteName="shareMainscreen">
         <ShareStack.Screen
           name="shareMainscreen"
-          component={ShareMainPage}
+          component={Connection}
           options={{
             header: () => {
               return (
