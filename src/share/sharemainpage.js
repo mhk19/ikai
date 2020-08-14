@@ -74,7 +74,7 @@ export class ShareMainPage extends React.Component {
             <View style={styles.descContainer}>
               <Text
                 style={{
-                  color: '#D82C2C',
+                  color: '#979797',
                   fontSize: 22,
                   fontFamily: 'roboto',
                   margin: '5%',
@@ -86,7 +86,7 @@ export class ShareMainPage extends React.Component {
             </View>
           </View>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.onlineButton}>
+            <TouchableOpacity style={styles.onlineButton} onPress={() => {}}>
               <Text
                 style={{
                   color: 'white',

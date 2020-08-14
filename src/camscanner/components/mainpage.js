@@ -3,13 +3,14 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {ImageDetailScreen} from './imagedetails';
 import {ImageResultScreen} from './imageresults';
 import {ScannerMainPage} from './scannermainpage';
-import {ScannerMainHeader} from './headers';
+import {MainHeader} from '../../ikai/components/header';
 
 const CamscannerStack = createStackNavigator();
 
 export class Scanner extends React.Component {
   constructor(props) {
     super(props);
+    this.open = props.route.params.user;
   }
 
   render() {
@@ -26,7 +27,13 @@ export class Scanner extends React.Component {
           component={ScannerMainPage}
           options={{
             header: () => {
-              return <ScannerMainHeader />;
+              return (
+                <MainHeader
+                  source={require('../assets/scanner_header.png')}
+                  view={true}
+                  open={this.open}
+                />
+              );
             },
           }}></CamscannerStack.Screen>
       </CamscannerStack.Navigator>

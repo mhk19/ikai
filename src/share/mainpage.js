@@ -1,14 +1,13 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import ShareMainPage from './sharemainpage';
-import ShareMainHeader from './headers';
-import {Connection} from '../file-transfer/components/connection';
-
+import MainHeader from '../ikai/components/header';
 const ShareStack = createStackNavigator();
 
 export class Share extends React.Component {
   constructor(props) {
     super(props);
+    this.open = props.route.params.user;
   }
 
   render() {
@@ -19,7 +18,13 @@ export class Share extends React.Component {
           component={Connection}
           options={{
             header: () => {
-              return <ShareMainHeader />;
+              return (
+                <MainHeader
+                  source={require('./assets/share_header.png')}
+                  view={true}
+                  open={this.open}
+                />
+              );
             },
           }}></ShareStack.Screen>
       </ShareStack.Navigator>

@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {Footer, FooterTab, Button, Icon, Thumbnail} from 'native-base';
-
+import {Keyboard} from 'react-native';
 const styles = StyleSheet.create({
   footertab: {
     fontFamily: 'roboto',
@@ -29,38 +29,51 @@ const images = {
   chat_active: require('../assets/chat_active.png'),
 };
 
-export function IkaiFooter({state, descriptors, navigation}) {
-  return (
-    <Footer>
-      <FooterTab style={styles.footertab}>
-        {/* <View> */}
-        {state.routeNames.map((route, index) => {
-          return (
-            <Button
-              vertical
-              onPress={() => {
-                navigation.navigate(route);
-              }}>
-              <Thumbnail
-                source={
-                  index !== state.index
-                    ? images[route]
-                    : images[route + '_active']
-                }
-                style={styles.thumbnail}
-              />
-              <Text
-                style={{
-                  color: index === state.index ? '#13C2C2' : '#595959',
+export function IkaiFooter(props) {
+  const [keyboardShow, setKeyboardShow] = useState(true);
+  useEffect(() => {
+    keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+      setKeyboardShow(false);
+    });
+    keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+      setKeyboardShow(true);
+    });
+  }, []);
+  if (keyboardShow) {
+    return (
+      <Footer>
+        <FooterTab style={styles.footertab}>
+          {/* <View> */}
+          {props.state.routeNames.map((route, index) => {
+            return (
+              <Button
+                vertical
+                onPress={() => {
+                  props.navigation.navigate(route);
                 }}>
-                {route}
-              </Text>
-            </Button>
-          );
-        })}
-      </FooterTab>
-    </Footer>
-  );
+                <Thumbnail
+                  source={
+                    index !== props.state.index
+                      ? images[route]
+                      : images[route + '_active']
+                  }
+                  style={styles.thumbnail}
+                />
+                <Text
+                  style={{
+                    color: index === props.state.index ? '#13C2C2' : '#595959',
+                  }}>
+                  {route}
+                </Text>
+              </Button>
+            );
+          })}
+        </FooterTab>
+      </Footer>
+    );
+  } else {
+    return <View></View>;
+  }
 }
 
 export default IkaiFooter;
