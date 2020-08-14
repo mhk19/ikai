@@ -115,6 +115,7 @@ const Connection = ({connection, updateConnection, channel, updateChannel}) => {
           send({
             name: connectedTo,
             type: 'candidate',
+            candidate: candidate,
           });
         }
         localConnection.ondatachannel = (event) => {
@@ -200,36 +201,37 @@ const Connection = ({connection, updateConnection, channel, updateChannel}) => {
   };
 
   const sendFile = () => {
-    if (file) {
+    // if (file) {
       // console.log('the selected file is:', file);
-      channel.onopen = async () => {
-        const arrayBuffer = await file.arrayBuffer();
-        for (let i = 0; i < arrayBuffer.byteLength; i += MAXIMUM_MESSAGE_SIZE) {
-          channel.send(arrayBuffer.slice(i, i + MAXIMUM_MESSAGE_SIZE));
-        }
-        channel.send(END_OF_FILE_MESSAGE);
-      };
-    }
+      // channel.onopen = async () => {
+      //   const arrayBuffer = await file.arrayBuffer();
+      //   for (let i = 0; i < 10; i++) {
+          channel.send('hello! this is mahak');
+        // }
+        // channel.send(END_OF_FILE_MESSAGE);
+      //};
+    //}
   };
 
   const handleDataChannelFileReceived = ({data}) => {
-    const receivedBuffers = [];
-    try {
-      if (data !== END_OF_FILE_MESSAGE) {
-        receivedBuffers.push(data);
-      } else {
-        const arrayBuffer = receivedBuffers.reduce((acc, arraybuffer) => {
-          const tmp = new Uint8Array(acc.byteLength + arraybuffer.byteLength);
-          tmp.set(new Uint8Array(acc), 0);
-          tmp.set(new Uint8Array(arraybuffer), acc.byteLength);
-          return tmp;
-        }, new Uint8Array());
-        const blob = new Blob([arrayBuffer]);
-        downloadFile(blob, channel.label);
-      }
-    } catch (err) {
-      console.log('File transfer failed');
-    }
+    console.log(data);
+    // const receivedBuffers = [];
+    // try {
+    //   if (data !== END_OF_FILE_MESSAGE) {
+    //     receivedBuffers.push(data);
+    //   } else {
+    //     const arrayBuffer = receivedBuffers.reduce((acc, arraybuffer) => {
+    //       const tmp = new Uint8Array(acc.byteLength + arraybuffer.byteLength);
+    //       tmp.set(new Uint8Array(acc), 0);
+    //       tmp.set(new Uint8Array(arraybuffer), acc.byteLength);
+    //       return tmp;
+    //     }, new Uint8Array());
+    //     const blob = new Blob([arrayBuffer]);
+    //     downloadFile(blob, channel.label);
+    //   }
+    // } catch (err) {
+    //   console.log('File transfer failed');
+    // }
   };
 
   const selectFile = async () => {
@@ -326,14 +328,12 @@ const Connection = ({connection, updateConnection, channel, updateChannel}) => {
         }}
         title="Connect"
       />
-      {file !== null ? (
         <Button
           title="Read File"
           onPress={() => {
-            ReadFile(file.name);
+            sendFile();
           }}
         />
-      ) : null}
     </View>
   );
 };
