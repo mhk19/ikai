@@ -7,6 +7,7 @@ import com.facebook.react.ReactApplication;
 import com.RNFetchBlob.RNFetchBlobPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
 import io.github.elyx0.reactnativedocumentpicker.DocumentPickerPackage;
+import com.reactnativewifiandhotspotwizard.RNWifiAndHotspotWizardPackage;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
