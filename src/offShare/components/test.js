@@ -158,23 +158,7 @@ const Home = () => {
     await NetworkInfo.getIPAddress().then((ipAddress) => {
       console.log(ipAddress);
     });
-    await NetworkInfo.getIPV4Address().then((ipv4Address) => {
-      console.log(ipv4Address);
-      x = ipv4Address;
-      console.log(x);
-      let passcode = '';
-      for(var i = 0; i < x.length; i++) {
-        if(x[i] != '.') {
-          passcode += x[i];
-        }
-      }
-      await showPasscode(passcode);
-    });
     SocketConnect.startServer();
-  }
-
-  async function showPasscode() {
-
   }
 
   async function turnOnWifi() {
