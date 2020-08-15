@@ -6,7 +6,6 @@ import Button from 'apsl-react-native-button';
 import style from '../model/style';
 import { WifiWizard } from 'react-native-wifi-and-hotspot-wizard';
 import Toast from 'react-native-simple-toast';
-import SocketConnect from './SocketConnection';
 import SocketConnection from '../components/FileTransfer'
 var net = require('net');
 
@@ -115,7 +114,7 @@ const ConnectToNetwork = (props) => {
         </View>
       </Button>
       <Modal
-        isVisible={showstartSendingFile}
+        isVisible={startSendingFile}
         style={{
           justifyContent: 'flex-end',
           margin: 0,
