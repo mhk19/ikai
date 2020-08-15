@@ -46,6 +46,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#13C2C2',
     height: '75%',
     alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
     borderRadius: 5,
   },
 });
@@ -88,7 +90,7 @@ export class EditorMainPage extends React.Component {
                   color: 'white',
                   fontSize: 18,
                   fontFamily: 'roboto',
-                  marginTop: '3%',
+                  textAlignVertical: 'center',
                 }}>
                 START EDITING
               </Text>
