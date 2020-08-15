@@ -6,6 +6,7 @@ import style from '../model/style';
 import { HotspotWizard } from 'react-native-wifi-and-hotspot-wizard';
 import Toast from 'react-native-simple-toast';
 import { NetworkInfo } from 'react-native-network-info';
+import SocketConnection from '../components/FileTransfer';
 var net = require('net');
 
 let TurnOnHotspot = (props) => {
@@ -119,7 +120,7 @@ let TurnOnHotspot = (props) => {
           setHotspotPassword(data.password);
           let ID = '';
           let temp = (data.SSID);
-          for(var i = 13; i < 17; i++) {
+          for (var i = 13; i < 17; i++) {
             ID += temp[i];
           }
           setHotspotSSID(ID);
@@ -152,38 +153,64 @@ let TurnOnHotspot = (props) => {
     });
     startServer();
   }
-  
+
   async function startServer() {
     let serverPort = 7251;
     let server = net.createServer((socket) => {
       console.log('server connected on ' + JSON.stringify(socket.address()));
-  
+
       socket.on('data', (data) => {
+        handleDataChannelFileReceived(data);
         console.log('Server Received: ' + data);
         socket.write('Verified\r\n');
-        Toast.show('Chal gyaaa!!!!');
-        showTurnOnHotspotModal(false);
+        if (data === 'Verified') {
+          showTurnOnHotspotModal(false);
+        }
       });
-  
+
       socket.on('error', (error) => {
         console.log('error ' + error);
       });
-  
+
       socket.on('close', (error) => {
         console.log('server client closed ' + (error ? error : ''));
       });
     }).listen(serverPort, () => {
       console.log('opened server on ' + JSON.stringify(server.address()));
     });
-  
+
     server.on('error', (error) => {
       console.log('error ' + error);
     });
-  
+
     server.on('close', () => {
       console.log('server close');
     });
   };
+};
+
+const handleDataChannelFileReceived = (data) => {
+  try {
+    if (data !== END_OF_FILE_MESSAGE) {
+      receivedBuffers.push(data);
+    } else if (data === END_OF_FILE_MESSAGE) {
+      RNFetchBlob.fs
+        .writeStream(RNFetchBlob.fs.dirs.DownloadDir + '/test2.pdf', 'base64')
+        .then((stream) => {
+          for (let i = 0; i < receivedBuffers.length; i++) {
+            stream.write(receivedBuffers[i]);
+          }
+          console.log(receivedBuffers);
+          console.log('File completely received');
+          receivedBuffers = [];
+          return stream.close();
+        });
+    } else {
+      console.log('file cannot be received completely');
+    }
+  } catch (err) {
+    console.log('File transfer failed');
+  }
 };
 
 export default TurnOnHotspot;
