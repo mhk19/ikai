@@ -1,7 +1,8 @@
 import {View, Text, Button, Animated} from 'react-native';
 import {Container, Header, Content} from 'native-base';
 import ScanbotSDK from 'react-native-scanbot-sdk';
-import React from 'react';
+import React, {createContext} from 'react';
+import {Colors} from './android/app/model/Colors';
 import initScanBotSdk from './src/camscanner/init';
 // import {ScannerMainPage} from './src/camscanner/components/mainpage';
 import {IkaiFooter} from './src/ikai/components/footer';
@@ -21,9 +22,6 @@ export class App extends React.Component {
   constructor(props) {
     super(props);
     initScanBotSdk().then((r) => console.log(r));
-    this.state = {
-      page: InitialPage,
-    };
   }
   closeControlPanel = () => {
     this._drawer.close();
@@ -67,4 +65,5 @@ export class App extends React.Component {
     );
   }
 }
+
 export default App;
