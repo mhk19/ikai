@@ -5,6 +5,7 @@ import Button from 'apsl-react-native-button';
 import style from '../model/style';
 import {HotspotWizard} from 'react-native-wifi-and-hotspot-wizard';
 import Toast from 'react-native-simple-toast';
+import {NetworkInfo} from 'react-native-network-info';
 var net = require('net');
 
 let TurnOnHotspot = (props) => {
@@ -117,22 +118,30 @@ let TurnOnHotspot = (props) => {
         if (data.status == 'auth') {
           setHotspotPassword(data.password);
           setHotspotSSID(data.SSID);
-          await NetworkInfo.getIPV4Address().then((ipv4Address) => {
+          NetworkInfo.getIPV4Address().then((ipv4Address) => {
             console.log(ipv4Address);
             x = ipv4Address;
             console.log(x);
+            var j = 0;
+            let arr = '';
             for(var i = 0; i < x.length; i++) {
               if(x[i] != '.') {
-                passcode += x[i];
+                j++;
+                arr += x[i];
+              }
+              else {
+                passcode += j;
               }
             }
+            passcode += arr;
+            console.log(passcode);
           });
         }
       } else {
         Toast.show('Something went wrong');
       }
     });
-    // makeServer();
+    makeServer();
   }
 };
 
