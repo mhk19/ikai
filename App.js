@@ -12,6 +12,7 @@ import {Scanner} from './src/camscanner/components/mainpage';
 import Chat from './src/chat/mainpage';
 import {Share} from './src/share/mainpage';
 import {Menu} from './src/menu/components/mainpage';
+import {Editor} from './src/editor/components/mainPage';
 import {navigationRef} from './RootNavigation';
 import * as RootNavigation from './RootNavigation.js';
 import Drawer from 'react-native-drawer';
@@ -45,6 +46,10 @@ export class App extends React.Component {
             <Tab.Screen
               name="share"
               component={Share}
+              initialParams={{user: this.openControlPanel}}></Tab.Screen>
+            <Tab.Screen
+              name="edit"
+              component={Editor}
               initialParams={{user: this.openControlPanel}}></Tab.Screen>
             <Tab.Screen
               name="scan"

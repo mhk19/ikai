@@ -20,10 +20,12 @@ const styles = StyleSheet.create({
 
 const images = {
   menu: require('../assets/menu.png'),
+  edit: require('../assets/edit.png'),
   share: require('../assets/share.png'),
   scan: require('../assets/scan.png'),
   chat: require('../assets/chat.png'),
   menu_active: require('../assets/menu_active.png'),
+  edit_active: require('../assets/edit_active.png'),
   share_active: require('../assets/share_active.png'),
   scan_active: require('../assets/scan_active.png'),
   chat_active: require('../assets/chat_active.png'),
