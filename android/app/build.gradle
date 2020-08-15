@@ -1,4 +1,6 @@
 apply plugin: "com.android.application"
+apply plugin: 'ly.img.android.sdk'
+apply plugin: 'kotlin-android'
 
 import com.android.build.OutputFile
 
@@ -128,7 +130,7 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    defaultConfig {
+    defaultConfig { 
         applicationId "com.learnnative"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
@@ -191,6 +193,10 @@ dependencies {
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
 
+    // implementation "androidx.multidex:multidex:2.0.1"
+
+    // compile project(':react-native-file-picker')
+
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
       exclude group:'com.facebook.fbjni'
     }
@@ -213,6 +219,31 @@ dependencies {
     }
 }
 
+imglyConfig {
+    modules {
+        include 'ui:text'
+        include 'ui:focus'
+        include 'ui:frame'
+        include 'ui:brush'
+        include 'ui:filter'
+        include 'ui:sticker'
+        include 'ui:overlay'
+        include 'ui:transform'
+        include 'ui:adjustment'
+        include 'ui:text-design'
+
+        // This module is big, remove the serializer if you don't need that feature.
+        include 'backend:serializer'
+
+        // Remove the asset packs you don't need, these are also big in size.
+        include 'assets:font-basic'
+        include 'assets:frame-basic'
+        include 'assets:filter-basic'
+        include 'assets:overlay-basic'
+        include 'assets:sticker-shapes'
+        include 'assets:sticker-emoticons'
+    }
+
 // Run this once to be able to run the application with BUCK
 // puts all compile dependencies into folder libs for BUCK to use
 task copyDownloadableDepsToLibs(type: Copy) {
@@ -221,3 +252,4 @@ task copyDownloadableDepsToLibs(type: Copy) {
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
+}
