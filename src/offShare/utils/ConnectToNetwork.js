@@ -42,7 +42,7 @@ const ConnectToNetwork = (props) => {
             }}
             onPress={() => {
               Toast.show('Authenticating... Please Wait');
-              connectToNetwork();
+              verifyPasscode();
             }}>
             <View>
               <Text style={style.headerText}> Send </Text>
@@ -83,7 +83,7 @@ const ConnectToNetwork = (props) => {
               }}
               onPress={() => {
                 Toast.show('Connecting... Please Wait');
-                verifyPasscode();
+                connectToNetwork();
               }}>
               <View>
                 <Text style={style.headerText}> Connect </Text>

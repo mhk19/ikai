@@ -158,7 +158,7 @@ const Home = () => {
     await NetworkInfo.getIPAddress().then((ipAddress) => {
       console.log(ipAddress);
     });
-    SocketConnect.startServer();
+    // SocketConnect.startServer();
   }
 
   async function turnOnWifi() {
