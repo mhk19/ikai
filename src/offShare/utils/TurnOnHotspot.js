@@ -1,93 +1,93 @@
-import React, {useState, useEffect} from 'react';
-import {View, Text, TextInput, Dimensions} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Button from 'apsl-react-native-button';
 import style from '../model/style';
-import {HotspotWizard} from 'react-native-wifi-and-hotspot-wizard';
+import { HotspotWizard } from 'react-native-wifi-and-hotspot-wizard';
 import Toast from 'react-native-simple-toast';
-import {NetworkInfo} from 'react-native-network-info';
+import { NetworkInfo } from 'react-native-network-info';
 var net = require('net');
 
 let TurnOnHotspot = (props) => {
   let win = Dimensions.get('window');
   let [HotspotSSID, setHotspotSSID] = useState();
   let [HotspotPassword, setHotspotPassword] = useState();
-  let passcode = '';
+  let [HotspotPasscode, setHotspotPasscode] = useState();
   let showTurnOnHotspotModal = props.showTurnOnHotspotModal;
   let [connected, setHotspotConnected] = useState(false);
   return (
     <View
-      style={{height: win.height / 2, backgroundColor: '#fff', padding: 10}}>
+      style={{ height: win.height / 2, backgroundColor: '#fff', padding: 10 }}>
       {connected ? (
-        <View style={{alignSelf: 'center', marginTop: 20}}>
+        <View style={{ alignSelf: 'center', marginTop: 20 }}>
           <Icon
             name="check-circle"
             color="green"
             size={150}
-            style={{alignSelf: 'center'}}></Icon>
-          <Text style={{fontSize: 35, alignSelf: 'center'}}>
+            style={{ alignSelf: 'center' }}></Icon>
+          <Text style={{ fontSize: 35, alignSelf: 'center' }}>
             Hotspot Active{' '}
           </Text>
           {connected == 'success' ? (
             <Text>Here are your credentials</Text>
           ) : (
-            <Text>
-              Failed to set custom credentials. Here is the randomly generated
-              credentials.
-            </Text>
-          )}
-          <Text style={{fontSize: 20, textAlign: 'left', fontWeight: 'bold'}}>
-            SSID : {HotspotSSID}{' '}
+              <Text>
+                Failed to set custom credentials. Here is the randomly generated
+                credentials.
+              </Text>
+            )}
+          <Text style={{ fontSize: 20, textAlign: 'left', fontWeight: 'bold' }}>
+            ID : {HotspotSSID}{' '}
           </Text>
-          <Text style={{fontSize: 20, textAlign: 'left', fontWeight: 'bold'}}>
+          <Text style={{ fontSize: 20, textAlign: 'left', fontWeight: 'bold' }}>
             Password : {HotspotPassword}{' '}
           </Text>
-          <Text style={{fontSize: 20, textAlign: 'left', fontWeight: 'bold'}}>
-            Passcode : {passcode}{' '}
+          <Text style={{ fontSize: 20, textAlign: 'left', fontWeight: 'bold' }}>
+            Passcode : {HotspotPasscode}{' '}
           </Text>
         </View>
       ) : (
-        <>
-          <Text style={style.text}>Setup Hotspot </Text>
-          <Text></Text>
-          <Text style={style.text}>Hotspot SSID</Text>
-          <TextInput
-            style={{borderBottomColor: '#212121', borderBottomWidth: 2}}
-            placeholder="SSID"
-            onChangeText={(text) => {
-              setHotspotSSID(text);
-            }}></TextInput>
-          <Text></Text>
-          <Text style={style.text}>Hotspot Password</Text>
-          <TextInput
-            secureTextEntry={true}
-            onChangeText={(text) => {
-              setHotspotPassword(text);
-            }}
-            style={{borderBottomColor: '#212121', borderBottomWidth: 2}}
-            placeholder="Password"></TextInput>
-          <Button
-            style={{
-              backgroundColor: '#00e676',
-              width: '100%',
-              height: 50,
-              left: 12,
-              borderWidth: 0,
-              justifyContent: 'center',
-              alignItems: 'center',
-              position: 'absolute',
-              bottom: 60,
-            }}
-            onPress={() => {
-              Toast.show('Starting Hotspot... Please Wait');
-              connectToHotspot();
-            }}>
-            <View>
-              <Text style={style.headerText}> Start Hotspot </Text>
-            </View>
-          </Button>
-        </>
-      )}
+          <>
+            <Text style={style.text}>Setup Hotspot </Text>
+            <Text></Text>
+            {/* <Text style={style.text}>Hotspot SSID</Text>
+            <TextInput
+              style={{ borderBottomColor: '#212121', borderBottomWidth: 2 }}
+              placeholder="SSID"
+              onChangeText={(text) => {
+                setHotspotSSID(text);
+              }}></TextInput>
+            <Text></Text>
+            <Text style={style.text}>Hotspot Password</Text>
+            <TextInput
+              secureTextEntry={true}
+              onChangeText={(text) => {
+                setHotspotPassword(text);
+              }}
+              style={{ borderBottomColor: '#212121', borderBottomWidth: 2 }}
+              placeholder="Password"></TextInput> */}
+            <Button
+              style={{
+                backgroundColor: '#00e676',
+                width: '100%',
+                height: 50,
+                left: 12,
+                borderWidth: 0,
+                justifyContent: 'center',
+                alignItems: 'center',
+                position: 'absolute',
+                bottom: 60,
+              }}
+              onPress={() => {
+                Toast.show('Starting Hotspot... Please Wait');
+                connectToHotspot();
+              }}>
+              <View>
+                <Text style={style.headerText}> Start Hotspot </Text>
+              </View>
+            </Button>
+          </>
+        )}
 
       <Button
         style={{
@@ -117,23 +117,32 @@ let TurnOnHotspot = (props) => {
         setHotspotConnected(data.status);
         if (data.status == 'auth') {
           setHotspotPassword(data.password);
-          setHotspotSSID(data.SSID);
+          let ID = '';
+          let temp = (data.SSID);
+          for(var i = 13; i < 17; i++) {
+            ID += temp[i];
+          }
+          setHotspotSSID(ID);
           NetworkInfo.getIPV4Address().then((ipv4Address) => {
             console.log(ipv4Address);
             x = ipv4Address;
             console.log(x);
             var j = 0;
             let arr = '';
-            for(var i = 0; i < x.length; i++) {
-              if(x[i] != '.') {
+            let passcode = '';
+            for (var i = 0; i < x.length; i++) {
+              if (x[i] != '.') {
                 j++;
                 arr += x[i];
               }
               else {
                 passcode += j;
+                j = 0;
               }
             }
+            passcode += j;
             passcode += arr;
+            setHotspotPasscode(passcode);
             console.log(passcode);
           });
         }
@@ -141,38 +150,40 @@ let TurnOnHotspot = (props) => {
         Toast.show('Something went wrong');
       }
     });
-    makeServer();
+    startServer();
   }
+  
+  async function startServer() {
+    let serverPort = 7251;
+    let server = net.createServer((socket) => {
+      console.log('server connected on ' + JSON.stringify(socket.address()));
+  
+      socket.on('data', (data) => {
+        console.log('Server Received: ' + data);
+        socket.write('Verified\r\n');
+        Toast.show('Chal gyaaa!!!!');
+        showTurnOnHotspotModal(false);
+      });
+  
+      socket.on('error', (error) => {
+        console.log('error ' + error);
+      });
+  
+      socket.on('close', (error) => {
+        console.log('server client closed ' + (error ? error : ''));
+      });
+    }).listen(serverPort, () => {
+      console.log('opened server on ' + JSON.stringify(server.address()));
+    });
+  
+    server.on('error', (error) => {
+      console.log('error ' + error);
+    });
+  
+    server.on('close', () => {
+      console.log('server close');
+    });
+  };
 };
 
-function makeServer() {
-  console.log('making server.');
-  let server = net
-    .createServer((socket) => {
-      console.log('socket created');
-      socket.on('data', (data) => {
-        console.log('data received: ' + data);
-        socket.write('Echo server\r\n');
-      });
-
-      socket.on('error', (error) => {
-        console.log('Error: ' + error);
-      });
-
-      socket.on('close', (error) => {
-        console.log('socket is closed.');
-      });
-    })
-    .listen(6666, () => {
-      console.log('listening to port 6666.');
-    });
-
-  server.on('error', (error) => {
-    console.log('error: ' + error);
-  });
-
-  server.on('close', () => {
-    console.log('server is closed.');
-  });
-}
 export default TurnOnHotspot;
