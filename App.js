@@ -16,6 +16,7 @@ import {Editor} from './src/editor/components/mainPage';
 import {navigationRef} from './RootNavigation';
 import * as RootNavigation from './RootNavigation.js';
 import Drawer from 'react-native-drawer';
+import Home from './src/offShare/components/test';
 const Tab = createBottomTabNavigator();
 const InitialPage = 'share';
 export class App extends React.Component {
