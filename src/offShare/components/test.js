@@ -11,6 +11,7 @@ import {Dimensions} from 'react-native';
 import TurnOnHotspot from '../utils/TurnOnHotspot';
 import {NetworkInfo} from 'react-native-network-info';
 import RctSockets from './tcp';
+import SocketConnect from '../utils/SocketConnection';
 var net = require('net');
 
 const Home = () => {
@@ -107,6 +108,14 @@ const Home = () => {
         <TurnOnHotspot showTurnOnHotspotModal={showTurnOnHotspotModal} />
       </Modal>
       <Modal
+        isVisible={TurnOnHotspotModalState}
+        style={{
+          justifyContent: 'flex-end',
+          margin: 0,
+        }}>
+        <TurnOnHotspot showTurnOnHotspotModal={showTurnOnHotspotModal} />
+      </Modal>
+      <Modal
         isVisible={ConnectToNetworkModalState}
         style={{
           justifyContent: 'flex-end',
@@ -121,34 +130,51 @@ const Home = () => {
 
   async function sender() {
     // TODO: permissions
-    // await turnOnWifi();
-    // console.log("wifi turned on");
-    // await isWifiEnabled();
-    // console.log("wifi is enabled");
-    // await connectToNetwork();
-    // console.log("connected to network.")
-    // Network info
-    let x;
-    NetworkInfo.getIPAddress().then((ipAddress) => {
-      console.log(ipAddress);
-      x = ipAddress;
-    });
-    NetworkInfo.getIPV4Address().then((ipv4Address) => {
-      console.log(ipv4Address);
-    });
-    let client = net.createConnection(6666, x, () => {
-      client.write('Hello, server! Love, Client.');
-    });
-    client.on('data', (data) => {
-      console.log('Client Received: ' + data);
-    });
+    await turnOnWifi();
+    console.log("wifi turned on");
+    await isWifiEnabled();
+    console.log("wifi is enabled");
+    connectToNetwork();
+    console.log("connected to network.");
+    // // Network info
+    // let x;
+    // await NetworkInfo.getIPAddress().then((ipAddress) => {
+    //   console.log(ipAddress);
+    //   x = toString(ipAddress);
+    //   console.log(x);
+    //   var passcode;
+    //   for(var i = 0; i < x.length(); i++) {
+    //     if(x[i] !== '.') {
+    //       passcode += x[i];
+    //     }
+    //   }
+    //   console.log(passcode)
+    // });
   }
 
   async function receiver() {
     await turnOnHotspot();
-    // var server = net.createServer(function(socket) {
-    //   socket.write('excellent!');
-    // }).listen(12345);
+    let x;
+    await NetworkInfo.getIPAddress().then((ipAddress) => {
+      console.log(ipAddress);
+    });
+    await NetworkInfo.getIPV4Address().then((ipv4Address) => {
+      console.log(ipv4Address);
+      x = ipv4Address;
+      console.log(x);
+      let passcode = '';
+      for(var i = 0; i < x.length; i++) {
+        if(x[i] != '.') {
+          passcode += x[i];
+        }
+      }
+      await showPasscode(passcode);
+    });
+    SocketConnect.startServer();
+  }
+
+  async function showPasscode() {
+
   }
 
   async function turnOnWifi() {

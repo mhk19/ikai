@@ -1,10 +1,11 @@
-import React, {useState} from 'react';
-import {View, Text, Dimensions, TextInput} from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, Dimensions, TextInput } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Button from 'apsl-react-native-button';
 import style from '../model/style';
-import {WifiWizard} from 'react-native-wifi-and-hotspot-wizard';
+import { WifiWizard } from 'react-native-wifi-and-hotspot-wizard';
 import Toast from 'react-native-simple-toast';
+import SocketConnect from './SocketConnection';
 
 const ConnectToNetwork = (props) => {
   let win = Dimensions.get('window');
@@ -13,33 +14,20 @@ const ConnectToNetwork = (props) => {
   let [connected, setConnected] = useState(false);
   return (
     <View
-      style={{height: win.height / 2, backgroundColor: '#fff', padding: 15}}>
+      style={{ height: win.height / 2, backgroundColor: '#fff', padding: 15 }}>
       {connected ? (
         <View
-          style={{alignContent: 'center', alignSelf: 'center', marginTop: 50}}>
+          style={{ alignContent: 'center', alignSelf: 'center', marginTop: 50 }}>
           <Icon name="check-circle" color="green" size={150}></Icon>
-          <Text style={{fontSize: 35}}> Connected </Text>
-        </View>
-      ) : (
-        <>
-          <Text style={style.text}>Connect To Network </Text>
-          <Text></Text>
-          <Text style={style.text}>SSID</Text>
-          <TextInput
-            style={{borderBottomColor: '#212121', borderBottomWidth: 2}}
-            placeholder="SSID"
-            onChangeText={(text) => {
-              WifiSSID = text;
-            }}></TextInput>
-          <Text></Text>
-          <Text style={style.text}>Password</Text>
+          <Text style={{ fontSize: 35 }}> Connected </Text>
+          <Text style={style.text}>WifiPasscode</Text>
           <TextInput
             secureTextEntry={true}
             onChangeText={(text) => {
-              WifiPassword = text;
+              WifiPasscode = text;
             }}
-            style={{borderBottomColor: '#212121', borderBottomWidth: 2}}
-            placeholder="Password"></TextInput>
+            style={{ borderBottomColor: '#212121', borderBottomWidth: 2 }}
+            placeholder="WifiPasscode"></TextInput>
           <Button
             style={{
               backgroundColor: '#00e676',
@@ -53,15 +41,56 @@ const ConnectToNetwork = (props) => {
               bottom: 60,
             }}
             onPress={() => {
-              Toast.show('Connecting... Please Wait');
+              Toast.show('Authenticating... Please Wait');
               connectToNetwork();
             }}>
             <View>
-              <Text style={style.headerText}> Connect </Text>
+              <Text style={style.headerText}> Send </Text>
             </View>
           </Button>
-        </>
-      )}
+        </View>
+      ) : (
+          <>
+            <Text style={style.text}>Connect To Network </Text>
+            <Text></Text>
+            <Text style={style.text}>SSID</Text>
+            <TextInput
+              style={{ borderBottomColor: '#212121', borderBottomWidth: 2 }}
+              placeholder="SSID"
+              onChangeText={(text) => {
+                WifiSSID = text;
+              }}></TextInput>
+            <Text></Text>
+            <Text style={style.text}>Password</Text>
+            <TextInput
+              secureTextEntry={true}
+              onChangeText={(text) => {
+                WifiPassword = text;
+              }}
+              style={{ borderBottomColor: '#212121', borderBottomWidth: 2 }}
+              placeholder="Password"></TextInput>
+            <Button
+              style={{
+                backgroundColor: '#00e676',
+                width: '100%',
+                height: 50,
+                left: 12,
+                borderWidth: 0,
+                justifyContent: 'center',
+                alignItems: 'center',
+                position: 'absolute',
+                bottom: 60,
+              }}
+              onPress={() => {
+                Toast.show('Connecting... Please Wait');
+                verifyPasscode();
+              }}>
+              <View>
+                <Text style={style.headerText}> Connect </Text>
+              </View>
+            </Button>
+          </>
+        )}
 
       <Button
         style={{
@@ -109,6 +138,12 @@ const ConnectToNetwork = (props) => {
         );
       }
     });
+  }
+
+  function verifyPasscode() {
+    // Search For Nearby Devices
+    console.log('Connecting to Server');
+    SocketConnect.connectToServer(WifiPasscode);
   }
 };
 

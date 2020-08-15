@@ -40,6 +40,9 @@ let TurnOnHotspot = (props) => {
           <Text style={{fontSize: 20, textAlign: 'left', fontWeight: 'bold'}}>
             Password : {HotspotPassword}{' '}
           </Text>
+          <Text style={{fontSize: 20, textAlign: 'left', fontWeight: 'bold'}}>
+            Passcode : {HotspotPasscode}{' '}
+          </Text>
         </View>
       ) : (
         <>
@@ -118,9 +121,10 @@ let TurnOnHotspot = (props) => {
         Toast.show('Something went wrong');
       }
     });
-    makeServer();
+    // makeServer();
   }
 };
+
 function makeServer() {
   console.log('making server.');
   let server = net
