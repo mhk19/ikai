@@ -12,6 +12,7 @@ import TurnOnHotspot from '../utils/TurnOnHotspot';
 import {NetworkInfo} from 'react-native-network-info';
 import RctSockets from './tcp';
 import SocketConnect from '../utils/SocketConnection';
+import NetInfo from "@react-native-community/netinfo";
 var net = require('net');
 
 const Home = () => {
@@ -153,11 +154,41 @@ const Home = () => {
   }
 
   async function receiver() {
-    await turnOnHotspot();
-    let x;
-    await NetworkInfo.getIPAddress().then((ipAddress) => {
-      console.log(ipAddress);
+    // alert('Please switch on your hotspot and connect to the device you want to receive data from');
+    // NetInfo.addEventListener(state => {
+    //   console.log("Connection type", state.type);
+    //   console.log("Is connected?", state.isConnected);
+    //   if(state.type === 'wifi' && state.isConnected === 'true')
+    //     console.log('done');
+    // });
+    // if(state.isConnected() === 'true')
+    //   unsubscribe();
+    turnOnHotspot();
+    NetworkInfo.getIPV4Address().then((ipv4Address) => {
+      console.log(ipv4Address);
+      x = ipv4Address;
+      console.log(x);
+      var j = 0;
+      let arr = '';
+      let passcode = '';
+      for(var i = 0; i < x.length; i++) {
+        if(x[i] != '.') {
+          j++;
+          arr += x[i];
+        }
+        else {
+          passcode += j;
+          j = 0;
+        }
+      }
+      passcode += j;
+      passcode += arr;
+      console.log(passcode);
     });
+    // let x;
+    // await NetworkInfo.getIPAddress().then((ipAddress) => {
+    //   console.log(ipAddress);
+    // });
     // SocketConnect.startServer();
   }
 
@@ -236,12 +267,12 @@ const Home = () => {
       });
   }
 
-  function isHotspotEnabled() {
+  async function isHotspotEnabled() {
     HotspotWizard.isHotspotEnabled().then((status) => {
       if (status) {
         Toast.show('Hotspot Is Enabled');
       } else {
-        Toast.show('Hotspot Is Disabled');
+        isHotspotEnabled();
       }
     });
   }
