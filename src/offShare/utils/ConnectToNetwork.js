@@ -143,7 +143,35 @@ const ConnectToNetwork = (props) => {
   function verifyPasscode() {
     // Search For Nearby Devices
     console.log('Connecting to Server');
-    SocketConnect.connectToServer(WifiPasscode);
+    connectToServer(WifiPasscode);
+  }
+
+  function connectToServer(WifiPasscode) {
+    let client = net.createConnection(serverPort, WifiPasscode, () => {
+      console.log('opened client on ' + JSON.stringify(client.address()));
+      client.write('Hello, server! Love, Client.');
+    });
+
+    client.on('data', (data) => {
+      console.log('Client Received: ' + data);
+
+      if (data === 'Verified') {
+        Toast.show('Socket Created')
+      }
+
+      // this.client.destroy(); // kill client after server's response
+      // this.server.close();
+    });
+
+    client.on('error', (error) => {
+      console.log('client error ' + error);
+    });
+
+    client.on('close', () => {
+      this.client.destroy(); // kill client after server's response
+      this.server.close();
+      console.log('client close');
+    });
   }
 };
 

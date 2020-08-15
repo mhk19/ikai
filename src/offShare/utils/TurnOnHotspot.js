@@ -11,6 +11,7 @@ let TurnOnHotspot = (props) => {
   let win = Dimensions.get('window');
   let [HotspotSSID, setHotspotSSID] = useState();
   let [HotspotPassword, setHotspotPassword] = useState();
+  let passcode = '';
   let showTurnOnHotspotModal = props.showTurnOnHotspotModal;
   let [connected, setHotspotConnected] = useState(false);
   return (
@@ -41,7 +42,7 @@ let TurnOnHotspot = (props) => {
             Password : {HotspotPassword}{' '}
           </Text>
           <Text style={{fontSize: 20, textAlign: 'left', fontWeight: 'bold'}}>
-            Passcode : {HotspotPasscode}{' '}
+            Passcode : {passcode}{' '}
           </Text>
         </View>
       ) : (
@@ -116,6 +117,16 @@ let TurnOnHotspot = (props) => {
         if (data.status == 'auth') {
           setHotspotPassword(data.password);
           setHotspotSSID(data.SSID);
+          await NetworkInfo.getIPV4Address().then((ipv4Address) => {
+            console.log(ipv4Address);
+            x = ipv4Address;
+            console.log(x);
+            for(var i = 0; i < x.length; i++) {
+              if(x[i] != '.') {
+                passcode += x[i];
+              }
+            }
+          });
         }
       } else {
         Toast.show('Something went wrong');
