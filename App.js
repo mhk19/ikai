@@ -26,6 +26,15 @@ export class App extends React.Component {
   constructor(props) {
     super(props);
     initScanBotSdk().then((r) => console.log(r));
+    this.getToken();
+    this.state = {
+      user: null,
+      token: null,
+      isLogin: false,
+      page: 'login',
+    };
+    this.loginHandler = this.loginHandler.bind(this);
+    this.pageHandler = this.pageHandler.bind(this);
   }
   closeControlPanel = () => {
     this._drawer.close();
@@ -33,18 +42,35 @@ export class App extends React.Component {
   openControlPanel = () => {
     this._drawer.open();
   };
-
-  getToken = async () => {
+  loginHandler() {
+    console.log('user is logged in');
+    this.setState({isLogin: true});
+  }
+  pageHandler(page) {
+    this.setState({page: page});
+  }
+  getToken() {
     try {
-      const value = await AsyncStorage.getItem('token');
-      return value != null ? JSON.parse(value) : null;
+      this.getMyStringValue('username');
+      this.getMyStringValue('token');
     } catch {
-      return null;
+      console.log('unable to read from storage');
     }
+  }
+
+  getUser = async () => {
+    await AsyncStorage.getItem('data').then((data) => {
+      this.setState({user: data});
+    });
+  };
+  getToken = async () => {
+    await AsyncStorage.getItem('token').then((data) => {
+      this.setState({token: data});
+    });
   };
 
   render() {
-    if (this.getToken()) {
+    if ((this.state.user && this.state.token) || this.state.isLogin) {
       return (
         <Drawer
           ref={(ref) => (this._drawer = ref)}
@@ -78,10 +104,17 @@ export class App extends React.Component {
           </NavigationContainer>
         </Drawer>
       );
-    }
-
-    else {
-      <LoginComponent />
+    } else {
+      if (this.state.page === 'login') {
+        return (
+          <LoginComponent
+            loginHandler={this.loginHandler}
+            pageHandler={this.pageHandler}
+          />
+        );
+      } else if (this.state.page === 'register') {
+        return <RegisterComponent pageHandler={this.pageHandler} />;
+      }
     }
   }
 }

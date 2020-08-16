@@ -1,15 +1,20 @@
 import React from 'react';
-import {StyleSheet, TextInput, Text} from 'react-native';
-import View from 'native-base';
+import {
+  StyleSheet,
+  TextInput,
+  Text,
+  View,
+  TouchableOpacity,
+} from 'react-native';
+// import View from 'native-base';
 import Background from '../assets/background.png';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import {virgilCrypto} from 'react-native-virgil-crypto';
 import App from '../../../App';
 import AsyncStorage from '@react-native-community/async-storage';
 
 const styles = StyleSheet.create({
   outerContainer: {
-    backgroundImage: `url(${Background})`,
+    // backgroundImage: `url(${Background})`,
     alignContent: 'center',
     flex: 1,
   },
@@ -26,11 +31,11 @@ const styles = StyleSheet.create({
   },
   textBox: {
     borderColor: '#13C2C2',
-    borderRadius: '5%',
+    borderRadius: 5,
   },
   submissionContainer: {
     flexDirection: 'column',
-    marginBottom: '0',
+    marginBottom: 0,
   },
   button: {},
 });
@@ -38,13 +43,12 @@ const styles = StyleSheet.create({
 export class RegisterComponent extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      username: null,
+      password1: null,
+      password2: null,
+    };
   }
-
-  state = {
-    username: null,
-    password1: null,
-    password2: null,
-  };
 
   setUserName = (text) => {
     this.setState({username: text});
@@ -95,12 +99,12 @@ export class RegisterComponent extends React.Component {
         this.setToken(response.token);
         this.setPrivateKey(this.state.username, keys.privateKey);
         console.log(response);
-        App.render();
       })
       .catch((error) => {
         console.log(error);
       });
   };
+
   render() {
     return (
       <View style={styles.outerContainer}>
@@ -131,7 +135,10 @@ export class RegisterComponent extends React.Component {
                 <Text style={null}>SIGNUP</Text>
               </TouchableOpacity>
               <Text style={null}>or</Text>
-              <TouchableOpacity onPress={() => {}}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.pageHandler('login');
+                }}>
                 <Text style={null}>LOGIN</Text>
               </TouchableOpacity>
             </View>
