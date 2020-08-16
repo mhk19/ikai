@@ -93,7 +93,9 @@ export const ActionPage = (props) => {
               </TouchableOpacity>
             </View>
             <View style={styles.sendAndReceiveContainer}>
-              <TouchableOpacity onPress={() => {}}>
+              <TouchableOpacity onPress={() => {
+                  props.navigation.push('shareConnectPage', {});
+              }}>
                 <Image
                   style={styles.imageContainer}
                   source={require('../assets/receive.png')}
