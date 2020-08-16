@@ -14,13 +14,13 @@ const MAXIMUM_MESSAGE_SIZE = 65535;
 const END_OF_FILE_MESSAGE = 'EOF';
 
 const ConnectToNetwork = (props) => {
-  const [file, setFile] = useState(null);
   let win = Dimensions.get('window');
   let WifiSSID, WifiPassword, WifiPasscode, serverPort = 7251;
   let showConnectToNetworkModal = props.showConnectToNetworkModal;
   let [StartSendingFile, showStartSendingFileState] = useState(false);
   let [connected, setConnected] = useState(false);
   let code = '';
+  const [file, setFile] = useState(null);
 
   // let [sendFile, showSendFile] = useState(false);
   return (
@@ -130,13 +130,13 @@ const ConnectToNetwork = (props) => {
           <Button
             title="Select File"
             onPress={() => {
-              connectToServer.selectFile();
+              selectFile();
             }}
           />
           <Button
             title="Send File"
             onPress={() => {
-              connectToServer.sendFile(file);
+              connectToServer(2);
             }}
           />
         </View>
@@ -184,10 +184,10 @@ const ConnectToNetwork = (props) => {
     //   }
     // }
     console.log(WifiPasscode);
-    const code = await decrypt(WifiPasscode);
+    await decrypt(WifiPasscode);
     // Search For Nearby Devices
     console.log('Connecting to Server');
-    connectToServer(code);
+    connectToServer(1);
   }
 
   async function decrypt(str) {
@@ -217,60 +217,61 @@ const ConnectToNetwork = (props) => {
       code += str[i];
     }
     console.log(code);
-    return code;
   }
 
+  function connectToServer(arg) {
+    let client;
+    console.log(arg, code);
+    switch (arg) {
+      case 1:
+        createConn();
+        break;
+      case 2:
+        sendFile();
+        break;
+      // case 3:
+      //   sendFile();
+      //   break;
+    }
 
+    async function createConn() {
+      console.log(serverPort, code);
+      client = net.createConnection(serverPort, code, () => {
+        console.log('opened client on ' + JSON.stringify(client.address()));
+        client.write('Verified');
+      });
 
-  function connectToServer(code) {
-    let client = net.createConnection(serverPort, code, () => {
-      console.log('opened client on ' + JSON.stringify(client.address()));
-      client.write('Verified');
-    });
+      client.on('data', (data) => {
+        console.log('Client Received: ' + data);
+        showStartSendingFileState(true);
+        console.log(StartSendingFile);
+        console.log(StartSendingFile);
+  
+        // sendFileFunc();
+  
+        // function sendFileFunc() {
+        //   console.log('set to true');
+        //   showStartSendingFileState(true);
+        //   console.log(StartSendingFile);
+  
+        //   StartSendingFile = true;
+        //   console.log(StartSendingFile);
+        // }
+  
+        // this.client.destroy(); // kill client after server's response
+        // this.server.close();
+      });
+    }
 
-    client.on('data', (data) => {
-      console.log('Client Received: ' + data);
-      showStartSendingFileState(true);
-      console.log(StartSendingFile);
-
-      // sendFileFunc();
-
-      // function sendFileFunc() {
-      //   console.log('set to true');
-      //   showStartSendingFileState(true);
-      //   console.log(StartSendingFile);
-
-      //   StartSendingFile = true;
-      //   console.log(StartSendingFile);
-      // }
-
-      // this.client.destroy(); // kill client after server's response
-      // this.server.close();
-    });
-
-    const sendFile = () => {
+    function sendFile() {
       if (file) {
         console.log('the selected file is:', file);
-
         ReadFile(file);
       }
     };
-
-    const selectFile = async () => {
-      FilePickerManager.showFilePicker(null, (response) => {
-        console.log('Response = ', response);
-
-        if (response.didCancel) {
-          console.log('User cancelled file picker');
-        } else if (response.error) {
-          console.log('FilePickerManager Error: ', response.error);
-        } else {
-          setFile(response);
-        }
-      });
-    };
-
-    const ReadFile = (file) => {
+  
+    function ReadFile(file) {
+      console.log('reading file');
       const fileData = [];
       const realPath = file.path;
       if (realPath !== null) {
@@ -297,7 +298,7 @@ const ConnectToNetwork = (props) => {
             console.log(err);
           });
       }
-    };
+    };  
 
     client.on('error', (error) => {
       console.log('client error ' + error);
@@ -308,10 +309,25 @@ const ConnectToNetwork = (props) => {
       this.server.close();
       console.log('client close');
     });
-    connectToServer.sendFile = sendFile;
-    connectToServer.selectFile = selectFile;
+    // connectToServer.sendFile = sendFile;
+    // connectToServer.selectFile = selectFile;
   }
 
+  async function selectFile() {
+    console.log('selecting file');
+    FilePickerManager.showFilePicker(null, (response) => {
+      console.log('Response = ', response);
+
+      if (response.didCancel) {
+        console.log('User cancelled file picker');
+      } else if (response.error) {
+        console.log('FilePickerManager Error: ', response.error);
+      } else {
+        setFile(response);
+      }
+    });
+  };
+  
 };
 
 export default ConnectToNetwork;

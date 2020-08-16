@@ -200,6 +200,7 @@ const handleDataChannelFileReceived = (data) => {
     if (data !== END_OF_FILE_MESSAGE) {
       receivedBuffers.push(data);
     } else if (data === END_OF_FILE_MESSAGE) {
+      console.log('file end');
       RNFetchBlob.fs
         .writeStream(RNFetchBlob.fs.dirs.DownloadDir + '/test2.pdf', 'base64')
         .then((stream) => {

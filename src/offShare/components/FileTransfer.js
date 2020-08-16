@@ -11,24 +11,7 @@ var net = require('net');
 const MAXIMUM_MESSAGE_SIZE = 65535;
 const END_OF_FILE_MESSAGE = 'EOF';
 
-const SocketConnection = (props) => {
-  let code = props.code;
-  let serverPort = 7251;
-
-  let client = net.createConnection(serverPort, code, () => {
-    console.log('opened client on ' + JSON.stringify(client.address()));
-  });
-
-  client.on('error', (error) => {
-    console.log('client error ' + error);
-  });
-
-  client.on('close', () => {
-    this.client.destroy(); // kill client after server's response
-    this.server.close();
-    console.log('client close');
-  });
-
+const SocketConnection = (client) => {
   const [file, setFile] = useState(null);
 
   const sendFile = () => {
