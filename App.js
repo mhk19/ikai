@@ -14,10 +14,14 @@ import {Share} from './src/share/mainpage';
 import {Menu} from './src/menu/components/mainpage';
 import {Editor} from './src/editor/components/mainPage';
 import {navigationRef} from './RootNavigation';
+import {LoginComponent} from './src/user/components/login';
+import {RegisterComponent} from './src/user/components/register';
 import * as RootNavigation from './RootNavigation.js';
 import Drawer from 'react-native-drawer';
+import AsyncStorage from '@react-native-community/async-storage';
 const Tab = createBottomTabNavigator();
 const InitialPage = 'share';
+
 export class App extends React.Component {
   constructor(props) {
     super(props);
@@ -29,40 +33,55 @@ export class App extends React.Component {
   openControlPanel = () => {
     this._drawer.open();
   };
+
+  getToken = async () => {
+    try {
+      const value = await AsyncStorage.getItem('token');
+      return value != null ? JSON.parse(value) : null;
+    } catch {
+      return null;
+    }
+  };
+
   render() {
-    return (
-      <Drawer
-        ref={(ref) => (this._drawer = ref)}
-        content={<Menu />}
-        type="overlay"
-        openDrawerOffset={150}
-        disabled={false}
-        side="left">
-        <NavigationContainer ref={navigationRef}>
-          <Tab.Navigator
-            initialRouteName={InitialPage}
-            tabBar={(prop) => <IkaiFooter {...prop} />}>
-            {/* <Tab.Screen name="menu" component={MenuMainPage}></Tab.Screen> */}
-            <Tab.Screen
-              name="share"
-              component={Share}
-              initialParams={{user: this.openControlPanel}}></Tab.Screen>
-            <Tab.Screen
-              name="edit"
-              component={Editor}
-              initialParams={{user: this.openControlPanel}}></Tab.Screen>
-            <Tab.Screen
-              name="scan"
-              component={Scanner}
-              initialParams={{user: this.openControlPanel}}></Tab.Screen>
-            <Tab.Screen
-              name="chat"
-              component={Chat}
-              initialParams={{user: this.openControlPanel}}></Tab.Screen>
-          </Tab.Navigator>
-        </NavigationContainer>
-      </Drawer>
-    );
+    if (this.getToken()) {
+      return (
+        <Drawer
+          ref={(ref) => (this._drawer = ref)}
+          content={<Menu />}
+          type="overlay"
+          openDrawerOffset={150}
+          disabled={false}
+          side="left">
+          <NavigationContainer ref={navigationRef}>
+            <Tab.Navigator
+              initialRouteName={InitialPage}
+              tabBar={(prop) => <IkaiFooter {...prop} />}>
+              {/* <Tab.Screen name="menu" component={MenuMainPage}></Tab.Screen> */}
+              <Tab.Screen
+                name="share"
+                component={Share}
+                initialParams={{user: this.openControlPanel}}></Tab.Screen>
+              <Tab.Screen
+                name="edit"
+                component={Editor}
+                initialParams={{user: this.openControlPanel}}></Tab.Screen>
+              <Tab.Screen
+                name="scan"
+                component={Scanner}
+                initialParams={{user: this.openControlPanel}}></Tab.Screen>
+              <Tab.Screen
+                name="chat"
+                component={Chat}
+                initialParams={{user: this.openControlPanel}}></Tab.Screen>
+            </Tab.Navigator>
+          </NavigationContainer>
+        </Drawer>
+      );
+    }
+    else {
+      <LoginComponent />
+    }
   }
 }
 
