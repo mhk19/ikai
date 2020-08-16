@@ -15,7 +15,7 @@ const ConnectToNetwork = (props) => {
   let win = Dimensions.get('window');
   let WifiSSID, WifiPassword, WifiPasscode, serverPort = 7251;
   let showConnectToNetworkModal = props.showConnectToNetworkModal;
-  let [startSendingFile, showstartSendingFile] = useState(false);
+  let [StartSendingFile, showStartSendingFileState] = useState(false);
   let [connected, setConnected] = useState(false);
   // let [sendFile, showSendFile] = useState(false);
   return (
@@ -116,7 +116,7 @@ const ConnectToNetwork = (props) => {
         </View>
       </Button>
       <Modal
-        isVisible={startSendingFile}
+        isVisible={StartSendingFile}
         style={{
           justifyContent: 'flex-end',
           margin: 0,
@@ -127,7 +127,25 @@ const ConnectToNetwork = (props) => {
             backgroundColor: '#fff',
             padding: 15,
           }}>
-          <SocketConnection showstartSendingFile={showstartSendingFile}/>
+          <SocketConnection/>
+          {/* <Button
+            style={{
+              backgroundColor: '#212121',
+              width: '100%',
+              height: 50,
+              left: 12,
+              justifyContent: 'center',
+              alignItems: 'center',
+              position: 'absolute',
+              bottom: 0,
+            }}
+            onPress={() => {
+              showStartSendingFileState(false);
+            }}>
+            <View>
+              <Text style={style.headerText}> Close </Text>
+            </View>
+          </Button> */}
         </View>
       </Modal>
     </View>
@@ -221,7 +239,7 @@ const ConnectToNetwork = (props) => {
 
       if (data === 'Verified') {
         Toast.show('Socket Created');
-        showstartSendingFile(true);
+        showStartSendingFileState(true);
         // Send File
       }
 
