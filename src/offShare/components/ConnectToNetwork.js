@@ -8,7 +8,7 @@ import { WifiWizard } from 'react-native-wifi-and-hotspot-wizard';
 import Toast from 'react-native-simple-toast';
 import FilePickerManager from 'react-native-file-picker';
 import RNFetchBlob from 'rn-fetch-blob';
-import SocketConnection from '../components/FileTransfer';
+import SocketConnection from './FileTransfer';
 var net = require('net');
 
 const ConnectToNetwork = (props) => {
