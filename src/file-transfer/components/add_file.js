@@ -142,7 +142,7 @@ export const AddFile = (props) => {
                 selectFile();
               }}>
               <Image source={require('../assets/plus.png')} />
-              <Text style={{color:'#979797'}}>ADD FILE</Text>
+              <Text style={{color: '#979797'}}>ADD FILE</Text>
             </TouchableOpacity>
             <View style={styles.disabledButton}>
               <Text style={{color: 'white', fontSize: 18, fontWeight: 'bold'}}>
@@ -159,13 +159,20 @@ export const AddFile = (props) => {
               }}>
               <View style={styles.iconContainer}>
                 <Image source={require('../assets/video_icon.png')} />
-                <Text style={{color:'#979797'}}>PDF</Text>
+                <Text style={{color: '#979797'}}>PDF</Text>
               </View>
               <View style={styles.filenameContainer}>
                 <Text style={{color: '#979797'}}>{fileName}</Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.sendContainer} onPress={() => {}}>
+            <TouchableOpacity
+              style={styles.sendContainer}
+              onPress={() => {
+                props.navigation.push('shareConnectPage', {
+                  file: file,
+                  navigation: props.navigation,
+                });
+              }}>
               <Text style={{color: 'white', fontSize: 18, fontWeight: 'bold'}}>
                 SEND
               </Text>
