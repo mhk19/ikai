@@ -123,11 +123,13 @@ export class EditorMainPage extends React.Component {
       this.state.file.type == 'image/jpeg' ||
       this.state.file.type == 'image/png'
     ) {
+      PESDK.unlockWithLicense(require('../pesdk_license'));
       PESDK.openEditor(this.state.file.path);
     } else if (
       this.state.file.type == 'video/mp4' ||
       this.state.file.type == 'video/mkv'
     ) {
+      VESDK.unlockWithLicense(require('../vesdk_license'));
       VESDK.openEditor(this.state.file.path);
     } else {
       console.log('Wrong file selected');
