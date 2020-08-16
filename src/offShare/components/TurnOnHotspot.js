@@ -155,20 +155,20 @@ let TurnOnHotspot = (props) => {
   }
 
   async function startServer() {
+    let j = 0;
     let receivedBuffers = [];
     let serverPort = 7251;
     let server = net.createServer((socket) => {
       console.log('server connected on ' + JSON.stringify(socket.address()));
 
       socket.on('data', (data) => {
-        socket.write('Verified');
-        if (data == 'Verified' && TurnOnHotspot) {
-          showTurnOnHotspotModal(false);
+        if (data == 'Verified') {
+          socket.write('Verified');
           console.log('temp test');
-        } else if (data != END_OF_FILE_MESSAGE) {
+        } else if (data != 'EOF') {
           console.log('pushing into buffer');
           receivedBuffers.push(data);
-        } else if (data == END_OF_FILE_MESSAGE) {
+        } else if (data == 'EOF') {
           console.log('file end');
           RNFetchBlob.fs
             .writeStream(RNFetchBlob.fs.dirs.DownloadDir + '/test2.pdf', 'base64')

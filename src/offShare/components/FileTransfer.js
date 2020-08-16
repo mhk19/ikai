@@ -30,8 +30,7 @@ const SocketConnection = (props) => {
     client.on('data', (data) => {
       console.log('Client Received: ' + data);
       if (data == 'Verified' && j === 0) {
-        console.log('sending data');
-        j=1;
+        j = 1;
         if (file) {
           ReadFile(file);
         }
@@ -51,7 +50,7 @@ const SocketConnection = (props) => {
 
 
   const sendFile = () => {
-    connectToServer();
+    connectToServer()
   };
 
   const selectFile = async () => {
