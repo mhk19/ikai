@@ -110,7 +110,9 @@ export class ShareMainPage extends React.Component {
               }}>
               or
             </Text>
-            <TouchableOpacity style={styles.offlineButton}>
+            <TouchableOpacity
+              style={styles.offlineButton}
+              onPress={() => this.props.navigation.push('offlinemainscreen')}>
               <Text
                 style={{
                   color: '#13C2C2',
