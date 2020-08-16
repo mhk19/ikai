@@ -2,22 +2,34 @@ import React, { useState, useEffect, useRef } from 'react';
 import DocumentPicker from 'react-native-document-picker';
 import FilePickerManager from 'react-native-file-picker';
 import { View, StyleSheet, Button, Text } from 'react-native';
-import {
-  RTCPeerConnection,
-  RTCIceCandidate,
-  RTCSessionDescription,
-} from 'react-native-webrtc';
 import { DocumentDirectoryPath, writeFile, stat } from 'react-native-fs';
 import RNFetchBlob from 'rn-fetch-blob';
 import { TextInput } from 'react-native-gesture-handler';
 import RNFS from 'react-native-fs';
+import { WifiWizard } from 'react-native-wifi-and-hotspot-wizard';
+var net = require('net');
 const MAXIMUM_MESSAGE_SIZE = 65535;
 const END_OF_FILE_MESSAGE = 'EOF';
 
 const SocketConnection = (props) => {
-  const [file, setFile] = useState(null);
-  let showStartSendingFileState = props.showStartSendingFileState;
+  let code = props.code;
+  let serverPort = 7251;
 
+  let client = net.createConnection(serverPort, code, () => {
+    console.log('opened client on ' + JSON.stringify(client.address()));
+  });
+
+  client.on('error', (error) => {
+    console.log('client error ' + error);
+  });
+
+  client.on('close', () => {
+    this.client.destroy(); // kill client after server's response
+    this.server.close();
+    console.log('client close');
+  });
+
+  const [file, setFile] = useState(null);
 
   const sendFile = () => {
     if (file) {
@@ -84,24 +96,6 @@ const SocketConnection = (props) => {
           sendFile(file);
         }}
       />
-      <Button
-        style={{
-          backgroundColor: '#212121',
-          width: '100%',
-          height: 50,
-          left: 12,
-          justifyContent: 'center',
-          alignItems: 'center',
-          position: 'absolute',
-          bottom: 0,
-        }}
-        onPress={() => {
-          showStartSendingFileState(false);
-        }}>
-        <View>
-          <Text> Close </Text>
-        </View>
-      </Button>
     </View>
   );
 };

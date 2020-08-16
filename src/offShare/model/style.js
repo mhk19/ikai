@@ -17,6 +17,9 @@ let style = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 2,
     },
+    container: {
+        flex: 1,
+    },
     buttonText: {
         fontSize: 18,
         fontWeight: 'bold',

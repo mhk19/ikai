@@ -160,11 +160,14 @@ let TurnOnHotspot = (props) => {
       console.log('server connected on ' + JSON.stringify(socket.address()));
 
       socket.on('data', (data) => {
-        handleDataChannelFileReceived(data);
         console.log('Server Received: ' + data);
-        socket.write('Verified\r\n');
-        if (data === 'Verified') {
+        socket.write('Verified');
+        if(data == 'Verified') {
           showTurnOnHotspotModal(false);
+          console.log('temp test');
+        }
+        else {
+          handleDataChannelFileReceived(data);
         }
       });
 
@@ -190,6 +193,7 @@ let TurnOnHotspot = (props) => {
 };
 
 const handleDataChannelFileReceived = (data) => {
+  console.log('data incoming');
   let receivedBuffers = [];
 
   try {
