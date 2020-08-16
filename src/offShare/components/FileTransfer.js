@@ -11,15 +11,45 @@ var net = require('net');
 const MAXIMUM_MESSAGE_SIZE = 65535;
 const END_OF_FILE_MESSAGE = 'EOF';
 
-const SocketConnection = (client) => {
+const SocketConnection = (props) => {
   const [file, setFile] = useState(null);
+  let serverPort = 7251;
+  let code = props.code;
+  console.log('code:' + code);
+
+  console.log(serverPort, code);
+
+  function connectToServer() {
+    console.log(serverPort, code);
+    client = net.createConnection(serverPort, code, () => {
+      console.log('opened client on ' + JSON.stringify(client.address()));
+      client.write('Verified');
+    });
+
+    client.on('data', (data) => {
+      console.log('Client Received: ' + data);
+      if (data == 'Verified') {
+        console.log('sending data');
+        if (file) {
+          ReadFile(file);
+        }
+      }
+    });
+
+    client.on('error', (error) => {
+      console.log('client error ' + error);
+    });
+
+    client.on('close', () => {
+      this.client.destroy(); // kill client after server's response
+      this.server.close();
+      console.log('client close');
+    });
+  }
+
 
   const sendFile = () => {
-    if (file) {
-      console.log('the selected file is:', file);
-
-      ReadFile(file);
-    }
+    connectToServer();
   };
 
   const selectFile = async () => {

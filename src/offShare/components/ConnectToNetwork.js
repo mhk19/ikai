@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Dimensions, TextInput } from 'react-native';
+import { View, Text, Dimensions, TextInput, ActivityIndicatorBase } from 'react-native';
 import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Button from 'apsl-react-native-button';
@@ -19,7 +19,7 @@ const ConnectToNetwork = (props) => {
   let showConnectToNetworkModal = props.showConnectToNetworkModal;
   let [StartSendingFile, showStartSendingFileState] = useState(false);
   let [connected, setConnected] = useState(false);
-  let code = '';
+  let [code, setCode] = useState(null);
   const [file, setFile] = useState(null);
 
   // let [sendFile, showSendFile] = useState(false);
@@ -126,20 +126,7 @@ const ConnectToNetwork = (props) => {
           justifyContent: 'flex-end',
           margin: 0,
         }}>
-        <View style={style.container}>
-          <Button
-            title="Select File"
-            onPress={() => {
-              selectFile();
-            }}
-          />
-          <Button
-            title="Send File"
-            onPress={() => {
-              connectToServer(2);
-            }}
-          />
-        </View>
+        <SocketConnection code={code} />
       </Modal>
     </View>
   );
@@ -187,7 +174,7 @@ const ConnectToNetwork = (props) => {
     await decrypt(WifiPasscode);
     // Search For Nearby Devices
     console.log('Connecting to Server');
-    connectToServer(1);
+    activate();
   }
 
   async function decrypt(str) {
@@ -197,137 +184,125 @@ const ConnectToNetwork = (props) => {
     var second = parseInt(str[1]);
     var third = parseInt(str[2]);
     var fourth = parseInt(str[3]);
+    let chck = '';
     console.log(first, second, third, fourth);
     for (var i = j; i < j + first; i++) {
-      code += str[i];
+      chck += str[i];
     }
-    code += '.';
+    chck += '.';
     j += first;
     for (var i = j; i < j + second; i++) {
-      code += str[i];
+      chck += str[i];
     }
-    code += '.';
+    chck += '.';
     j += second;
     for (var i = j; i < j + third; i++) {
-      code += str[i];
+      chck += str[i];
     }
-    code += '.';
+    chck += '.';
     j += third;
     for (var i = j; i < j + fourth; i++) {
-      code += str[i];
+      chck += str[i];
     }
+    console.log(chck);
+    code = chck;
+    setCode(chck);
     console.log(code);
+    console.log(setCode);
+    console.log({code});
+    console.log({setCode});
   }
 
-  function connectToServer(arg) {
-    let client;
-    console.log(arg, code);
-    switch (arg) {
-      case 1:
-        createConn();
-        break;
-      case 2:
-        sendFile();
-        break;
-      // case 3:
-      //   sendFile();
-      //   break;
-    }
-
-    async function createConn() {
-      console.log(serverPort, code);
-      client = net.createConnection(serverPort, code, () => {
-        console.log('opened client on ' + JSON.stringify(client.address()));
-        client.write('Verified');
-      });
-
-      client.on('data', (data) => {
-        console.log('Client Received: ' + data);
-        showStartSendingFileState(true);
-        console.log(StartSendingFile);
-        console.log(StartSendingFile);
-  
-        // sendFileFunc();
-  
-        // function sendFileFunc() {
-        //   console.log('set to true');
-        //   showStartSendingFileState(true);
-        //   console.log(StartSendingFile);
-  
-        //   StartSendingFile = true;
-        //   console.log(StartSendingFile);
-        // }
-  
-        // this.client.destroy(); // kill client after server's response
-        // this.server.close();
-      });
-    }
-
-    function sendFile() {
-      if (file) {
-        console.log('the selected file is:', file);
-        ReadFile(file);
-      }
-    };
-  
-    function ReadFile(file) {
-      console.log('reading file');
-      const fileData = [];
-      const realPath = file.path;
-      if (realPath !== null) {
-        console.log('Path is', realPath);
-        RNFetchBlob.fs
-          .readStream(realPath, 'base64', MAXIMUM_MESSAGE_SIZE)
-          .then((ifstream) => {
-            ifstream.open();
-            ifstream.onData((chunk) => {
-              console.log('reading file');
-              console.log(chunk);
-              //fileData.push(chunk);
-              client.write(chunk);
-            });
-            ifstream.onError((err) => {
-              console.log('error in reading file', err);
-            });
-            ifstream.onEnd(() => {
-              client.write(END_OF_FILE_MESSAGE);
-              console.log('read successful');
-            });
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
-    };  
-
-    client.on('error', (error) => {
-      console.log('client error ' + error);
-    });
-
-    client.on('close', () => {
-      this.client.destroy(); // kill client after server's response
-      this.server.close();
-      console.log('client close');
-    });
-    // connectToServer.sendFile = sendFile;
-    // connectToServer.selectFile = selectFile;
+  async function activate() {
+    showStartSendingFileState(true);
+    StartSendingFile = true;
+    console.log(StartSendingFile);
   }
 
-  async function selectFile() {
-    console.log('selecting file');
-    FilePickerManager.showFilePicker(null, (response) => {
-      console.log('Response = ', response);
+  // function connectToServer() {
+  //   console.log(serverPort, code);
+  //   client = net.createConnection(serverPort, code, () => {
+  //     console.log('opened client on ' + JSON.stringify(client.address()));
+  //     client.write('Verified');
+  //   });
 
-      if (response.didCancel) {
-        console.log('User cancelled file picker');
-      } else if (response.error) {
-        console.log('FilePickerManager Error: ', response.error);
-      } else {
-        setFile(response);
-      }
-    });
-  };
-  
-};
+  //   async function activate() {
+  //     showStartSendingFileState(true);
+  //     StartSendingFile = true;
+  //     console.log(StartSendingFile);
+  //   }
+
+  //   client.on('data', (data) => {
+  //     console.log('Client Received: ' + data);
+  //     activate();
+  //     // this.client.destroy(); // kill client after server's response
+  //     // this.server.close();
+  //   });
+
+  //   client.on('error', (error) => {
+  //     console.log('client error ' + error);
+  //   });
+
+  //   client.on('close', () => {
+  //     this.client.destroy(); // kill client after server's response
+  //     this.server.close();
+  //     console.log('client close');
+  //   });
+
+  //   sendF = function sendFile(client) {
+  //     if (file) {
+  //       console.log('the selected file is:', file);
+  //       ReadFile(file);
+  //     }
+  //   };
+
+  //   function ReadFile(file) {
+  //     console.log('reading file');
+  //     const fileData = [];
+  //     const realPath = file.path;
+  //     if (realPath !== null) {
+  //       console.log('Path is', realPath);
+  //       RNFetchBlob.fs
+  //         .readStream(realPath, 'base64', MAXIMUM_MESSAGE_SIZE)
+  //         .then((ifstream) => {
+  //           ifstream.open();
+  //           ifstream.onData((chunk) => {
+  //             console.log('reading file');
+  //             console.log(chunk);
+  //             //fileData.push(chunk);
+  //             client.write(chunk);
+  //           });
+  //           ifstream.onError((err) => {
+  //             console.log('error in reading file', err);
+  //           });
+  //           ifstream.onEnd(() => {
+  //             client.write(END_OF_FILE_MESSAGE);
+  //             console.log('read successful');
+  //           });
+  //         })
+  //         .catch((err) => {
+  //           console.log(err);
+  //         });
+  //     }
+  //   };
+  //   // connectToServer.selectFile = selectFile;
+  // }
+
+  // async function selectFile() {
+  //   console.log('selecting file');
+  //   FilePickerManager.showFilePicker(null, (response) => {
+  //     console.log('Response = ', response);
+
+  //     if (response.didCancel) {
+  //       console.log('User cancelled file picker');
+  //     } else if (response.error) {
+  //       console.log('FilePickerManager Error: ', response.error);
+  //     } else {
+  //       setFile(response);
+  //     }
+  //   });
+  // };
+
+}
 
 export default ConnectToNetwork;
