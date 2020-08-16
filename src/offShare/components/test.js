@@ -25,7 +25,7 @@ const Home = () => {
 
   let HotspotSSID, HotspotPassword;
   return (
-    <ScrollView scrollEnabled={true} style={{padding: 15}}>
+    <ScrollView scrollEnabled={false} style={{padding: 15}}>
       <Text style={style.text}>Send or Receive Files</Text>
       <Text />
       <Button
