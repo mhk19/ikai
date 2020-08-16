@@ -162,19 +162,22 @@ let TurnOnHotspot = (props) => {
       console.log('server connected on ' + JSON.stringify(socket.address()));
 
       socket.on('data', (data) => {
+        console.log('Server Received: ' + data);
         if (data == 'Verified') {
           socket.write('Verified');
           console.log('temp test');
         } else if (data != 'EOF') {
           console.log('pushing into buffer');
           receivedBuffers.push(data);
+          console.log(receivedBuffers.length);
         } else if (data == 'EOF') {
           console.log('file end');
           RNFetchBlob.fs
             .writeStream(RNFetchBlob.fs.dirs.DownloadDir + '/test2.pdf', 'base64')
             .then((stream) => {
               for (let i = 0; i < receivedBuffers.length; i++) {
-                stream.write(receivedBuffers[i]);
+                stream.write(receivedBuffers[i].toString('utf-8'));
+                console.log(receivedBuffers[i].toString('utf-8'));
               }
               console.log(receivedBuffers);
               console.log('File completely received');

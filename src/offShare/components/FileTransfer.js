@@ -76,7 +76,6 @@ const SocketConnection = (props) => {
         .readStream(realPath, 'base64', MAXIMUM_MESSAGE_SIZE)
         .then((ifstream) => {
           ifstream.open();
-          client.write('SOF');
           ifstream.onData((chunk) => {
             console.log('reading file');
             console.log(chunk);
