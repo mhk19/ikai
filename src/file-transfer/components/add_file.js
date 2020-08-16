@@ -170,7 +170,6 @@ export const AddFile = (props) => {
               onPress={() => {
                 props.navigation.push('shareConnectPage', {
                   file: file,
-                  navigation: props.navigation,
                 });
               }}>
               <Text style={{color: 'white', fontSize: 18, fontWeight: 'bold'}}>

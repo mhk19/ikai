@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
 const configuration = {
   iceServers: [{url: 'stun:stun.1.google.com:19302'}],
 };
-export const Connect = (file, navigation) => {
+export const Connect = (props) => {
   const [socketMessages, setSocketMessages] = useState([]);
   const [username, setUserName] = useState('');
   const [users, setUsers] = useState([]);
@@ -50,7 +50,6 @@ export const Connect = (file, navigation) => {
       console.log('closing the websocket');
       webSocket.current.close();
     };
-    console.log('file', file);
   }, []);
 
   useEffect(() => {
