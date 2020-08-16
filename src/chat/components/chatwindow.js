@@ -1,4 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
+import IKAISERVER from '../../ikai/constants';
 import {
   View,
   StyleSheet,
@@ -94,7 +95,7 @@ export const ShareOnlineChatWindow = (props) => {
   const [prevButton, setPrevButton] = useState(true);
   useEffect(() => {
     setChatSocket(
-      new WebSocket('ws://62876c440dd3.ngrok.io/ws/chat/' + chatroom + '/'),
+      new WebSocket('ws://' + IKAISERVER + '/ws/chat/' + chatroom + '/'),
     );
   }, []);
   useEffect(() => {
