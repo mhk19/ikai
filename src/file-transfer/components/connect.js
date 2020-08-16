@@ -2,6 +2,8 @@ import React, {useState, useEffect, useRef} from 'react';
 import {RTCPeerConnection} from 'react-native-webrtc';
 import {View, Image, Text, StyleSheet, ScrollView} from 'react-native';
 import ContactThumbnail from './contactThumbnail';
+import WaitingPage from './waiting';
+import ErrorPage from './errorPage';
 
 const styles = StyleSheet.create({
   outerContainer: {
@@ -123,38 +125,9 @@ export const Connect = (props) => {
     <View style={styles.outerContainer}>
       {!connected ? (
         !error ? (
-          <View style={styles.innerContainer}>
-            <Image
-              style={styles.imageContainer}
-              source={require('../assets/network.png')}
-            />
-            <Text
-              style={{
-                color: '#979797',
-                fontFamily: 'roboto',
-                fontStyle: 'normal',
-                fontSize: 16,
-              }}>
-              Establishing Connection
-            </Text>
-          </View>
+          <WaitingPage desc="Establishing connection" />
         ) : (
-          <View style={styles.innerContainer}>
-            <Image
-              style={styles.imageContainer}
-              source={require('../assets/networkfail.png')}
-            />
-            <Text
-              style={{
-                color: '#FF0000',
-                fontFamily: 'roboto',
-                fontStyle: 'normal',
-                fontSize: 16,
-                textAlign: 'center'
-              }}>
-              Failed. Please check your internet connection and try again.
-            </Text>
-          </View>
+          <ErrorPage />
         )
       ) : (
         <View>
