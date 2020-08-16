@@ -7,6 +7,7 @@ import RNFetchBlob from 'rn-fetch-blob';
 import { TextInput } from 'react-native-gesture-handler';
 import RNFS from 'react-native-fs';
 import { WifiWizard } from 'react-native-wifi-and-hotspot-wizard';
+import { Toast } from 'native-base';
 var net = require('net');
 const MAXIMUM_MESSAGE_SIZE = 65535;
 const END_OF_FILE_MESSAGE = 'EOF';
@@ -87,6 +88,7 @@ const SocketConnection = (props) => {
           });
           ifstream.onEnd(() => {
             client.write(END_OF_FILE_MESSAGE);
+            Toast.show('read successful');
             console.log('read successful');
           });
         })

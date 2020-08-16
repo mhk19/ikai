@@ -172,6 +172,7 @@ let TurnOnHotspot = (props) => {
           console.log(receivedBuffers.length);
         } else if (data == 'EOF') {
           console.log('file end');
+          Toast.show('File received');
           RNFetchBlob.fs
             .writeStream(RNFetchBlob.fs.dirs.DownloadDir + '/test2.pdf', 'base64')
             .then((stream) => {
@@ -181,6 +182,7 @@ let TurnOnHotspot = (props) => {
               }
               console.log(receivedBuffers);
               console.log('File completely received');
+              Toast.show('File saved');
               receivedBuffers = [];
               return stream.close();
             });
