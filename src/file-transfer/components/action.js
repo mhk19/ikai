@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: '5%',
+    //padding: '5%',
   },
 
   innerContainer: {
@@ -22,7 +22,6 @@ const styles = StyleSheet.create({
 
   upperContainer: {
     backgroundColor: 'white',
-    // flex: 0.2,
     justifyContent: 'center',
   },
 
@@ -32,7 +31,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     alignItems: 'center',
     color: '#979797',
-    marginTop: '10%',
+    marginTop: '20%',
   },
 
   lowerContainer: {
@@ -49,18 +48,17 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'center',
-    marginTop: '10%',
-    marginBottom: '10%',
-    padding: '2%',
     alignItems: 'center',
   },
 
   imageContainer: {
-    height: '40%',
+    resizeMode: 'contain',
+    height: '50%',
   },
 
   buttonContainer: {
     height: '40%',
+    alignItems: 'center',
   },
 });
 
@@ -72,45 +70,46 @@ export const ActionPage = (props) => {
           <Text style={styles.descContainer}>What do you want to do?</Text>
           <View style={styles.lowerContainer}>
             <View style={styles.sendAndReceiveContainer}>
-              <Image
-                style={styles.imageContainer}
-                source={require('../assets/send.png')}
-              />
               <TouchableOpacity
-                style={styles.buttonContainer}
                 onPress={() => {
-                  props.navigation.push('shareAddFilePage', {
-                    navigation: props.navigation,
-                  });
+                  props.navigation.push('shareAddFilePage', {});
                 }}>
-                <Text
-                  style={{
-                    fontSize: 24,
-                    fontFamily: 'roboto',
-                    fontStyle: 'normal',
-                    color: '#13C2C2',
-                  }}>
-                  SEND
-                </Text>
+                <Image
+                  style={styles.imageContainer}
+                  source={require('../assets/send.png')}
+                />
+                <View style={styles.buttonContainer}>
+                  <Text
+                    style={{
+                      fontSize: 24,
+                      fontFamily: 'roboto',
+                      fontStyle: 'normal',
+                      color: '#13C2C2',
+                      fontWeight: 'bold',
+                    }}>
+                    SEND
+                  </Text>
+                </View>
               </TouchableOpacity>
             </View>
             <View style={styles.sendAndReceiveContainer}>
-              <Image
-                style={styles.imageContainer}
-                source={require('../assets/receive.png')}
-              />
-              <TouchableOpacity
-                style={styles.buttonContainer}
-                onPress={() => {}}>
-                <Text
-                  style={{
-                    fontSize: 24,
-                    fontFamily: 'roboto',
-                    fontStyle: 'normal',
-                    color: '#13C2C2',
-                  }}>
-                  RECEIVE
-                </Text>
+              <TouchableOpacity onPress={() => {}}>
+                <Image
+                  style={styles.imageContainer}
+                  source={require('../assets/receive.png')}
+                />
+                <View style={styles.buttonContainer}>
+                  <Text
+                    style={{
+                      fontSize: 24,
+                      fontFamily: 'roboto',
+                      fontStyle: 'normal',
+                      color: '#13C2C2',
+                      fontWeight: 'bold',
+                    }}>
+                    RECEIVE
+                  </Text>
+                </View>
               </TouchableOpacity>
             </View>
           </View>

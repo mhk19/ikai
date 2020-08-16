@@ -11,7 +11,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {Scanner} from './src/camscanner/components/mainpage';
 import Chat from './src/chat/mainpage';
 import {Share} from './src/share/mainpage';
-import {Menu} from './src/menu/components/mainpage';
+import {Menu} from './src/menu/components/menumainpage';
 import {Editor} from './src/editor/components/mainPage';
 import {navigationRef} from './RootNavigation';
 import {LoginComponent} from './src/user/components/login';
@@ -50,7 +50,7 @@ export class App extends React.Component {
           ref={(ref) => (this._drawer = ref)}
           content={<Menu />}
           type="overlay"
-          openDrawerOffset={150}
+          openDrawerOffset={100}
           disabled={false}
           side="left">
           <NavigationContainer ref={navigationRef}>
@@ -79,6 +79,7 @@ export class App extends React.Component {
         </Drawer>
       );
     }
+
     else {
       <LoginComponent />
     }

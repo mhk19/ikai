@@ -90,9 +90,7 @@ export class ShareMainPage extends React.Component {
             <TouchableOpacity
               style={styles.onlineButton}
               onPress={() => {
-                this.props.navigation.push('shareOnlineActionPage', {
-                  navigation: this.props,
-                });
+                this.props.navigation.push('shareOnlineActionPage', {});
               }}>
               <Text
                 style={{

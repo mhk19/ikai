@@ -1,6 +1,9 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {RTCPeerConnection} from 'react-native-webrtc';
-import {View, Image, Text, StyleSheet} from 'react-native';
+import {View, Image, Text, StyleSheet, ScrollView} from 'react-native';
+import ContactThumbnail from './contactThumbnail';
+import WaitingPage from './waiting';
+import ErrorPage from './errorPage';
 
 const styles = StyleSheet.create({
   outerContainer: {
@@ -21,12 +24,20 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     marginBottom: 20,
   },
+  showingContactsDesc: {
+    marginTop: 10,
+    color: '#595959',
+    fontFamily: 'roboto',
+    fontStyle: 'normal',
+    fontSize: 16,
+    marginRight: 35,
+  },
 });
 
 const configuration = {
   iceServers: [{url: 'stun:stun.1.google.com:19302'}],
 };
-export const Connect = (file, navigation) => {
+export const Connect = (props) => {
   const [socketMessages, setSocketMessages] = useState([]);
   const [username, setUserName] = useState('');
   const [users, setUsers] = useState([]);
@@ -50,7 +61,7 @@ export const Connect = (file, navigation) => {
       console.log('closing the websocket');
       webSocket.current.close();
     };
-    console.log('file', file);
+    return () => webSocket.current.close();
   }, []);
 
   useEffect(() => {
@@ -66,7 +77,7 @@ export const Connect = (file, navigation) => {
         case 'updateUsers':
           updateUsersList(data);
           break;
-        case 'removeUser':
+        case 'leave':
           removeUser(data);
           break;
         default:
@@ -91,10 +102,11 @@ export const Connect = (file, navigation) => {
   const updateUsersList = ({user}) => {
     console.log(user.username, typeof user.username);
     setUsers((prev) => [...prev, user]);
+    console.log(users);
   };
 
   const removeUser = ({user}) => {
-    setUsers((prev) => prev.filter((u) => u.username !== user));
+    setUsers((prev) => prev.filter((u) => u.username !== user.username));
   };
 
   const onLogin = ({success, message, users: loggedIn}) => {
@@ -113,42 +125,25 @@ export const Connect = (file, navigation) => {
     <View style={styles.outerContainer}>
       {!connected ? (
         !error ? (
-          <View style={styles.innerContainer}>
-            <Image
-              style={styles.imageContainer}
-              source={require('../assets/network.png')}
-            />
-            <Text
-              style={{
-                color: '#979797',
-                fontFamily: 'roboto',
-                fontStyle: 'normal',
-                fontSize: 16,
-              }}>
-              Establishing Connection
-            </Text>
-          </View>
+          <WaitingPage desc="Establishing connection" />
         ) : (
-          <View style={styles.innerContainer}>
-            <Image
-              style={styles.imageContainer}
-              source={require('../assets/networkfail.png')}
-            />
-            <Text
-              style={{
-                color: '#FF0000',
-                fontFamily: 'roboto',
-                fontStyle: 'normal',
-                fontSize: 16,
-                textAlign: 'center'
-              }}>
-              Failed. Please check your internet connection and try again.
-            </Text>
-          </View>
+          <ErrorPage />
         )
       ) : (
         <View>
-          <Text>Push to available contacts page</Text>
+          <Text style={styles.showingContactsDesc}>
+            Showing all available contacts. Tap to connect.
+          </Text>
+          {users.length !== 0 ? (
+            <ScrollView style={{marginLeft: 20}}>
+              {users.map((user) => {
+                console.log(user);
+                return <ContactThumbnail name={user.username} />;
+              })}
+            </ScrollView>
+          ) : (
+            <Text>Searching for online users.</Text>
+          )}
         </View>
       )}
     </View>
