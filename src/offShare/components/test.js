@@ -11,7 +11,6 @@ import {Dimensions} from 'react-native';
 import TurnOnHotspot from '../utils/TurnOnHotspot';
 import {NetworkInfo} from 'react-native-network-info';
 import RctSockets from './tcp';
-import SocketConnect from '../utils/SocketConnection';
 import NetInfo from "@react-native-community/netinfo";
 var net = require('net');
 

@@ -7,7 +7,10 @@ import { HotspotWizard } from 'react-native-wifi-and-hotspot-wizard';
 import Toast from 'react-native-simple-toast';
 import { NetworkInfo } from 'react-native-network-info';
 import SocketConnection from '../components/FileTransfer';
+import RNFetchBlob from 'rn-fetch-blob';
 var net = require('net');
+const MAXIMUM_MESSAGE_SIZE = 65535;
+const END_OF_FILE_MESSAGE = 'EOF';
 
 let TurnOnHotspot = (props) => {
   let win = Dimensions.get('window');
@@ -32,10 +35,7 @@ let TurnOnHotspot = (props) => {
           {connected == 'success' ? (
             <Text>Here are your credentials</Text>
           ) : (
-              <Text>
-                Failed to set custom credentials. Here is the randomly generated
-                credentials.
-              </Text>
+              <Text></Text>
             )}
           <Text style={{ fontSize: 20, textAlign: 'left', fontWeight: 'bold' }}>
             ID : {HotspotSSID}{' '}
@@ -190,6 +190,8 @@ let TurnOnHotspot = (props) => {
 };
 
 const handleDataChannelFileReceived = (data) => {
+  let receivedBuffers = [];
+
   try {
     if (data !== END_OF_FILE_MESSAGE) {
       receivedBuffers.push(data);

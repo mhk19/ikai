@@ -6,7 +6,9 @@ import Button from 'apsl-react-native-button';
 import style from '../model/style';
 import { WifiWizard } from 'react-native-wifi-and-hotspot-wizard';
 import Toast from 'react-native-simple-toast';
-import SocketConnection from '../components/FileTransfer'
+import FilePickerManager from 'react-native-file-picker';
+import RNFetchBlob from 'rn-fetch-blob';
+import SocketConnection from '../components/FileTransfer';
 var net = require('net');
 
 const ConnectToNetwork = (props) => {
@@ -15,10 +17,10 @@ const ConnectToNetwork = (props) => {
   let showConnectToNetworkModal = props.showConnectToNetworkModal;
   let [startSendingFile, showstartSendingFile] = useState(false);
   let [connected, setConnected] = useState(false);
-  let [sendFile, showSendFile] = useState(false);
+  // let [sendFile, showSendFile] = useState(false);
   return (
     <View
-      style={{ height: win.height / 2, backgroundColor: '#fff', padding: 15 }}>
+      style={{ height: 2 * win.height / 3, backgroundColor: '#fff', padding: 15 }}>
       {connected ? (
         <>
           <Text style={style.text}>Authenticate </Text>
@@ -125,7 +127,7 @@ const ConnectToNetwork = (props) => {
             backgroundColor: '#fff',
             padding: 15,
           }}>
-          <SocketConnection />
+          <SocketConnection showstartSendingFile={showstartSendingFile}/>
         </View>
       </Modal>
     </View>
@@ -219,7 +221,6 @@ const ConnectToNetwork = (props) => {
 
       if (data === 'Verified') {
         Toast.show('Socket Created');
-        showConnectToNetworkModal(false);
         showstartSendingFile(true);
         // Send File
       }
@@ -238,23 +239,6 @@ const ConnectToNetwork = (props) => {
       console.log('client close');
     });
   }
-
-  return (
-    <View style={styles.container}>
-      <Button
-        title="Select File"
-        onPress={() => {
-          selectFile();
-        }}
-      />
-      <Button
-        title="Send File"
-        onPress={() => {
-          sendFile(file);
-        }}
-      />
-    </View>
-  );
 };
 
 export default ConnectToNetwork;
