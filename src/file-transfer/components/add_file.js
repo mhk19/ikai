@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React, {useState} from 'react';
 import FilePickerManager from 'react-native-file-picker';
 import {View, Image, Text, StyleSheet} from 'react-native';
@@ -178,6 +177,3 @@ export const AddFile = (props) => {
   );
 };
 export default AddFile;
-=======
-import React
->>>>>>> fc2781da1ed60b8283894f2cf827e551ff8fbc9b
