@@ -60,7 +60,7 @@ export const Connect = (props) => {
   const [channel, updateChannel] = useState(null);
   const [error, setError] = useState(false);
   const [senders, setSenders] = useState([]);
-  const [waitingSender, setWaitingSender] = useState(true);
+  const [selectingSender, setSelectingSender] = useState(true);
   const connectedRef = useRef();
   let receivedBuffers = [];
 
@@ -155,10 +155,10 @@ export const Connect = (props) => {
   const onOffer = ({offer, name}) => {
     let sender = {name: name, offer: offer};
     setSenders((prev) => [...prev, sender]);
-    setWaitingSender(false);
   };
 
   const acceptOffer = (name, offer) => {
+    setSelectingSender(false);
     setConnectedTo(name);
     connectedRef.current = name;
     connection
@@ -329,7 +329,7 @@ export const Connect = (props) => {
         ) : (
           <Text>Sending Page</Text>
         )
-      ) : waitingSender ? (
+      ) : selectingSender ? (
         senders.length === 0 ? (
           <WaitingPage desc="Waiting for sender." />
         ) : (
