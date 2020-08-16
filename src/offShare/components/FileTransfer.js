@@ -14,10 +14,8 @@ import RNFS from 'react-native-fs';
 const MAXIMUM_MESSAGE_SIZE = 65535;
 const END_OF_FILE_MESSAGE = 'EOF';
 
-const SocketConnection = ({connection, updateConnection, channel, updateChannel}) => {
+const SocketConnection = () => {
   const [file, setFile] = useState(null);
-  const [receiver, setReceiver] = useState('');
-  let receivedBuffers = [];
 
   const sendFile = () => {
     if (file) {
@@ -54,13 +52,13 @@ const SocketConnection = ({connection, updateConnection, channel, updateChannel}
             console.log('reading file');
             console.log(chunk);
             //fileData.push(chunk);
-            socket.write(chunk);
+            client.write(chunk);
           });
           ifstream.onError((err) => {
             console.log('error in reading file', err);
           });
           ifstream.onEnd(() => {
-            socket.write(END_OF_FILE_MESSAGE);
+            client.write(END_OF_FILE_MESSAGE);
             console.log('read successful');
           });
         })
