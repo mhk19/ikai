@@ -16,6 +16,7 @@ const SocketConnection = (props) => {
   let serverPort = 7251;
   let code = props.code;
   console.log('code:' + code);
+  let j = 0;
 
   console.log(serverPort, code);
 
@@ -28,8 +29,9 @@ const SocketConnection = (props) => {
 
     client.on('data', (data) => {
       console.log('Client Received: ' + data);
-      if (data == 'Verified') {
+      if (data == 'Verified' && j === 0) {
         console.log('sending data');
+        j=1;
         if (file) {
           ReadFile(file);
         }
@@ -75,6 +77,7 @@ const SocketConnection = (props) => {
         .readStream(realPath, 'base64', MAXIMUM_MESSAGE_SIZE)
         .then((ifstream) => {
           ifstream.open();
+          client.write('SOF');
           ifstream.onData((chunk) => {
             console.log('reading file');
             console.log(chunk);
