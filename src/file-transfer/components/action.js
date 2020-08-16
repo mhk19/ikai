@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {View, Text, Image, StyleSheet} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
@@ -78,7 +78,11 @@ export const ActionPage = (props) => {
               />
               <TouchableOpacity
                 style={styles.buttonContainer}
-                onPress={() => {}}>
+                onPress={() => {
+                  props.navigation.push('shareAddFilePage', {
+                    navigation: props.navigation,
+                  });
+                }}>
                 <Text
                   style={{
                     fontSize: 24,

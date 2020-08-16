@@ -93,7 +93,7 @@ export class ShareMainPage extends React.Component {
                 this.props.navigation.push('shareOnlineActionPage', {
                   navigation: this.props,
                 });
-            }}>
+              }}>
               <Text
                 style={{
                   color: 'white',
