@@ -6,7 +6,7 @@ import style from '../model/style';
 import { HotspotWizard } from 'react-native-wifi-and-hotspot-wizard';
 import Toast from 'react-native-simple-toast';
 import { NetworkInfo } from 'react-native-network-info';
-import SocketConnection from '../components/FileTransfer';
+import SocketConnection from './FileTransfer';
 import RNFetchBlob from 'rn-fetch-blob';
 var net = require('net');
 const MAXIMUM_MESSAGE_SIZE = 65535;
