@@ -229,6 +229,7 @@ export const Connect = (props) => {
           console.log('Data channel is created!');
           let receiveChannel = event.channel;
           receiveChannel.onopen = () => {
+            receiveChannel.send('ikaiopen');
             console.log('Data channel is open and ready to be used.');
           };
           receiveChannel.binaryType = 'arraybuffer';
@@ -253,7 +254,14 @@ export const Connect = (props) => {
       console.log(error);
     };
     dataChannel.binaryType = 'arraybuffer';
-    dataChannel.onmessage = handleDataChannelFileReceived;
+    dataChannel.onmessage = ({data}) => {
+      if (data === 'ikaiopen') {
+        // dataChannel.send(JSON.stringify(props.route.params.file));
+        // dataChannel.send('SOF');
+        ReadFile(props.route.params.file);
+      }
+      handleDataChannelFileReceived(data);
+    };
     updateChannel(dataChannel);
     console.log('reached here');
     connection
@@ -266,7 +274,7 @@ export const Connect = (props) => {
       .catch((e) => setError(e));
   };
 
-  const handleDataChannelFileReceived = ({data}) => {
+  const handleDataChannelFileReceived = (data) => {
     try {
       if (data !== END_OF_FILE_MESSAGE) {
         receivedBuffers.push(data);
