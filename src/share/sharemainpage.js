@@ -97,7 +97,7 @@ export class ShareMainPage extends React.Component {
                   color: 'white',
                   fontSize: 20,
                   fontFamily: 'roboto',
-                  marginTop: '10%',
+                  marginTop: '7%',
                 }}>
                 ONLINE
               </Text>
@@ -123,7 +123,7 @@ export class ShareMainPage extends React.Component {
                   color: '#13C2C2',
                   fontSize: 20,
                   fontFamily: 'roboto',
-                  marginTop: '10%',
+                  marginTop: '7%',
                 }}>
                 OFFLINE
               </Text>

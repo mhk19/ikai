@@ -11,25 +11,35 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
+    width: '100%'
   },
   innerContainer: {
     backgroundColor: 'white',
     flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
+    width: '100%'
   },
   shareImageContainer: {
     marginTop: '20%',
     height: '30%',
     resizeMode: 'contain',
   },
-  descContainer: {
-    marginTop: '5%',
+  descContainer1: {
+    marginTop: '10%',
     fontFamily: 'roboto',
     fontStyle: 'normal',
-    fontSize: 16,
+    fontSize: 20,
     textAlign: 'center',
     color: '#979797',
+  },
+  descContainer2: {
+    marginTop: '10%',
+    fontFamily: 'roboto',
+    fontStyle: 'normal',
+    fontSize: 20,
+    textAlign: 'center',
+    color: '#13C2C2',
   },
   emptyFileContainer: {
     backgroundColor: '#FAFAFA',
@@ -39,17 +49,22 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     flexDirection: 'column',
     marginTop: '5%',
-    width: 350,
-    height: 80,
+    width: '80%',
+    height: '25%',
     justifyContent: 'space-evenly',
+    alignItems: 'center',
+  },
+  upperContainer: {
+    flexDirection: 'column',
+    width: '100%',
     alignItems: 'center',
   },
   disabledButton: {
     backgroundColor: 'rgba(19, 194, 194, 0.3)',
     borderRadius: 2,
     color: 'white',
-    width: 350,
-    height: 40,
+    width: '80%',
+    height: '15%',
     fontFamily: 'roboto',
     fontStyle: 'normal',
     textAlign: 'center',
@@ -64,22 +79,22 @@ const styles = StyleSheet.create({
     borderColor: '#D9D9D9',
     borderRadius: 2,
     alignItems: 'center',
-    flex: 0.2,
+    flex: 0.3,
     flexDirection: 'column',
     justifyContent: 'center',
   },
   fileContainer: {
     flexDirection: 'row',
-    width: 300,
-    height: 70,
-    marginTop: 20,
+    width: '80%',
+    height: '25%',
+    marginTop: '5%',
     justifyContent: 'center',
   },
   filenameContainer: {
     flex: 0.7,
     fontFamily: 'roboto',
     fontStyle: 'normal',
-    fontSize: 14,
+    fontSize: 18,
     borderStyle: 'solid',
     borderColor: '#D9D9D9',
     borderWidth: 1,
@@ -90,8 +105,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#13C2C2',
     borderRadius: 2,
     color: 'white',
-    width: 275,
-    height: 40,
+    width: '80%',
+    height: '15%',
     fontFamily: 'roboto',
     fontStyle: 'normal',
     fontSize: 18,
@@ -99,6 +114,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: 10,
   },
+  imageContainer: {
+    alignItems: 'center',
+    marginTop: '50%',
+  }
 });
 
 export const SendPage = (props) => {
@@ -178,11 +197,11 @@ export const SendPage = (props) => {
             style={styles.shareImageContainer}
             source={require('../assets/share.png')}
           />
-          <Text style={styles.descContainer}>
+          <Text style={styles.descContainer1}>
             Start by choosing file you want to share.
           </Text>
           {fileName === '' && (
-            <View>
+            <View style={styles.upperContainer}>
               <TouchableOpacity
                 style={styles.emptyFileContainer}
                 onPress={() => {
@@ -200,7 +219,7 @@ export const SendPage = (props) => {
             </View>
           )}
           {fileName !== '' && (
-            <View style={{flexDirection: 'column', alignItems: 'center'}}>
+            <View style={styles.upperContainer}>
               <TouchableOpacity
                 style={styles.fileContainer}
                 onPress={() => {
@@ -208,7 +227,7 @@ export const SendPage = (props) => {
                 }}>
                 <View style={styles.iconContainer}>
                   <Image source={require('../assets/video_icon.png')} />
-                  <Text style={{color: '#979797'}}>PDF</Text>
+                  <Text style={{color: '#979797'}}>FILE</Text>
                 </View>
                 <View style={styles.filenameContainer}>
                   <Text style={{color: '#979797'}}>{fileName}</Text>
@@ -234,10 +253,9 @@ export const SendPage = (props) => {
             style={styles.imageContainer}
             source={require('../assets/sendfile.png')}
           />
-          <Text style={(styles.descContainer, {color: '#979797'})}>
+          <Text style={(styles.descContainer1)}>
             Sending your file!
           </Text>
-          <EatBeanLoader color={'#13C2C2'} size={40}></EatBeanLoader>
         </View>
       )}
       {sent && connected && (
@@ -246,7 +264,7 @@ export const SendPage = (props) => {
             style={styles.imageContainer}
             source={require('../assets/sentfile.png')}
           />
-          <Text style={(styles.descContainer, {color: '#13C2C2'})}>
+          <Text style={(styles.descContainer2)}>
             File successfully sent!
           </Text>
         </View>

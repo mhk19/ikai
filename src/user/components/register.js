@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
     borderRadius: 500,
     borderWidth: 2,
     textAlign: 'center',
+    fontSize: 20,
   },
   submissionContainer: {
     height: '30%',
