@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, ScrollView, Text} from 'react-native';
 import ContactThumbnail from './contactThumbnail';
 import axios from 'axios';
+import {IKAISERVER} from '../../ikai/constants';
 const styles = StyleSheet.create({
   outerContainer: {
     backgroundColor: 'white',
@@ -35,7 +36,7 @@ export const ShareOnlineContacts = (props) => {
   const [userLoggedin, setUserLoggedin] = useState(true);
   const [dataReceived, setDataReceived] = useState(false);
   useEffect(() => {
-    callAPI('http://62876c440dd3.ngrok.io/users/chatrooms').then((res) => {
+    callAPI('http://' + IKAISERVER + '/users/chatrooms').then((res) => {
       console.log('Data is received.');
       setDataReceived(true);
       setChatrooms(res.results);

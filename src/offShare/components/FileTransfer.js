@@ -7,11 +7,16 @@ import RNFetchBlob from 'rn-fetch-blob';
 import { TextInput } from 'react-native-gesture-handler';
 import RNFS from 'react-native-fs';
 import { WifiWizard } from 'react-native-wifi-and-hotspot-wizard';
+<<<<<<< HEAD
+=======
+import { Toast } from 'native-base';
+>>>>>>> 138cc7b2faa641a3aa65fcf89a283d5200db5ee5
 var net = require('net');
 const MAXIMUM_MESSAGE_SIZE = 65535;
 const END_OF_FILE_MESSAGE = 'EOF';
 
 const SocketConnection = (props) => {
+<<<<<<< HEAD
   let code = props.code;
   let serverPort = 7251;
 
@@ -37,6 +42,47 @@ const SocketConnection = (props) => {
 
       ReadFile(file);
     }
+=======
+  const [file, setFile] = useState(null);
+  let serverPort = 7251;
+  let code = props.code;
+  console.log('code:' + code);
+  let j = 0;
+
+  console.log(serverPort, code);
+
+  function connectToServer() {
+    console.log(serverPort, code);
+    client = net.createConnection(serverPort, code, () => {
+      console.log('opened client on ' + JSON.stringify(client.address()));
+      client.write('Verified');
+    });
+
+    client.on('data', (data) => {
+      console.log('Client Received: ' + data);
+      if (data == 'Verified' && j === 0) {
+        j = 1;
+        if (file) {
+          ReadFile(file);
+        }
+      }
+    });
+
+    client.on('error', (error) => {
+      console.log('client error ' + error);
+    });
+
+    client.on('close', () => {
+      this.client.destroy(); // kill client after server's response
+      this.server.close();
+      console.log('client close');
+    });
+  }
+
+
+  const sendFile = () => {
+    connectToServer()
+>>>>>>> 138cc7b2faa641a3aa65fcf89a283d5200db5ee5
   };
 
   const selectFile = async () => {
@@ -73,6 +119,10 @@ const SocketConnection = (props) => {
           });
           ifstream.onEnd(() => {
             client.write(END_OF_FILE_MESSAGE);
+<<<<<<< HEAD
+=======
+            Toast.show('read successful');
+>>>>>>> 138cc7b2faa641a3aa65fcf89a283d5200db5ee5
             console.log('read successful');
           });
         })

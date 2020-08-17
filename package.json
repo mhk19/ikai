@@ -17,9 +17,11 @@
     "@react-navigation/stack": "^5.9.0",
     "apsl-react-native-button": "^3.1.1",
     "axios": "^0.19.2",
+    "lottie-react-native": "^3.5.0",
     "native-base": "^2.13.13",
     "react": "16.13.1",
     "react-native": "^0.62.2",
+    "react-native-animated-loader": "0.0.8",
     "react-native-custom-actionsheet": "^0.1.1",
     "react-native-document-picker": "^3.5.4",
     "react-native-drawer": "^2.5.1",
@@ -30,6 +32,10 @@
     "react-native-image-picker": "^2.3.3",
     "react-native-modal": "^11.5.6",
     "react-native-network-info": "^5.2.1",
+<<<<<<< HEAD
+=======
+    "react-native-photoeditorsdk": "^2.4.2",
+>>>>>>> 138cc7b2faa641a3aa65fcf89a283d5200db5ee5
     "react-native-reanimated": "^1.9.0",
     "react-native-safe-area-context": "^3.1.4",
     "react-native-scanbot-sdk": "^4.2.0",
@@ -38,6 +44,11 @@
     "react-native-simple-toast": "^1.1.2",
     "react-native-tcp": "^4.0.0",
     "react-native-vector-icons": "^7.0.0",
+<<<<<<< HEAD
+=======
+    "react-native-videoeditorsdk": "^2.4.2",
+    "react-native-virgil-crypto": "^0.6.1",
+>>>>>>> 138cc7b2faa641a3aa65fcf89a283d5200db5ee5
     "react-native-webrtc": "^1.84.0",
     "react-native-wifi-and-hotspot-wizard": "^1.0.5-stable",
     "react-navigation": "^4.4.0",

@@ -1,5 +1,6 @@
 import React from 'react';
 import {View, StyleSheet, Text, TouchableOpacity, Image} from 'react-native';
+import {ActionPage} from '../file-transfer/components/action';
 
 const styles = StyleSheet.create({
   outerContainer: {
@@ -86,7 +87,11 @@ export class ShareMainPage extends React.Component {
             </View>
           </View>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.onlineButton} onPress={() => {}}>
+            <TouchableOpacity
+              style={styles.onlineButton}
+              onPress={() => {
+                this.props.navigation.push('shareOnlineActionPage', {});
+              }}>
               <Text
                 style={{
                   color: 'white',
@@ -110,7 +115,9 @@ export class ShareMainPage extends React.Component {
               }}>
               or
             </Text>
-            <TouchableOpacity style={styles.offlineButton}>
+            <TouchableOpacity
+              style={styles.offlineButton}
+              onPress={() => this.props.navigation.push('offlinemainscreen')}>
               <Text
                 style={{
                   color: '#13C2C2',

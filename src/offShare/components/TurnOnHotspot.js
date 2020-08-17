@@ -155,12 +155,18 @@ let TurnOnHotspot = (props) => {
   }
 
   async function startServer() {
+<<<<<<< HEAD
+=======
+    let j = 0;
+    let receivedBuffers = [];
+>>>>>>> 138cc7b2faa641a3aa65fcf89a283d5200db5ee5
     let serverPort = 7251;
     let server = net.createServer((socket) => {
       console.log('server connected on ' + JSON.stringify(socket.address()));
 
       socket.on('data', (data) => {
         console.log('Server Received: ' + data);
+<<<<<<< HEAD
         socket.write('Verified');
         if(data == 'Verified') {
           showTurnOnHotspotModal(false);
@@ -168,6 +174,33 @@ let TurnOnHotspot = (props) => {
         }
         else {
           handleDataChannelFileReceived(data);
+=======
+        if (data == 'Verified') {
+          socket.write('Verified');
+          console.log('temp test');
+        } else if (data != 'EOF') {
+          console.log('pushing into buffer');
+          receivedBuffers.push(data);
+          console.log(receivedBuffers.length);
+        } else if (data == 'EOF') {
+          console.log('file end');
+          Toast.show('File received');
+          RNFetchBlob.fs
+            .writeStream(RNFetchBlob.fs.dirs.DownloadDir + '/test2.pdf', 'base64')
+            .then((stream) => {
+              for (let i = 0; i < receivedBuffers.length; i++) {
+                stream.write(receivedBuffers[i].toString('utf-8'));
+                console.log(receivedBuffers[i].toString('utf-8'));
+              }
+              console.log(receivedBuffers);
+              console.log('File completely received');
+              Toast.show('File saved');
+              receivedBuffers = [];
+              return stream.close();
+            });
+        } else {
+          console.log('file cannot be received completely');
+>>>>>>> 138cc7b2faa641a3aa65fcf89a283d5200db5ee5
         }
       });
 
@@ -192,6 +225,7 @@ let TurnOnHotspot = (props) => {
   };
 };
 
+<<<<<<< HEAD
 const handleDataChannelFileReceived = (data) => {
   console.log('data incoming');
   let receivedBuffers = [];
@@ -218,5 +252,34 @@ const handleDataChannelFileReceived = (data) => {
     console.log('File transfer failed');
   }
 };
+=======
+// const handleDataChannelFileReceived = (data) => {
+//   console.log('data incoming');
+//   let receivedBuffers = [];
+
+//   try {
+//     if (data !== END_OF_FILE_MESSAGE) {
+//       receivedBuffers.push(data);
+//     } else if (data === END_OF_FILE_MESSAGE) {
+//       console.log('file end');
+//       RNFetchBlob.fs
+//         .writeStream(RNFetchBlob.fs.dirs.DownloadDir + '/test2.pdf', 'base64')
+//         .then((stream) => {
+//           for (let i = 0; i < receivedBuffers.length; i++) {
+//             stream.write(receivedBuffers[i]);
+//           }
+//           console.log(receivedBuffers);
+//           console.log('File completely received');
+//           receivedBuffers = [];
+//           return stream.close();
+//         });
+//     } else {
+//       console.log('file cannot be received completely');
+//     }
+//   } catch (err) {
+//     console.log('File transfer failed');
+//   }
+// };
+>>>>>>> 138cc7b2faa641a3aa65fcf89a283d5200db5ee5
 
 export default TurnOnHotspot;

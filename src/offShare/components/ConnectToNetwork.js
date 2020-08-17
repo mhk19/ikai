@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
+<<<<<<< HEAD
 import { View, Text, Dimensions, TextInput } from 'react-native';
+=======
+import { View, Text, Dimensions, TextInput, ActivityIndicatorBase } from 'react-native';
+>>>>>>> 138cc7b2faa641a3aa65fcf89a283d5200db5ee5
 import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Button from 'apsl-react-native-button';
@@ -14,13 +18,21 @@ const MAXIMUM_MESSAGE_SIZE = 65535;
 const END_OF_FILE_MESSAGE = 'EOF';
 
 const ConnectToNetwork = (props) => {
+<<<<<<< HEAD
   const [file, setFile] = useState(null);
+=======
+>>>>>>> 138cc7b2faa641a3aa65fcf89a283d5200db5ee5
   let win = Dimensions.get('window');
   let WifiSSID, WifiPassword, WifiPasscode, serverPort = 7251;
   let showConnectToNetworkModal = props.showConnectToNetworkModal;
   let [StartSendingFile, showStartSendingFileState] = useState(false);
   let [connected, setConnected] = useState(false);
+<<<<<<< HEAD
   let code = '';
+=======
+  let [code, setCode] = useState(null);
+  const [file, setFile] = useState(null);
+>>>>>>> 138cc7b2faa641a3aa65fcf89a283d5200db5ee5
 
   // let [sendFile, showSendFile] = useState(false);
   return (
@@ -126,6 +138,7 @@ const ConnectToNetwork = (props) => {
           justifyContent: 'flex-end',
           margin: 0,
         }}>
+<<<<<<< HEAD
         <View style={style.container}>
           <Button
             title="Select File"
@@ -140,6 +153,9 @@ const ConnectToNetwork = (props) => {
             }}
           />
         </View>
+=======
+        <SocketConnection code={code} />
+>>>>>>> 138cc7b2faa641a3aa65fcf89a283d5200db5ee5
       </Modal>
     </View>
   );
@@ -184,10 +200,17 @@ const ConnectToNetwork = (props) => {
     //   }
     // }
     console.log(WifiPasscode);
+<<<<<<< HEAD
     const code = await decrypt(WifiPasscode);
     // Search For Nearby Devices
     console.log('Connecting to Server');
     connectToServer(code);
+=======
+    await decrypt(WifiPasscode);
+    // Search For Nearby Devices
+    console.log('Connecting to Server');
+    activate();
+>>>>>>> 138cc7b2faa641a3aa65fcf89a283d5200db5ee5
   }
 
   async function decrypt(str) {
@@ -197,6 +220,7 @@ const ConnectToNetwork = (props) => {
     var second = parseInt(str[1]);
     var third = parseInt(str[2]);
     var fourth = parseInt(str[3]);
+<<<<<<< HEAD
     console.log(first, second, third, fourth);
     for (var i = j; i < j + first; i++) {
       code += str[i];
@@ -313,5 +337,127 @@ const ConnectToNetwork = (props) => {
   }
 
 };
+=======
+    let chck = '';
+    console.log(first, second, third, fourth);
+    for (var i = j; i < j + first; i++) {
+      chck += str[i];
+    }
+    chck += '.';
+    j += first;
+    for (var i = j; i < j + second; i++) {
+      chck += str[i];
+    }
+    chck += '.';
+    j += second;
+    for (var i = j; i < j + third; i++) {
+      chck += str[i];
+    }
+    chck += '.';
+    j += third;
+    for (var i = j; i < j + fourth; i++) {
+      chck += str[i];
+    }
+    console.log(chck);
+    code = chck;
+    setCode(chck);
+    console.log(code);
+    console.log(setCode);
+    console.log({code});
+    console.log({setCode});
+  }
+
+  async function activate() {
+    showStartSendingFileState(true);
+    StartSendingFile = true;
+    console.log(StartSendingFile);
+  }
+
+  // function connectToServer() {
+  //   console.log(serverPort, code);
+  //   client = net.createConnection(serverPort, code, () => {
+  //     console.log('opened client on ' + JSON.stringify(client.address()));
+  //     client.write('Verified');
+  //   });
+
+  //   async function activate() {
+  //     showStartSendingFileState(true);
+  //     StartSendingFile = true;
+  //     console.log(StartSendingFile);
+  //   }
+
+  //   client.on('data', (data) => {
+  //     console.log('Client Received: ' + data);
+  //     activate();
+  //     // this.client.destroy(); // kill client after server's response
+  //     // this.server.close();
+  //   });
+
+  //   client.on('error', (error) => {
+  //     console.log('client error ' + error);
+  //   });
+
+  //   client.on('close', () => {
+  //     this.client.destroy(); // kill client after server's response
+  //     this.server.close();
+  //     console.log('client close');
+  //   });
+
+  //   sendF = function sendFile(client) {
+  //     if (file) {
+  //       console.log('the selected file is:', file);
+  //       ReadFile(file);
+  //     }
+  //   };
+
+  //   function ReadFile(file) {
+  //     console.log('reading file');
+  //     const fileData = [];
+  //     const realPath = file.path;
+  //     if (realPath !== null) {
+  //       console.log('Path is', realPath);
+  //       RNFetchBlob.fs
+  //         .readStream(realPath, 'base64', MAXIMUM_MESSAGE_SIZE)
+  //         .then((ifstream) => {
+  //           ifstream.open();
+  //           ifstream.onData((chunk) => {
+  //             console.log('reading file');
+  //             console.log(chunk);
+  //             //fileData.push(chunk);
+  //             client.write(chunk);
+  //           });
+  //           ifstream.onError((err) => {
+  //             console.log('error in reading file', err);
+  //           });
+  //           ifstream.onEnd(() => {
+  //             client.write(END_OF_FILE_MESSAGE);
+  //             console.log('read successful');
+  //           });
+  //         })
+  //         .catch((err) => {
+  //           console.log(err);
+  //         });
+  //     }
+  //   };
+  //   // connectToServer.selectFile = selectFile;
+  // }
+
+  // async function selectFile() {
+  //   console.log('selecting file');
+  //   FilePickerManager.showFilePicker(null, (response) => {
+  //     console.log('Response = ', response);
+
+  //     if (response.didCancel) {
+  //       console.log('User cancelled file picker');
+  //     } else if (response.error) {
+  //       console.log('FilePickerManager Error: ', response.error);
+  //     } else {
+  //       setFile(response);
+  //     }
+  //   });
+  // };
+
+}
+>>>>>>> 138cc7b2faa641a3aa65fcf89a283d5200db5ee5
 
 export default ConnectToNetwork;
