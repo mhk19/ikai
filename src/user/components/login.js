@@ -5,32 +5,43 @@ import {
   TextInput,
   Text,
   TouchableOpacity,
+  ImageBackground,
 } from 'react-native';
 import Toast from 'react-native-simple-toast';
-import Background from '../assets/background.png';
 import AsyncStorage from '@react-native-community/async-storage';
-import App from '../../../App';
-import axios from 'axios';
 import {IKAISERVER} from '../../ikai/constants';
 const styles = StyleSheet.create({
   outerContainer: {
-    // backgroundImage: `url(${Background})`,
     flex: 1,
     flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'stretch',
-    alignContent: 'center',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    paddingBottom: '12%',
   },
   formContainer: {
     height: '60%',
     width: '72%',
-    marginLeft: '7%',
-    justifyContent: 'center',
-    alignItems: 'stretch',
+    justifyContent: 'space-between',
   },
-  buttonContainer: {},
-  submissionContainer: {},
-  textBox: {},
+  background: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+  },
+  inputContainer: {
+    height: '27%',
+    justifyContent: 'space-between',
+  },
+  submissionContainer: {
+    height: '30%',
+    justifyContent: 'space-between',
+  },
+  textBox: {
+    backgroundColor: 'white',
+    borderColor: '#13C2C2',
+    borderRadius: 500,
+    borderWidth: 2,
+  },
 });
 
 export class LoginComponent extends React.Component {
@@ -125,76 +136,90 @@ export class LoginComponent extends React.Component {
 
   render() {
     return (
-      <View style={styles.outerContainer}>
-        <View style={styles.formContainer}>
-          <View style={styles.buttonContainer}>
-            <TextInput
-              style={styles.textBox}
-              placeholder="Username"
-              onChangeText={this.setUserName}
-            />
-            <TextInput
-              style={styles.textBox}
-              placeholder="Password"
-              secureTextEntry={true}
-              onChangeText={this.setPassword}
-            />
+      <ImageBackground
+        source={require('../assets/background.png')}
+        style={styles.background}>
+        <View style={styles.outerContainer}>
+          <View style={styles.formContainer}>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.textBox}
+                placeholder="Username"
+                placeholderTextColor="rgba(19, 194, 194, 0.5)"
+                onChangeText={this.setUserName}
+              />
+              <TextInput
+                style={styles.textBox}
+                placeholder="Password"
+                placeholderTextColor="rgba(19, 194, 194, 0.5)"
+                secureTextEntry={true}
+                onChangeText={this.setPassword}
+              />
+            </View>
             {/* <TouchableOpacity>
-              <Text style={}>Forgot Password?</Text>
-            </TouchableOpacity>
-          </View> */}
-            <TouchableOpacity
-              onPress={() => {
-                this.loginUser();
-              }}
-              disabled={!(this.state.username && this.state.password)}>
+                <Text style={}>Forgot Password?</Text>
+                </TouchableOpacity>
+                </View> */}
+            <View style={styles.submissionContainer}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.loginUser();
+                }}
+                disabled={!(this.state.username && this.state.password)}
+                style={{
+                  borderRadius: 500,
+                  borderColor: '#13C2C2',
+                  backgroundColor: '#13C2C2',
+                  borderWidth: 2,
+                }}>
+                <Text
+                  style={{
+                    color: 'white',
+                    fontSize: 22,
+                    fontFamily: 'roboto',
+                    padding: '3%',
+                    textAlign: 'center',
+                    textAlignVertical: 'center',
+                  }}>
+                  LOG IN
+                </Text>
+              </TouchableOpacity>
               <Text
                 style={{
-                  color: '#13C2C2',
-                  fontSize: 18,
+                  color: '#979797',
+                  width: '100%',
+                  textAlignVertical: 'center',
+                  textAlign: 'center',
+                  fontSize: 16,
                   fontFamily: 'roboto',
-                  marginTop: '3%',
                 }}>
-                LOG IN
+                or
               </Text>
-            </TouchableOpacity>
-            <Text
-              style={{
-                color: '#979797',
-                backgroundColor: 'white',
-                width: '100%',
-                height: '33%',
-                textAlignVertical: 'center',
-                textAlign: 'center',
-                fontSize: 18,
-                fontFamily: 'roboto',
-              }}>
-              or
-            </Text>
-            <TouchableOpacity
-              onPress={() => {
-                this.props.pageHandler('register');
-              }}
-              style={{
-                backgroundColor: '#13C2C2',
-                fontSize: 18,
-                fontFamily: 'roboto',
-                marginTop: '3%',
-              }}>
-              <Text
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.pageHandler('register');
+                }}
                 style={{
-                  color: 'white',
-                  fontSize: 18,
-                  fontFamily: 'roboto',
-                  marginTop: '3%',
+                  borderColor: '#13C2C2',
+                  borderRadius: 500,
+                  borderWidth: 2,
                 }}>
-                SIGNUP
-              </Text>
-            </TouchableOpacity>
+                <Text
+                  style={{
+                    color: '#13C2C2',
+                    fontSize: 16,
+                    padding: '5%',
+                    fontFamily: 'roboto',
+                    textAlignVertical: 'center',
+                    textAlign: 'center',
+                  }}>
+                  SIGNUP
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
-          {/* <Image source={require('../assets/require.png')}></Image> */}
         </View>
-      </View>
+      </ImageBackground>
     );
   }
 }
