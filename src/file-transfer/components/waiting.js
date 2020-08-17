@@ -1,15 +1,16 @@
 import React from 'react';
 import {View, Image, Text, StyleSheet} from 'react-native';
-
+import {EatBeanLoader} from 'react-native-indicator';
 const styles = StyleSheet.create({
   innerContainer: {
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'white',
   },
   imageContainer: {
-    height: 150,
+    height: '30%',
     resizeMode: 'contain',
     marginBottom: 20,
   },
@@ -28,10 +29,12 @@ export class WaitingPage extends React.Component {
             color: '#979797',
             fontFamily: 'roboto',
             fontStyle: 'normal',
-            fontSize: 16,
+            fontSize: 20,
+            marginBottom: '15%',
           }}>
           {this.props.desc}
         </Text>
+        <EatBeanLoader color={'#13C2C2'} size={40}></EatBeanLoader>
       </View>
     );
   }
