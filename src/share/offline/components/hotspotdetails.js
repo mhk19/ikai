@@ -18,12 +18,12 @@ const styles = StyleSheet.create({
     height: '55%',
   },
   shareImageContainer: {
-    marginTop: '30%',
-    height: '40%',
+    marginTop: '25%',
+    height: '50%',
     resizeMode: 'contain',
   },
   descContainer: {
-    marginTop: '5%',
+    marginTop: '2%',
     fontFamily: 'roboto',
     fontStyle: 'normal',
     fontSize: 20,
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     color: '#979797',
   },
   buttonContainer: {
-    height: '45%',
+    height: '57%',
     width: '100%',
     backgroundColor: 'white',
     flexDirection: 'column',
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
   },
   buttonDetail: {
     width: '60%',
-    height: '18%',
+    height: '13%',
     borderRadius: 30,
     backgroundColor: 'white',
     borderColor: '#13C2C2',
@@ -72,10 +72,26 @@ const styles = StyleSheet.create({
   },
   buttonPair: {
     width: '60%',
-    height: '18%',
+    height: '13%',
     borderRadius: 30,
     backgroundColor: '#13C2C2',
-    margin: '5%',
+    margin: '3%',
+  },
+  textInfo: {
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    marginTop: 12,
+    color: 'white',
+    fontSize: 20,
+    fontFamily: 'roboto',
+  },
+  textInfo2: {
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    marginTop: 12,
+    color: '#13C2C2',
+    fontSize: 20,
+    fontFamily: 'roboto',
   },
   cameraButton: {
     minHeight: '10%',
@@ -97,22 +113,6 @@ const styles = StyleSheet.create({
     resizeMode: 'center',
     height: '100%',
     width: '100%',
-  },
-  textInfo: {
-    textAlign: 'center',
-    textAlignVertical: 'center',
-    marginTop: 12,
-    color: 'white',
-    fontSize: 20,
-    fontFamily: 'roboto',
-  },
-  textInfo2: {
-    textAlign: 'center',
-    textAlignVertical: 'center',
-    marginTop: 12,
-    color: '#13C2C2',
-    fontSize: 20,
-    fontFamily: 'roboto',
   },
 });
 
