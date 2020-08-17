@@ -66,7 +66,7 @@ export const Connect = (props) => {
   let receivedBuffers = [];
 
   useEffect(() => {
-    setUserName('mahak');
+    setUserName('oneplus');
     if (props.route.params.file !== undefined) {
       setClientType('sender');
     } else {
@@ -229,11 +229,16 @@ export const Connect = (props) => {
           console.log('Data channel is created!');
           let receiveChannel = event.channel;
           receiveChannel.onopen = () => {
+            // updateChannel(receiveChannel);
             receiveChannel.send('ikaiopen');
             console.log('Data channel is open and ready to be used.');
+            receiveChannel.onmessage = ({data}) => {
+              handleDataChannelFileReceived(data);
+            };
+            // receiveChannel.onmessage = handleDataChannelFileReceived;
           };
           receiveChannel.binaryType = 'arraybuffer';
-          receiveChannel.onmessage = handleDataChannelFileReceived;
+          // receiveChannel.onmessage = handleDataChannelFileReceived;
           updateChannel(receiveChannel);
         };
       };
@@ -255,10 +260,14 @@ export const Connect = (props) => {
     };
     dataChannel.binaryType = 'arraybuffer';
     dataChannel.onmessage = ({data}) => {
+      console.log(data);
       if (data === 'ikaiopen') {
         // dataChannel.send(JSON.stringify(props.route.params.file));
         // dataChannel.send('SOF');
-        ReadFile(props.route.params.file);
+        console.log('starting to call readfile');
+        console.log('here channel is', dataChannel);
+        updateChannel(dataChannel);
+        ReadFile(props.route.params.file, dataChannel);
       }
       handleDataChannelFileReceived(data);
     };
@@ -275,6 +284,7 @@ export const Connect = (props) => {
   };
 
   const handleDataChannelFileReceived = (data) => {
+    console.log(data);
     try {
       if (data !== END_OF_FILE_MESSAGE) {
         receivedBuffers.push(data);
@@ -298,7 +308,7 @@ export const Connect = (props) => {
     }
   };
 
-  const ReadFile = (file) => {
+  const ReadFile = (file, datachannel) => {
     const realPath = file.path;
     if (realPath !== null) {
       console.log('path is', realPath);
@@ -308,14 +318,14 @@ export const Connect = (props) => {
           ifstream.open();
           ifstream.onData((chunk) => {
             console.log('reading file');
-            console.log(chunk);
-            channel.send(chunk);
+            console.log('channel', channel);
+            datachannel.send(chunk);
           });
           ifstream.onError((err) => {
             console.log('error in reading file', err);
           });
           ifstream.onEnd(() => {
-            channel.send(END_OF_FILE_MESSAGE);
+            datachannel.send(END_OF_FILE_MESSAGE);
             console.log('read successful');
           });
         })

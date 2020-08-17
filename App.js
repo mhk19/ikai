@@ -64,7 +64,8 @@ export class App extends React.Component {
   };
 
   render() {
-    if (this.state.user && this.state.token && this.state.isLogin) {
+    // if (this.state.user && this.state.token && this.state.isLogin) {
+      if(true){
       return (
         <Drawer
           ref={(ref) => (this._drawer = ref)}
