@@ -217,26 +217,28 @@ export const Connect = (props) => {
     }
   };
 
-  connection.onicecandidate = ({candidate}) => {
-    let connectedTo = connectedRef.current;
-    if (candidate && !!connectedTo) {
-      send({
-        name: connectedTo,
-        type: 'candidate',
-        candidate: candidate,
-      });
-    }
-    connection.ondatachannel = (event) => {
-      console.log('Data channel is created!');
-      let receiveChannel = event.channel;
-      receiveChannel.onopen = () => {
-        console.log('Data channel is open and ready to be used.');
+  if (connection !== null) {
+    connection.onicecandidate = ({candidate}) => {
+      let connectedTo = connectedRef.current;
+      if (candidate && !!connectedTo) {
+        send({
+          name: connectedTo,
+          type: 'candidate',
+          candidate: candidate,
+        });
+      }
+      connection.ondatachannel = (event) => {
+        console.log('Data channel is created!');
+        let receiveChannel = event.channel;
+        receiveChannel.onopen = () => {
+          console.log('Data channel is open and ready to be used.');
+        };
+        receiveChannel.binaryType = 'arraybuffer';
+        receiveChannel.onmessage = handleDataChannelFileReceived;
+        updateChannel(receiveChannel);
       };
-      receiveChannel.binaryType = 'arraybuffer';
-      receiveChannel.onmessage = handleDataChannelFileReceived;
-      updateChannel(receiveChannel);
     };
-  };
+  }
   const handleConnection = (name) => {
     setSelectingReceiver(false);
     setConnecting(true);
