@@ -5,15 +5,16 @@ import Button from 'apsl-react-native-button';
 import style from '../model/style';
 import {WifiWizard, HotspotWizard} from 'react-native-wifi-and-hotspot-wizard';
 import Toast from 'react-native-simple-toast';
-import NearbyDevices from './NearbyDevices';
-import ConnectToNetwork from './ConnectToNetwork';
+import NearbyDevices from '../utils/NearbyDevices';
+import ConnectToNetwork from '../utils/ConnectToNetwork';
 import {Dimensions} from 'react-native';
-import TurnOnHotspot from './TurnOnHotspot';
+import TurnOnHotspot from '../utils/TurnOnHotspot';
 import {NetworkInfo} from 'react-native-network-info';
+import FilePickerManager from 'react-native-file-picker';
 import RctSockets from './tcp';
-import NetInfo from "@react-native-community/netinfo";
+import RNFetchBlob from 'rn-fetch-blob';
 var net = require('net');
-
+const MAXIMUM_MESSAGE_SIZE = 65535;
 const Home = () => {
   const win = Dimensions.get('window');
 
@@ -22,16 +23,38 @@ const Home = () => {
   );
   let [ConnectToNetworkModalState, showConnectToNetworkModal] = useState(false);
   let [TurnOnHotspotModalState, showTurnOnHotspotModal] = useState(false);
+  const [file, setFile] = useState(null);
+  const selectFile = async () => {
+    FilePickerManager.showFilePicker(null, (response) => {
+      console.log('Response = ', response);
 
+      if (response.didCancel) {
+        console.log('User cancelled file picker');
+      } else if (response.error) {
+        console.log('FilePickerManager Error: ', response.error);
+      } else {
+        setFile(response);
+      }
+    });
+  };
   let HotspotSSID, HotspotPassword;
   return (
-    <ScrollView scrollEnabled={false} style={{padding: 15}}>
+    <ScrollView scrollEnabled={true} style={{padding: 15}}>
       <Text style={style.text}>Send or Receive Files</Text>
       <Text />
       <Button
         style={{backgroundColor: '#00e676', borderWidth: 0, elevation: 5}}
         onPress={() => {
-          sender();
+          selectFile();
+        }}>
+        <View>
+          <Text style={style.buttonText}> Select File </Text>
+        </View>
+      </Button>
+      <Button
+        style={{backgroundColor: '#00e676', borderWidth: 0, elevation: 5}}
+        onPress={() => {
+          sender(file);
         }}>
         <View>
           <Text style={style.buttonText}> SEND </Text>
@@ -108,14 +131,6 @@ const Home = () => {
         <TurnOnHotspot showTurnOnHotspotModal={showTurnOnHotspotModal} />
       </Modal>
       <Modal
-        isVisible={TurnOnHotspotModalState}
-        style={{
-          justifyContent: 'flex-end',
-          margin: 0,
-        }}>
-        <TurnOnHotspot showTurnOnHotspotModal={showTurnOnHotspotModal} />
-      </Modal>
-      <Modal
         isVisible={ConnectToNetworkModalState}
         style={{
           justifyContent: 'flex-end',
@@ -130,65 +145,69 @@ const Home = () => {
 
   async function sender() {
     // TODO: permissions
-    await turnOnWifi();
-    console.log("wifi turned on");
-    await isWifiEnabled();
-    console.log("wifi is enabled");
-    connectToNetwork();
-    console.log("connected to network.");
-    // // Network info
-    // let x;
+    // await turnOnWifi();
+    // console.log("wifi turned on");
+    // await isWifiEnabled();
+    // console.log("wifi is enabled");
+    // await connectToNetwork();
+    // console.log("connected to network.")
+    // Network
+
+    console.log('clicked');
+
+    // let x, y, z;
+    // await NetworkInfo.getIPV4Address().then((ipv4Address) => {
+    //   x = ipv4Address;
+    //   console.log('ipv4');
+    //   console.log(ipv4Address);
+    //   console.log('ipv4');
+    // });
     // await NetworkInfo.getIPAddress().then((ipAddress) => {
+    //   y = ipAddress;
+    //   console.log('ipAddress');
     //   console.log(ipAddress);
-    //   x = toString(ipAddress);
-    //   console.log(x);
-    //   var passcode;
-    //   for(var i = 0; i < x.length(); i++) {
-    //     if(x[i] !== '.') {
-    //       passcode += x[i];
-    //     }
-    //   }
-    //   console.log(passcode)
+    //   console.log('ipAddress');
+    // });
+    // await NetworkInfo.getBroadcast().then((broadcast) => {
+    //   console.log(broadcast);
+    // });
+    // await NetworkInfo.getSSID().then((ssid) => {
+    //   console.log(ssid);
+    // });
+
+    // // Get BSSID
+    // await NetworkInfo.getBSSID().then((bssid) => {
+    //   console.log(bssid);
+    // });
+
+    // // Get Subnet
+    // await NetworkInfo.getSubnet().then((subnet) => {
+    //   console.log(subnet);
+    // });
+
+    // // Get Default Gateway IP
+    // await NetworkInfo.getGatewayIPAddress().then((defaultGateway) => {
+    //   z = defaultGateway;
+    //   console.log(defaultGateway);
+    // });
+
+    // // Get frequency (supported only for Android)
+    // await NetworkInfo.getFrequency().then((frequency) => {
+    //   console.log(frequency);
+    // });
+    // let client = net.createConnection(8000, x, () => {
+    //   client.write('Hello, server! Love, Client.');
+    // });
+    // client.on('data', (data) => {
+    //   console.log('Client Received: ' + data);
     // });
   }
 
   async function receiver() {
-    // alert('Please switch on your hotspot and connect to the device you want to receive data from');
-    // NetInfo.addEventListener(state => {
-    //   console.log("Connection type", state.type);
-    //   console.log("Is connected?", state.isConnected);
-    //   if(state.type === 'wifi' && state.isConnected === 'true')
-    //     console.log('done');
-    // });
-    // if(state.isConnected() === 'true')
-    //   unsubscribe();
-    turnOnHotspot();
-    NetworkInfo.getIPV4Address().then((ipv4Address) => {
-      console.log(ipv4Address);
-      x = ipv4Address;
-      console.log(x);
-      var j = 0;
-      let arr = '';
-      let passcode = '';
-      for(var i = 0; i < x.length; i++) {
-        if(x[i] != '.') {
-          j++;
-          arr += x[i];
-        }
-        else {
-          passcode += j;
-          j = 0;
-        }
-      }
-      passcode += j;
-      passcode += arr;
-      console.log(passcode);
-    });
-    // let x;
-    // await NetworkInfo.getIPAddress().then((ipAddress) => {
-    //   console.log(ipAddress);
-    // });
-    // SocketConnect.startServer();
+    await turnOnHotspot();
+    // var server = net.createServer(function(socket) {
+    //   socket.write('excellent!');
+    // }).listen(12345);
   }
 
   async function turnOnWifi() {
@@ -266,12 +285,12 @@ const Home = () => {
       });
   }
 
-  async function isHotspotEnabled() {
+  function isHotspotEnabled() {
     HotspotWizard.isHotspotEnabled().then((status) => {
       if (status) {
         Toast.show('Hotspot Is Enabled');
       } else {
-        isHotspotEnabled();
+        Toast.show('Hotspot Is Disabled');
       }
     });
   }

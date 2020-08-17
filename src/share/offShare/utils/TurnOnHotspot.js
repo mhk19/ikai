@@ -5,7 +5,10 @@ import Button from 'apsl-react-native-button';
 import style from '../model/style';
 import {HotspotWizard} from 'react-native-wifi-and-hotspot-wizard';
 import Toast from 'react-native-simple-toast';
+import RNFetchBlob from 'rn-fetch-blob';
+import {NetworkInfo} from 'react-native-network-info';
 var net = require('net');
+var receivedBuffers = [];
 
 let TurnOnHotspot = (props) => {
   let win = Dimensions.get('window');
@@ -121,8 +124,21 @@ let TurnOnHotspot = (props) => {
     makeServer();
   }
 };
-function makeServer() {
-  console.log('making server.');
+async function makeServer() {
+  console.log('i m here');
+  await NetworkInfo.getIPV4Address().then((ipv4Address) => {
+    x = ipv4Address;
+    console.log('ipv4');
+    console.log(ipv4Address);
+    console.log('ipv4');
+  });
+  await NetworkInfo.getIPAddress().then((ipAddress) => {
+    y = ipAddress;
+    console.log('ipAddress');
+    console.log(ipAddress);
+    console.log('ipAddress');
+  });
+  console.log('making server now');
   let server = net
     .createServer((socket) => {
       console.log('socket created');
@@ -139,7 +155,7 @@ function makeServer() {
         console.log('socket is closed.');
       });
     })
-    .listen(6666, () => {
+    .listen(8001, () => {
       console.log('listening to port 6666.');
     });
 
@@ -151,4 +167,50 @@ function makeServer() {
     console.log('server is closed.');
   });
 }
+// function makeServer() {
+//   console.log('making server.');
+//   let server = net
+//     .createServer((socket) => {
+//       console.log('socket created');
+//       socket.on('data', (data) => {
+//         if (data === 'EOF') {
+//           RNFetchBlob.fs
+//             .writeStream(
+//               RNFetchBlob.fs.dirs.DownloadDir + '/test2.pdf',
+//               'base64',
+//             )
+//             .then((stream) => {
+//               for (let i = 0; i < receivedBuffers.length; i++) {
+//                 stream.write(receivedBuffers[i]);
+//               }
+//               console.log(receivedBuffers);
+//               console.log('File completely received');
+//               receivedBuffers = [];
+//               return stream.close();
+//             });
+//         } else if (data !== 'EOF' && data != 'SOF') {
+//           receivedBuffers.push(data);
+//         }
+//       });
+
+//       socket.on('error', (error) => {
+//         console.log('Error: ' + error);
+//       });
+
+//       socket.on('close', (error) => {
+//         console.log('socket is closed.');
+//       });
+//     })
+//     .listen(6667, () => {
+//       console.log('listening to port 6666.');
+//     });
+
+//   server.on('error', (error) => {
+//     console.log('error: ' + error);
+//   });
+
+//   server.on('close', () => {
+//     console.log('server is closed.');
+//   });
+// }
 export default TurnOnHotspot;
