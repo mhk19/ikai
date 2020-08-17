@@ -50,7 +50,6 @@ export class MenuMainPage extends React.Component {
           alignItems: 'center',
           borderRightColor: '#595959',
           borderRightWidth: 3,
-          borderRadius: 15,
         }}>
         <View
           style={{
