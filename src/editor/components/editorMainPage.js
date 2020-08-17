@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
   innerContainer: {
     backgroundColor: 'white',
     width: '86%',
-    height: '50%',
+    height: '70%',
     marginLeft: '7%',
   },
   graphicsContainer: {
@@ -25,21 +25,24 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   imageContainer: {
-    height: '72%',
+    height: '80%',
   },
   image: {
-    // to be specified once the image gets finalised in the design
+    resizeMode: 'center',
+    height: '100%',
+    width: '100%',
   },
   descrContainer: {
     height: '28%',
     margin: 0,
   },
   buttonContainer: {
-    height: '28%',
+    height: '20%',
     backgroundColor: 'white',
     fontStyle: 'normal',
     fontFamily: 'roboto',
     fontSize: 18,
+    marginTop: '10%',
   },
   button: {
     minHeight: '10%',
@@ -64,18 +67,20 @@ export class EditorMainPage extends React.Component {
         <View style={styles.innerContainer}>
           <View style={styles.graphicsContainer}>
             <View style={styles.imageContainer}>
-              <Image style={styles.image} source={null}></Image>
+              <Image
+                style={styles.image}
+                source={require('../assets/edit_main.png')}></Image>
             </View>
             <View style={styles.descrContainer}>
               <Text
                 style={{
                   color: '#979797',
-                  fontSize: 16,
+                  fontSize: 20,
                   fontFamily: 'roboto',
                   margin: '5%',
                   textAlign: 'center',
                 }}>
-                Give the cinematic feel to your photos, start editing now.
+                Give the cinematic feel to your memories, start editing now.
               </Text>
             </View>
           </View>

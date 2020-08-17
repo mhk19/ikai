@@ -59,43 +59,23 @@ export const callAPI = (url) => {
   });
 };
 
-export const FindPage = (props) => {
+export const PendingRequests = (props) => {
   const [username, setUsername] = useState('burnerlee');
   const [searchedUsers, setSearchedUsers] = useState([]);
   const [userLoggedin, setUserLoggedin] = useState(true);
   const [dataReceived, setDataReceived] = useState(false);
-  const [isLoading, setLoading] = useState(false);
-  const [query, setQuery] = useState('');
+  const [isLoading, setLoading] = useState(true);
+  useEffect(() => {
+    searchUsers();
+  }, []);
   const searchUsers = () => {
-    setLoading(true);
-    if (query === '') {
-      return;
-    }
-    console.log;
-    callAPI('http://' + IKAISERVER + '/users/search?query=' + query).then(
-      (res) => {
-        setSearchedUsers(res.users);
-        setLoading(false);
-      },
-    );
+    callAPI('http://' + IKAISERVER + '/users/pending').then((res) => {
+      setLoading(false);
+      setSearchedUsers(res.users);
+    });
   };
   return (
     <View style={styles.outerContainer}>
-      <View style={styles.searchbar}>
-        <TextInput
-          style={styles.textinput}
-          placeholder={'Search for a user'}
-          onChange={(e) => {
-            setQuery(e.nativeEvent.text);
-          }}
-          onSubmitEditing={searchUsers}></TextInput>
-
-        <TouchableOpacity onPress={searchUsers}>
-          <Image
-            source={require('../assets/search.png')}
-            style={{width: 30, height: 30, resizeMode: 'center'}}></Image>
-        </TouchableOpacity>
-      </View>
       <ScrollView
         style={styles.innerContainer}
         showsVerticalScrollIndicator={false}>
@@ -115,9 +95,12 @@ export const FindPage = (props) => {
         {searchedUsers.map((user) => {
           return <Request name={user.username} status={user.status} />;
         })}
+        {searchedUsers.map((user) => {
+          return <Request name={user.username} status={'requested'} />;
+        })}
       </ScrollView>
     </View>
   );
 };
 
-export default FindPage;
+export default PendingRequests;

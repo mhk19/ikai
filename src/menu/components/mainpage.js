@@ -50,7 +50,6 @@ export class MenuMainPage extends React.Component {
           alignItems: 'center',
           borderRightColor: '#595959',
           borderRightWidth: 3,
-          borderRadius: 15,
         }}>
         <View
           style={{
@@ -112,6 +111,8 @@ export class MenuMainPage extends React.Component {
           <MenuButton
             source={require('../assets/request.png')}
             text={'Your Requests'}
+            page={'Your Requests'}
+            navigation={this.props.navigation}
           />
           <MenuButton
             source={require('../assets/settings.png')}

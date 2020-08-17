@@ -23,7 +23,15 @@ const styles = StyleSheet.create({
 export class ContactThumbnail extends React.Component {
   render() {
     return (
-      <TouchableOpacity style={styles.contactContainer} onPress={() => {}}>
+      <TouchableOpacity
+        style={styles.contactContainer}
+        onPress={() => {
+          if (!this.props.receiver) {
+            this.props.handleConnection(this.props.name);
+          } else {
+            this.props.acceptOffer(this.props.name);
+          }
+        }}>
         <Image
           source={require('../assets/contact_avatar.png')}
           style={{width: 40, height: 40}}
