@@ -4,6 +4,7 @@ import Request from './request';
 import axios from 'axios';
 import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
 import {IKAISERVER} from '../../ikai/constants';
+import {BreathingLoader} from 'react-native-indicator';
 const styles = StyleSheet.create({
   outerContainer: {
     height: '100%',
@@ -63,8 +64,10 @@ export const FindPage = (props) => {
   const [searchedUsers, setSearchedUsers] = useState([]);
   const [userLoggedin, setUserLoggedin] = useState(true);
   const [dataReceived, setDataReceived] = useState(false);
+  const [isLoading, setLoading] = useState(false);
   const [query, setQuery] = useState('');
   const searchUsers = () => {
+    setLoading(true);
     if (query === '') {
       return;
     }
@@ -72,6 +75,7 @@ export const FindPage = (props) => {
     callAPI('http://' + IKAISERVER + '/users/search?query=' + query).then(
       (res) => {
         setSearchedUsers(res.users);
+        setLoading(false);
       },
     );
   };
@@ -85,6 +89,7 @@ export const FindPage = (props) => {
             setQuery(e.nativeEvent.text);
           }}
           onSubmitEditing={searchUsers}></TextInput>
+
         <TouchableOpacity onPress={searchUsers}>
           <Image
             source={require('../assets/search.png')}
@@ -94,6 +99,19 @@ export const FindPage = (props) => {
       <ScrollView
         style={styles.innerContainer}
         showsVerticalScrollIndicator={false}>
+        {isLoading && (
+          <View
+            style={{
+              alignContent: 'center',
+              alignSelf: 'center',
+            }}>
+            <BreathingLoader
+              color={'#13C2C2'}
+              size={40}
+              strokeWidth={8}
+              frequency={800}></BreathingLoader>
+          </View>
+        )}
         {searchedUsers.map((user) => {
           return <Request name={user.username} status={user.status} />;
         })}

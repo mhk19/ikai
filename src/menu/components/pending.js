@@ -4,6 +4,7 @@ import Request from './request';
 import axios from 'axios';
 import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
 import {IKAISERVER} from '../../ikai/constants';
+import {BreathingLoader} from 'react-native-indicator';
 const styles = StyleSheet.create({
   outerContainer: {
     height: '100%',
@@ -63,11 +64,13 @@ export const PendingRequests = (props) => {
   const [searchedUsers, setSearchedUsers] = useState([]);
   const [userLoggedin, setUserLoggedin] = useState(true);
   const [dataReceived, setDataReceived] = useState(false);
+  const [isLoading, setLoading] = useState(true);
   useEffect(() => {
     searchUsers();
   }, []);
   const searchUsers = () => {
     callAPI('http://' + IKAISERVER + '/users/pending').then((res) => {
+      setLoading(false);
       setSearchedUsers(res.users);
     });
   };
@@ -76,6 +79,22 @@ export const PendingRequests = (props) => {
       <ScrollView
         style={styles.innerContainer}
         showsVerticalScrollIndicator={false}>
+        {isLoading && (
+          <View
+            style={{
+              alignContent: 'center',
+              alignSelf: 'center',
+            }}>
+            <BreathingLoader
+              color={'#13C2C2'}
+              size={40}
+              strokeWidth={8}
+              frequency={800}></BreathingLoader>
+          </View>
+        )}
+        {searchedUsers.map((user) => {
+          return <Request name={user.username} status={user.status} />;
+        })}
         {searchedUsers.map((user) => {
           return <Request name={user.username} status={'requested'} />;
         })}
