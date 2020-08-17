@@ -29,7 +29,7 @@ export class ContactThumbnail extends React.Component {
           if (!this.props.receiver) {
             this.props.handleConnection(this.props.name);
           } else {
-            this.props.acceptOffer(this.props.name, this.props.offer);
+            this.props.acceptOffer(this.props.name);
           }
         }}>
         <Image

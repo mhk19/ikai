@@ -38,9 +38,8 @@ export class ReceiveRequests extends React.Component {
           {this.props.users.map((user) => {
             return (
               <ContactThumbnail
-                name={user.name}
+                name={user}
                 receiver={true}
-                offer={user.offer}
                 acceptOffer={this.props.acceptOffer}
               />
             );
