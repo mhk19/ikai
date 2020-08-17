@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Text, Image, StyleSheet} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import {EatBeanLoader} from 'react-native-indicator';
+import { color } from 'react-native-reanimated';
 const styles = StyleSheet.create({
   outerContainer: {
     backgroundColor: 'white',
@@ -9,9 +9,10 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
+    alignContent: 'center'
   },
   imageContainer: {
-    //marginTop: 10,
+    // marginTop: 10,
     resizeMode: 'contain',
     marginBottom: 10,
   },
@@ -26,11 +27,21 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
   },
-  descContainer: {
+  descContainer1: {
     fontFamily: 'roboto',
     fontStyle: 'normal',
-    fontSize: 16,
+    fontSize: 20,
     flexDirection: 'row',
+    textAlign: 'center',
+    color: '#979797',
+  },
+  descContainer2: {
+    fontFamily: 'roboto',
+    fontStyle: 'normal',
+    fontSize: 20,
+    flexDirection: 'row',
+    textAlign: 'center',
+    color: '#13C2C2',
   },
   fileContainer: {
     flexDirection: 'row',
@@ -86,11 +97,10 @@ export class ReceiveFileOffline extends React.Component {
               style={styles.imageContainer}
               source={require('../assets/sendfile.png')}
             />
-            <Text style={(styles.descContainer, {color: '#979797'})}>
-              Receiving file
+            <Text style={(styles.descContainer1)}>
+              Receiving file...
               <Text style={{color: '#13C2C2'}}> {this.props.sender}</Text>
             </Text>
-            <EatBeanLoader color={'#13C2C2'} size={40}></EatBeanLoader>
           </View>
         ) : (
           <View style={{alignItems: 'center'}}>
@@ -98,8 +108,11 @@ export class ReceiveFileOffline extends React.Component {
               style={styles.imageContainer}
               source={require('../assets/sentfile.png')}
             />
-            <Text style={(styles.descContainer, {color: '#13C2C2'})}>
-              File successfully received! Check your Downloads folder
+            <Text style={(styles.descContainer2)}>
+              File successfully received!
+            </Text>
+            <Text style={(styles.descContainer2)}>
+              Check your Downloads folder
             </Text>
           </View>
         )}
