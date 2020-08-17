@@ -186,20 +186,20 @@ const Connection = ({connection, updateConnection, channel, updateChannel}) => {
       .catch((e) => setAlert(e));
   };
 
-  const toggleConnection = (userName) => {
-    if (connectedRef.current === userName) {
-      setConnecting(true);
-      setConnectedTo('');
-      connectedRef.current = '';
-      setConnecting(false);
-    } else {
-      setConnecting(true);
-      setConnectedTo(userName);
-      connectedRef.current = userName;
-      handleConnection(userName);
-      setConnecting(false);
-    }
-  };
+  // const toggleConnection = (userName) => {
+  //   if (connectedRef.current === userName) {
+  //     setConnecting(true);
+  //     setConnectedTo('');
+  //     connectedRef.current = '';
+  //     setConnecting(false);
+  //   } else {
+  //     setConnecting(true);
+  //     setConnectedTo(userName);
+  //     connectedRef.current = userName;
+  //     handleConnection(userName);
+  //     setConnecting(false);
+  //   }
+  // };
 
   const sendFile = () => {
     if (file) {
@@ -287,16 +287,16 @@ const Connection = ({connection, updateConnection, channel, updateChannel}) => {
     }
   };
 
-  const downloadFile = (bytes, name) => {
-    let path = DocumentDirectoryPath + name;
-    writeFile(path, bytes)
-      .then((success) => {
-        console.log('File written');
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
-  };
+  // const downloadFile = (bytes, name) => {
+  //   let path = DocumentDirectoryPath + name;
+  //   writeFile(path, bytes)
+  //     .then((success) => {
+  //       console.log('File written');
+  //     })
+  //     .catch((err) => {
+  //       console.log(err.message);
+  //     });
+  // };
   return (
     <View style={styles.container}>
       <TextInput onChangeText={(text) => setUserName(text)} value={username} />
