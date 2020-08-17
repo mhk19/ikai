@@ -105,6 +105,12 @@ export const Connect = (props) => {
         case 'leave':
           removeUser(data);
           break;
+        case 'request':
+          onRequest(data);
+          break;
+        case 'accept':
+          onAccept(data);
+          break;
         case 'offer':
           onOffer(data);
           break;
@@ -143,6 +149,32 @@ export const Connect = (props) => {
     }
   }, 25000);
 
+  const request = (name) => {
+    setSelectingReceiver(false);
+    setConnecting(true);
+    send({
+      type: 'request',
+      name: name,
+    });
+  };
+
+  const accept = (name) => {
+    setSelectingSender(false);
+    send({
+      type: 'accept',
+      name: name,
+    });
+  };
+
+  const onRequest = ({name}) => {
+    setSenders((prev) => [...prev, name]);
+  };
+
+  const onAccept = ({name}) => {
+    setConnecting(false);
+    handleConnection(name);
+  };
+
   const updateUsersList = ({user}) => {
     console.log(user.username, typeof user.username);
     setUsers((prev) => [...prev, user]);
@@ -154,12 +186,6 @@ export const Connect = (props) => {
   };
 
   const onOffer = ({offer, name}) => {
-    let sender = {name: name, offer: offer};
-    setSenders((prev) => [...prev, sender]);
-  };
-
-  const acceptOffer = (name, offer) => {
-    setSelectingSender(false);
     setConnectedTo(name);
     connectedRef.current = name;
     connection
@@ -175,7 +201,6 @@ export const Connect = (props) => {
   };
 
   const onAnswer = ({answer}) => {
-    setConnecting(false);
     connection.setRemoteDescription(new RTCSessionDescription(answer));
   };
 
@@ -191,57 +216,33 @@ export const Connect = (props) => {
       updateConnection(localConnection);
       setConnected(true);
       setSelectingReceiver(true);
-      // localConnection.onicecandidate = ({candidate}) => {
-      //   let connectedTo = connectedRef.current;
-      //   if (candidate && !!connectedTo) {
-      //     send({
-      //       name: connectedTo,
-      //       type: 'candidate',
-      //       candidate: candidate,
-      //     });
-      //   }
-      //   localConnection.ondatachannel = (event) => {
-      //     console.log('Data channel is created!');
-      //     let receiveChannel = event.channel;
-      //     receiveChannel.onopen = () => {
-      //       console.log('Data channel is open and ready to be used.');
-      //     };
-      //     receiveChannel.binaryType = 'arraybuffer';
-      //     receiveChannel.onmessage = handleDataChannelFileReceived;
-      //     updateChannel(receiveChannel);
-      //   };
-      //};
+      localConnection.onicecandidate = ({candidate}) => {
+        let connectedTo = connectedRef.current;
+        if (candidate && !!connectedTo) {
+          send({
+            name: connectedTo,
+            type: 'candidate',
+            candidate: candidate,
+          });
+        }
+        localConnection.ondatachannel = (event) => {
+          console.log('Data channel is created!');
+          let receiveChannel = event.channel;
+          receiveChannel.onopen = () => {
+            console.log('Data channel is open and ready to be used.');
+          };
+          receiveChannel.binaryType = 'arraybuffer';
+          receiveChannel.onmessage = handleDataChannelFileReceived;
+          updateChannel(receiveChannel);
+        };
+      };
     } else {
       console.log(message);
       setError(true);
     }
   };
 
-  if (connection !== null) {
-    connection.onicecandidate = ({candidate}) => {
-      let connectedTo = connectedRef.current;
-      if (candidate && !!connectedTo) {
-        send({
-          name: connectedTo,
-          type: 'candidate',
-          candidate: candidate,
-        });
-      }
-      connection.ondatachannel = (event) => {
-        console.log('Data channel is created!');
-        let receiveChannel = event.channel;
-        receiveChannel.onopen = () => {
-          console.log('Data channel is open and ready to be used.');
-        };
-        receiveChannel.binaryType = 'arraybuffer';
-        receiveChannel.onmessage = handleDataChannelFileReceived;
-        updateChannel(receiveChannel);
-      };
-    };
-  }
   const handleConnection = (name) => {
-    setSelectingReceiver(false);
-    setConnecting(true);
     setConnectedTo(name);
     let dataChannel = connection.createDataChannel('file');
     console.log('datachannels');
@@ -337,7 +338,7 @@ export const Connect = (props) => {
                   return (
                     <ContactThumbnail
                       name={user.username}
-                      handleConnection={handleConnection}
+                      handleConnection={request}
                       receiver={false}
                     />
                   );
@@ -356,7 +357,7 @@ export const Connect = (props) => {
         senders.length === 0 ? (
           <WaitingPage desc="Waiting for sender." />
         ) : (
-          <ReceiveRequests users={senders} acceptOffer={acceptOffer} />
+          <ReceiveRequests users={senders} acceptOffer={accept} />
         )
       ) : (
         <Text>Receiving page</Text>
