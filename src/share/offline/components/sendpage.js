@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import FilePickerManager from 'react-native-file-picker';
-import { View, Image, Text, StyleSheet } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { ScreenStackHeaderCenterView } from 'react-native-screens';
-
+import {View, Image, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {ScreenStackHeaderCenterView} from 'react-native-screens';
+import {EatBeanLoader} from 'react-native-indicator';
+import RNFetchBlob from 'rn-fetch-blob';
+const MAXIMUM_BUFFER_SIZE = 4095;
 const styles = StyleSheet.create({
   outerContainer: {
     backgroundColor: 'white',
@@ -100,13 +101,13 @@ const styles = StyleSheet.create({
   },
 });
 
-export const AddFile = (props) => {
+export const SendPage = (props) => {
   const [file, setFile] = useState(null);
   const [fileExtension, setFileExtension] = useState('');
   const [fileName, setFileName] = useState('');
   const [connected, setConnected] = useState(false);
   const [sent, setSent] = useState(false);
-
+  const data = props.route.params;
   const getFileExtension = () => {
     let temp = fileName.split('.');
     return temp[temp.length - 1];
@@ -126,13 +127,15 @@ export const AddFile = (props) => {
       }
     });
   };
-
+  function sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
   const ReadFile = () => {
     const realPath = file.path;
     if (realPath !== null) {
       console.log('path is', realPath);
       RNFetchBlob.fs
-        .readStream(realPath, 'base64', 4095)
+        .readStream(realPath, 'base64', MAXIMUM_BUFFER_SIZE)
         .then((ifstream) => {
           ifstream.open();
           ifstream.onData((chunk) => {
@@ -145,6 +148,7 @@ export const AddFile = (props) => {
           });
           ifstream.onEnd(() => {
             data.client.write('EOF');
+            setSent(true);
             console.log('read successful');
           });
         })
@@ -156,7 +160,6 @@ export const AddFile = (props) => {
   };
 
   const sendFile = () => {
-    setSent(true);
     console.log('sending file');
     data.client.write('SOF');
     sleep(1000).then(() => {
@@ -169,7 +172,7 @@ export const AddFile = (props) => {
 
   return (
     <View style={styles.outerContainer}>
-      {!sent ? (
+      {!sent && (
         <View style={styles.innerContainer}>
           <Image
             style={styles.shareImageContainer}
@@ -178,7 +181,7 @@ export const AddFile = (props) => {
           <Text style={styles.descContainer}>
             Start by choosing file you want to share.
           </Text>
-          {fileName === '' ? (
+          {fileName === '' && (
             <View>
               <TouchableOpacity
                 style={styles.emptyFileContainer}
@@ -186,66 +189,69 @@ export const AddFile = (props) => {
                   selectFile();
                 }}>
                 <Image source={require('../assets/plus.png')} />
-                <Text style={{ color: '#979797' }}>ADD FILE</Text>
+                <Text style={{color: '#979797'}}>ADD FILE</Text>
               </TouchableOpacity>
               <View style={styles.disabledButton}>
-                <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>
+                <Text
+                  style={{color: 'white', fontSize: 18, fontWeight: 'bold'}}>
                   SEND
                 </Text>
               </View>
             </View>
-          ) : (
-              <View style={{ flexDirection: 'column', alignItems: 'center' }}>
-                <TouchableOpacity
-                  style={styles.fileContainer}
-                  onPress={() => {
-                    selectFile();
-                  }}>
-                  <View style={styles.iconContainer}>
-                    <Image source={require('../assets/video_icon.png')} />
-                    <Text style={{ color: '#979797' }}>PDF</Text>
-                  </View>
-                  <View style={styles.filenameContainer}>
-                    <Text style={{ color: '#979797' }}>{fileName}</Text>
-                  </View>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.sendContainer}
-                  onPress={() => {
-                    sendFile();
-                  }}>
-                  <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>
-                    SEND
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            )}
-        </View>
-      ) : (
-          { !connected ? (
-      <View style={styles.innerContainer}>
-        <Image
-          style={styles.imageContainer}
-          source={require('../assets/sendfile.png')}
-        />
-        <Text style={(styles.descContainer, { color: '#979797' })}>
-          Sending your file!
-            </Text>
-        <EatBeanLoader color={'#13C2C2'} size={40}></EatBeanLoader>
-      </View>
-            ) : (
-      <View style={{ alignItems: 'center' }}>
-        <Image
-          style={styles.imageContainer}
-          source={require('../assets/sentfile.png')}
-        />
-        <Text style={(styles.descContainer, { color: '#13C2C2' })}>
-          File successfully sent!
-                </Text>
-      </View>
-              )}
           )}
+          {fileName !== '' && (
+            <View style={{flexDirection: 'column', alignItems: 'center'}}>
+              <TouchableOpacity
+                style={styles.fileContainer}
+                onPress={() => {
+                  selectFile();
+                }}>
+                <View style={styles.iconContainer}>
+                  <Image source={require('../assets/video_icon.png')} />
+                  <Text style={{color: '#979797'}}>PDF</Text>
+                </View>
+                <View style={styles.filenameContainer}>
+                  <Text style={{color: '#979797'}}>{fileName}</Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.sendContainer}
+                onPress={() => {
+                  sendFile();
+                }}>
+                <Text
+                  style={{color: 'white', fontSize: 18, fontWeight: 'bold'}}>
+                  SEND
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </View>
+      )}
+      {sent && !connected && (
+        <View style={styles.innerContainer}>
+          <Image
+            style={styles.imageContainer}
+            source={require('../assets/sendfile.png')}
+          />
+          <Text style={(styles.descContainer, {color: '#979797'})}>
+            Sending your file!
+          </Text>
+          <EatBeanLoader color={'#13C2C2'} size={40}></EatBeanLoader>
+        </View>
+      )}
+      {sent && connected && (
+        <View style={{alignItems: 'center'}}>
+          <Image
+            style={styles.imageContainer}
+            source={require('../assets/sentfile.png')}
+          />
+          <Text style={(styles.descContainer, {color: '#13C2C2'})}>
+            File successfully sent!
+          </Text>
+        </View>
+      )}
     </View>
   );
 };
-export default AddFile;
+export default SendPage;

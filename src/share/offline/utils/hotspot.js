@@ -39,14 +39,13 @@ export async function makeServer(port) {
       console.log('socket created');
       socket.on('data', (data) => {
         console.log('on receiving data, value of fileMode is ', fileMode);
-        console.log(String.fromCharCode.apply(null, data.data));
         // console.log('received data: ', data);
         if (fileMode) {
           if (data == 'EOF') {
             console.log(fileBuffer);
             makeFile(fileBuffer);
             fileBuffer = [];
-            fileMode = true;
+            fileMode = false;
           } else {
             if (!gotFileName) {
               fileName = data.toString('utf-8');
@@ -122,6 +121,7 @@ function makeFile(receivedBuffers) {
         stream.write(receivedBuffers[i].toString('utf-8'));
       }
       console.log('File completely streamed');
+      fileMode = false;
       return stream.close();
     });
 }

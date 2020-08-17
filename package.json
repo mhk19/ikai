@@ -10,6 +10,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@react-native-community/art": "^1.2.0",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-native-community/netinfo": "^5.9.6",
     "@react-navigation/bottom-tabs": "^5.8.0",
@@ -30,12 +31,10 @@
     "react-native-gesture-handler": "^1.7.0",
     "react-native-get-real-path": "git+https://github.com/Wraptime/react-native-get-real-path.git",
     "react-native-image-picker": "^2.3.3",
+    "react-native-indicator": "^1.2.2",
     "react-native-modal": "^11.5.6",
     "react-native-network-info": "^5.2.1",
-<<<<<<< HEAD
-=======
     "react-native-photoeditorsdk": "^2.4.2",
->>>>>>> 138cc7b2faa641a3aa65fcf89a283d5200db5ee5
     "react-native-reanimated": "^1.9.0",
     "react-native-safe-area-context": "^3.1.4",
     "react-native-scanbot-sdk": "^4.2.0",
@@ -44,11 +43,8 @@
     "react-native-simple-toast": "^1.1.2",
     "react-native-tcp": "^4.0.0",
     "react-native-vector-icons": "^7.0.0",
-<<<<<<< HEAD
-=======
     "react-native-videoeditorsdk": "^2.4.2",
     "react-native-virgil-crypto": "^0.6.1",
->>>>>>> 138cc7b2faa641a3aa65fcf89a283d5200db5ee5
     "react-native-webrtc": "^1.84.0",
     "react-native-wifi-and-hotspot-wizard": "^1.0.5-stable",
     "react-navigation": "^4.4.0",

@@ -16,11 +16,6 @@ import {Editor} from './src/editor/components/mainPage';
 import {navigationRef} from './RootNavigation';
 import * as RootNavigation from './RootNavigation.js';
 import Drawer from 'react-native-drawer';
-<<<<<<< HEAD
-import Home from './src/offShare/components/test';
-=======
-import {Offline} from './src/share/offline/offlinemainpage';
->>>>>>> 138cc7b2faa641a3aa65fcf89a283d5200db5ee5
 const Tab = createBottomTabNavigator();
 const InitialPage = 'share';
 export class App extends React.Component {
@@ -36,38 +31,6 @@ export class App extends React.Component {
   };
   render() {
     return (
-<<<<<<< HEAD
-      <View>
-        <Home/>
-      </View>
-      // <Drawer
-      //   ref={(ref) => (this._drawer = ref)}
-      //   content={<Menu />}
-      //   type="overlay"
-      //   openDrawerOffset={150}
-      //   disabled={false}
-      //   side="left">
-      //   <NavigationContainer ref={navigationRef}>
-      //     <Tab.Navigator
-      //       initialRouteName={InitialPage}
-      //       tabBar={(prop) => <IkaiFooter {...prop} />}>
-      //       {/* <Tab.Screen name="menu" component={MenuMainPage}></Tab.Screen> */}
-      //       <Tab.Screen
-      //         name="share"
-      //         component={Share}
-      //         initialParams={{user: this.openControlPanel}}></Tab.Screen>
-      //       <Tab.Screen
-      //         name="scan"
-      //         component={Scanner}
-      //         initialParams={{user: this.openControlPanel}}></Tab.Screen>
-      //       <Tab.Screen
-      //         name="chat"
-      //         component={Chat}
-      //         initialParams={{user: this.openControlPanel}}></Tab.Screen>
-      //     </Tab.Navigator>
-      //   </NavigationContainer>
-      // </Drawer>
-=======
       <Drawer
         ref={(ref) => (this._drawer = ref)}
         content={<Menu />}
@@ -99,7 +62,6 @@ export class App extends React.Component {
           </Tab.Navigator>
         </NavigationContainer>
       </Drawer>
->>>>>>> 138cc7b2faa641a3aa65fcf89a283d5200db5ee5
     );
   }
 }
