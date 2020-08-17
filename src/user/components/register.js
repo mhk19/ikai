@@ -10,6 +10,7 @@ import {
 import {virgilCrypto} from 'react-native-virgil-crypto';
 import AsyncStorage from '@react-native-community/async-storage';
 import Toast from 'react-native-simple-toast';
+import {IKAISERVER} from '../../ikai/constants';
 
 const styles = StyleSheet.create({
   outerContainer: {
@@ -53,7 +54,6 @@ export class RegisterComponent extends React.Component {
       username: null,
       password1: null,
       password2: null,
-      publicKey: null,
     };
   }
 
@@ -88,19 +88,23 @@ export class RegisterComponent extends React.Component {
   };
 
   registerUser = () => {
+    if (this.state.password1 !== this.state.password2) {
+      Toast.show('Your Passwords do not match');
+      return;
+    }
     const keys = this.generateKeyPair();
-    fetch('http://3a0b1b353ddb.ngrok.io/rest-auth/registration/', {
+    fetch('http://' + IKAISERVER + '/rest-auth/registration/', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: {
+      body: JSON.stringify({
         username: `${this.state.username}`,
         password1: `${this.state.password1}`,
         password2: `${this.state.password2}`,
-        publicKey: `${keys.publicKey}`,
-      },
+        public_key: `${keys.publicKey.value}`,
+      }),
     })
       .then((response) => response.json())
       .then((data) => {

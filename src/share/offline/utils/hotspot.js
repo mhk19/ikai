@@ -26,7 +26,7 @@ export async function connectToHotspot() {
   return {status: status, password: password, ssid: ssid};
 }
 
-export async function makeServer(port) {
+export async function makeServer(port, setIsReceiving, setFileName, setSent) {
   console.log('starting to make a server');
   let x;
 
@@ -42,13 +42,14 @@ export async function makeServer(port) {
         // console.log('received data: ', data);
         if (fileMode) {
           if (data == 'EOF') {
-            console.log(fileBuffer);
+            setSent(true);
+            fileMode = false;
             makeFile(fileBuffer);
             fileBuffer = [];
-            fileMode = false;
           } else {
             if (!gotFileName) {
               fileName = data.toString('utf-8');
+              setFileName(fileName);
               gotFileName = true;
             } else {
               fileBuffer.push(data);
@@ -62,6 +63,7 @@ export async function makeServer(port) {
           if (data == 'SOF') {
             console.log('received SOF');
             fileMode = true;
+            setIsReceiving(true);
           }
         }
       });
@@ -92,7 +94,7 @@ export async function makeServer(port) {
     fileMode = false;
     console.log('server is closed.');
   });
-  return {port: port, ip: x};
+  return {port: port, ip: x, server: server};
 }
 
 export function encryptIP(x) {
@@ -122,6 +124,7 @@ function makeFile(receivedBuffers) {
       }
       console.log('File completely streamed');
       fileMode = false;
+      console.log(fileMode);
       return stream.close();
     });
 }

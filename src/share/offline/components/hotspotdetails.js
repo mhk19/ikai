@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
-import { makeServer, encryptIP } from '../utils/hotspot';
+import React, {useState} from 'react';
+import {View, StyleSheet, Text, TouchableOpacity, Image} from 'react-native';
+import {makeServer, encryptIP} from '../utils/hotspot';
 import Toast from 'react-native-simple-toast';
+import {ReceiveFileOffline} from './receiveFile';
+// import {traverse} from '@babel/core';
 const styles = StyleSheet.create({
   outerContainer: {
     backgroundColor: 'white',
@@ -111,39 +113,46 @@ const styles = StyleSheet.create({
     color: '#13C2C2',
     fontSize: 20,
     fontFamily: 'roboto',
-  }
+  },
 });
 
 export const HotspotDetails = (props) => {
   const [passcode, setPasscode] = useState();
+  const [isReceiving, setIsReceiving] = useState(false);
+  const [sent, setSent] = useState(false);
+  const [fileName, setFileName] = useState(false);
   async function readyHandler() {
-    let server = await makeServer(8000);
+    let server = await makeServer(8000, setIsReceiving, setFileName, setSent);
     console.log('server started', server);
     setPasscode(encryptIP(server.ip));
+  }
+  if (isReceiving) {
+    return (
+      <ReceiveFileOffline sent={sent} fileName={fileName}></ReceiveFileOffline>
+    );
   }
   return (
     <View style={styles.outerContainer}>
       <View style={styles.innerContainer}>
-          <Image
-            source={require('../assets/network.png')}
-            style={styles.shareImageContainer}
-          />
-          <Text
-            style={styles.descContainer}>
-            Connect your hotspot and Press on ready
-          </Text>
-        </View>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.buttonDetail} onPress={() => { }}>
-            <Text style={styles.textInfo2}>{passcode}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.buttonPair}
-            onPress={() => {
-              readyHandler();
-            }}>
-            <Text style={styles.textInfo}>Ready</Text>
-          </TouchableOpacity>
+        <Image
+          source={require('../assets/network.png')}
+          style={styles.shareImageContainer}
+        />
+        <Text style={styles.descContainer}>
+          Connect your hotspot and Press on ready
+        </Text>
+      </View>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.buttonDetail} onPress={() => {}}>
+          <Text style={styles.textInfo2}>{passcode}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.buttonPair}
+          onPress={() => {
+            readyHandler();
+          }}>
+          <Text style={styles.textInfo}>Ready</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
