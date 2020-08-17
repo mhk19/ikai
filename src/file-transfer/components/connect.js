@@ -65,7 +65,7 @@ export const Connect = (props) => {
   let receivedBuffers = [];
 
   useEffect(() => {
-    setUserName('mahak');
+    setUserName('aviral');
     if (props.route.params.file !== undefined) {
       setClientType('sender');
     } else {

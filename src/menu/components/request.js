@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, StyleSheet, Text, TouchableOpacity, Image} from 'react-native';
-
+import {callAPI} from './find';
+import {IKAISERVER} from '../../ikai/constants';
 const styles = StyleSheet.create({
   contactContainer: {
     backgroundColor: 'white',
@@ -43,7 +44,7 @@ export class Request extends React.Component {
         image = require('../assets/add.png');
         break;
       case 'pending':
-        image = require('../assets/add.png');
+        image = require('../assets/pending.png');
         break;
       case 'accepted':
         image = require('../assets/done.png');
@@ -54,9 +55,49 @@ export class Request extends React.Component {
       disabled:
         this.props.status === 'pending' || this.props.status === 'accepted',
       image: image,
+      name: this.props.name,
     };
   }
+  accept(name) {
+    callAPI('http://' + IKAISERVER + '/users/accept?user=' + name).then(
+      (res) => {
+        //after request accepted
+        this.setState({
+          status: 'accepted',
+          disabled: true,
+          image: require('../assets/done.png'),
+        });
+      },
+    );
+  }
+  decline(name) {
+    callAPI('http://' + IKAISERVER + '/users/decline?user=' + name).then(
+      (res) => {
+        //after request accepted
+        this.setState({
+          status: 'new',
+          disabled: false,
+          image: require('../assets/add.png'),
+        });
+      },
+    );
+  }
+  request(name) {
+    callAPI('http://' + IKAISERVER + '/users/request?user=' + name).then(
+      (res) => {
+        //after request
+        console.log('request sent.');
+        this.setState({
+          status: 'pending',
+          disabled: true,
+          image: require('../assets/pending.png'),
+        });
+      },
+    );
+  }
   render() {
+    console.log(this.state.status);
+    console.log(this.state.disabled);
     return (
       <View style={styles.contactContainer}>
         <Image
@@ -72,20 +113,34 @@ export class Request extends React.Component {
         </Text>
         {this.state.status === 'requested' && (
           <View style={{flexDirection: 'row'}}>
-            <TouchableOpacity onPress={this.accept}>
+            <TouchableOpacity
+              onPress={() => this.accept(this.state.name)}
+              style={{marginRight: '10%'}}>
               <Image
-                source={require('../assets/done.png')}
+                source={require('../assets/accept.png')}
                 style={{width: 20, height: 20, resizeMode: 'center'}}></Image>
             </TouchableOpacity>
-            <TouchableOpacity onPress={this.decline}>
+            <TouchableOpacity
+              onPress={() => this.decline(this.state.name)}
+              style={{marginRight: '10%'}}>
               <Image
-                source={require('../assets/done.png')}
-                style={{width: 20, height: 20, resizeMode: 'center'}}></Image>
+                source={require('../assets/decline.png')}
+                style={{
+                  width: 20,
+                  height: 20,
+                  resizeMode: 'center',
+                }}></Image>
             </TouchableOpacity>
           </View>
         )}
-        {!this.state.status === 'requested' && (
-          <TouchableOpacity disabled={this.props.status}>
+        {!(this.state.status === 'requested') && (
+          <TouchableOpacity
+            disabled={this.state.disabled}
+            onPress={() => {
+              if (this.state.status === 'new') {
+                this.request(this.state.name);
+              }
+            }}>
             <Image
               source={this.state.image}
               style={{width: 30, height: 30, resizeMode: 'center'}}></Image>

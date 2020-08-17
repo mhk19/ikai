@@ -112,6 +112,8 @@ export class MenuMainPage extends React.Component {
           <MenuButton
             source={require('../assets/request.png')}
             text={'Your Requests'}
+            page={'Your Requests'}
+            navigation={this.props.navigation}
           />
           <MenuButton
             source={require('../assets/settings.png')}

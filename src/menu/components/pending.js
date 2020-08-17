@@ -58,48 +58,30 @@ export const callAPI = (url) => {
   });
 };
 
-export const FindPage = (props) => {
+export const PendingRequests = (props) => {
   const [username, setUsername] = useState('burnerlee');
   const [searchedUsers, setSearchedUsers] = useState([]);
   const [userLoggedin, setUserLoggedin] = useState(true);
   const [dataReceived, setDataReceived] = useState(false);
-  const [query, setQuery] = useState('');
+  useEffect(() => {
+    searchUsers();
+  }, []);
   const searchUsers = () => {
-    if (query === '') {
-      return;
-    }
-    console.log;
-    callAPI('http://' + IKAISERVER + '/users/search?query=' + query).then(
-      (res) => {
-        setSearchedUsers(res.users);
-      },
-    );
+    callAPI('http://' + IKAISERVER + '/users/pending').then((res) => {
+      setSearchedUsers(res.users);
+    });
   };
   return (
     <View style={styles.outerContainer}>
-      <View style={styles.searchbar}>
-        <TextInput
-          style={styles.textinput}
-          placeholder={'Search for a user'}
-          onChange={(e) => {
-            setQuery(e.nativeEvent.text);
-          }}
-          onSubmitEditing={searchUsers}></TextInput>
-        <TouchableOpacity onPress={searchUsers}>
-          <Image
-            source={require('../assets/search.png')}
-            style={{width: 30, height: 30, resizeMode: 'center'}}></Image>
-        </TouchableOpacity>
-      </View>
       <ScrollView
         style={styles.innerContainer}
         showsVerticalScrollIndicator={false}>
         {searchedUsers.map((user) => {
-          return <Request name={user.username} status={user.status} />;
+          return <Request name={user.username} status={'requested'} />;
         })}
       </ScrollView>
     </View>
   );
 };
 
-export default FindPage;
+export default PendingRequests;
