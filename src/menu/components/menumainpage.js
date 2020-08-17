@@ -14,6 +14,7 @@ export class Menu extends React.Component {
           <MenuStack.Screen
             name="main"
             component={MenuMainPage}
+            initialParams={{logoutHandler: this.props.logoutHandler}}
             options={{
               header: () => {
                 return <MainHeader view={false} />;

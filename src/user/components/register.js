@@ -11,6 +11,7 @@ import {virgilCrypto} from 'react-native-virgil-crypto';
 import AsyncStorage from '@react-native-community/async-storage';
 import Toast from 'react-native-simple-toast';
 import {IKAISERVER} from '../../ikai/constants';
+import {BreathingLoader} from 'react-native-indicator';
 
 const styles = StyleSheet.create({
   outerContainer: {
@@ -18,7 +19,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-end',
     alignItems: 'center',
-    paddingBottom: '12%',
+    paddingBottom: '15%',
   },
   formContainer: {
     height: '60%',
@@ -31,7 +32,7 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   inputContainer: {
-    height: '42%',
+    height: '40%',
     justifyContent: 'space-between',
   },
   textBox: {
@@ -54,6 +55,7 @@ export class RegisterComponent extends React.Component {
       username: null,
       password1: null,
       password2: null,
+      showLoader: false,
     };
   }
 
@@ -67,10 +69,6 @@ export class RegisterComponent extends React.Component {
 
   setConfirmedPassword = (text) => {
     this.setState({password2: text});
-  };
-
-  setPublicKey = async (name, key) => {
-    AsyncStorage.setItem(`${name}_public_key`, key);
   };
 
   generateKeyPair = () => {
@@ -88,26 +86,56 @@ export class RegisterComponent extends React.Component {
   };
 
   registerUser = () => {
+    this.setState({showLoader: true});
     if (this.state.password1 !== this.state.password2) {
+      console.log(this.state.password1);
+      console.log(this.state.password2);
       Toast.show('Your Passwords do not match');
       return;
     }
     const keys = this.generateKeyPair();
+    console.log(JSON.stringify(keys.publicKey));
     fetch('http://' + IKAISERVER + '/rest-auth/registration/', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
+        // 'X-CSRF-TOKEN': getCookie('CSRF-TOKEN'),
       },
       body: JSON.stringify({
         username: `${this.state.username}`,
         password1: `${this.state.password1}`,
         password2: `${this.state.password2}`,
-        public_key: `${keys.publicKey.value}`,
+        publickey: JSON.stringify(keys.publicKey),
       }),
     })
       .then((response) => response.json())
       .then((data) => {
+        this.setState({showLoader: false});
+        console.log(data);
+        if (data.key) {
+          this.props.setPrivateKey(
+            this.state.username,
+            JSON.stringify(keys.privateKey),
+          );
+          this.props.pageHandler('login');
+        }
+        if (data.detail) {
+          Toast.show(data.detail);
+        }
+        if (data.username) {
+          data.username.map((err) => {
+            Toast.show(err);
+          });
+        } else if (data.password1) {
+          data.password1.map((err) => {
+            Toast.show(err);
+          });
+        } else if (data.non_field_errors) {
+          non_field_errors.map((err) => {
+            Toast.show(err);
+          });
+        }
         // this.setToken(response.token);
         // this.setPrivateKey(this.state.username, keys.privateKey);
         console.log(data);
@@ -115,6 +143,7 @@ export class RegisterComponent extends React.Component {
       .catch((error) => {
         Toast.show('Please check your internet connection and try again');
         console.log(error);
+        this.setState({showLoader: false});
       });
   };
 
@@ -144,9 +173,18 @@ export class RegisterComponent extends React.Component {
                 placeholder="Confirm Password"
                 placeholderTextColor="rgba(19, 194, 194, 0.5)"
                 secureTextEntry={true}
-                onChangeText={this.setPassword}
+                onChangeText={this.setConfirmedPassword}
               />
             </View>
+            {this.state.showLoader && (
+              <View style={{alignContent: 'center', alignItems: 'center'}}>
+                <BreathingLoader
+                  color={'#13C2C2'}
+                  size={30}
+                  strokeWidth={8}
+                  frequency={800}></BreathingLoader>
+              </View>
+            )}
             <View style={styles.submissionContainer}>
               <TouchableOpacity
                 onPress={() => {

@@ -10,6 +10,7 @@ import {
 import Toast from 'react-native-simple-toast';
 import AsyncStorage from '@react-native-community/async-storage';
 import {IKAISERVER} from '../../ikai/constants';
+import {BreathingLoader} from 'react-native-indicator';
 const styles = StyleSheet.create({
   outerContainer: {
     flex: 1,
@@ -51,6 +52,7 @@ export class LoginComponent extends React.Component {
     this.state = {
       username: '',
       password: '',
+      showLoader: false,
     };
   }
   getPrivateKey = async (name) => {
@@ -97,6 +99,7 @@ export class LoginComponent extends React.Component {
     }
   };
   loginUser = () => {
+    this.setState({showLoader: true});
     if (this.getPrivateKey(this.state.username)) {
       console.log('login is clicked');
       fetch('http://' + IKAISERVER + '/rest-auth/login/', {
@@ -112,17 +115,20 @@ export class LoginComponent extends React.Component {
       })
         .then((response) => response.json())
         .then((data) => {
+          this.setState({showLoader: false});
           if (data.key) {
-            console.log('user is logged in');
-            if (this.props.private_key) {
-              this.setToken(data.key);
-              this.setUsername(this.state.username);
-              this.props.loginHandler();
-            } else {
-              Toast.show(
-                'This account was not set on this device. Private Key not found',
-              );
-            }
+            this.props.getPrivKey(this.state.username).then(() => {
+              if (this.props.private_key) {
+                console.log('user is logged in');
+                this.setToken(data.key);
+                this.setUsername(this.state.username);
+                this.props.loginHandler();
+              } else {
+                Toast.show(
+                  'This account was not set on this device. Private Key not found',
+                );
+              }
+            });
           } else {
             Toast.show('Invalid Credentials, not authenticated.');
           }
@@ -168,6 +174,15 @@ export class LoginComponent extends React.Component {
                 <Text style={}>Forgot Password?</Text>
                 </TouchableOpacity>
                 </View> */}
+            {this.state.showLoader && (
+              <View style={{alignContent: 'center', alignItems: 'center'}}>
+                <BreathingLoader
+                  color={'#13C2C2'}
+                  size={40}
+                  strokeWidth={8}
+                  frequency={800}></BreathingLoader>
+              </View>
+            )}
             <View style={styles.submissionContainer}>
               <TouchableOpacity
                 onPress={() => {

@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, Text, Image} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import Toast from 'react-native-simple-toast';
 class MenuButton extends React.Component {
   render() {
     return (
@@ -8,7 +9,9 @@ class MenuButton extends React.Component {
         onPress={
           this.props.navigation
             ? () => this.props.navigation.push(this.props.page)
-            : () => {}
+            : () => {
+                this.props.press();
+              }
         }
         disabled={this.props.disable}
         style={{
@@ -122,6 +125,12 @@ export class MenuMainPage extends React.Component {
           <MenuButton
             source={require('../assets/logout.png')}
             text={'Log out'}
+            press={() => {
+              Toast.show('Logging You out');
+              sleep(1000).then(() => {
+                this.props.route.params.logoutHandler();
+              });
+            }}
           />
         </View>
       </View>
@@ -129,3 +138,6 @@ export class MenuMainPage extends React.Component {
   }
 }
 export default MenuMainPage;
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}

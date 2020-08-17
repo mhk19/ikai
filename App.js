@@ -27,9 +27,6 @@ export class App extends React.Component {
   constructor(props) {
     super(props);
     initScanBotSdk().then((r) => console.log(r));
-    this.getToken();
-    this.getUser();
-    this.getPrivKey();
     this.state = {
       user: null,
       token: null,
@@ -37,8 +34,13 @@ export class App extends React.Component {
       isLogin: false,
       page: 'login',
     };
+    this.getToken();
+    this.getUser().then(() => this.getPrivKey(this.state.user));
     this.loginHandler = this.loginHandler.bind(this);
     this.pageHandler = this.pageHandler.bind(this);
+    this.setPrivateKey = this.setPrivateKey.bind(this);
+    this.logOutHander = this.logOutHander.bind(this);
+    this.getPrivKey = this.getPrivKey.bind(this);
   }
   closeControlPanel = () => {
     this._drawer.close();
@@ -65,19 +67,47 @@ export class App extends React.Component {
       this.setState({token: data});
     });
   };
-  getPrivKey = async () => {
-    await AsyncStorage.getItem('private_key').then((data) => {
+  getPrivKey = async (user) => {
+    await AsyncStorage.getItem(user + '_private_key').then((data) => {
       console.log('got private Key:', data);
       this.setState({private_key: data});
     });
   };
+
+  setPrivateKey = async (name, key) => {
+    await AsyncStorage.setItem(`${name}_private_key`, key);
+    console.log('Stored private key', key);
+    this.setState({private_key: key});
+  };
+  removeToken = async () => {
+    await AsyncStorage.removeItem('token');
+    console('token removed');
+  };
+  removeUser = async () => {
+    await AsyncStorage.removeItem('user');
+    console.log('user removed');
+  };
+  logOutHander() {
+    this.removeUser();
+    this.removeToken();
+    this.setState({
+      user: null,
+      token: null,
+      private_key: null,
+      isLogin: false,
+      page: 'login',
+    });
+  }
   render() {
-    // if (this.state.user && this.state.token && this.state.isLogin) {
-    if (true) {
+    if (
+      (this.state.user && this.state.token && this.state.private_key) ||
+      this.state.isLogin
+    ) {
+      // if (!true) {
       return (
         <Drawer
           ref={(ref) => (this._drawer = ref)}
-          content={<Menu />}
+          content={<Menu logoutHandler={this.logOutHander} />}
           type="overlay"
           openDrawerOffset={100}
           disabled={false}
@@ -114,10 +144,16 @@ export class App extends React.Component {
             loginHandler={this.loginHandler}
             pageHandler={this.pageHandler}
             private_key={this.state.private_key}
+            getPrivKey={this.getPrivKey}
           />
         );
       } else if (this.state.page === 'register') {
-        return <RegisterComponent pageHandler={this.pageHandler} />;
+        return (
+          <RegisterComponent
+            pageHandler={this.pageHandler}
+            setPrivateKey={this.setPrivateKey}
+          />
+        );
       }
     }
   }
