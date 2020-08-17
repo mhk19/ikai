@@ -19,6 +19,7 @@ import {RegisterComponent} from './src/user/components/register';
 import * as RootNavigation from './RootNavigation.js';
 import Drawer from 'react-native-drawer';
 import AsyncStorage from '@react-native-community/async-storage';
+import {FA5Style} from 'react-native-vector-icons/FontAwesome5';
 const Tab = createBottomTabNavigator();
 const InitialPage = 'share';
 
@@ -28,9 +29,11 @@ export class App extends React.Component {
     initScanBotSdk().then((r) => console.log(r));
     this.getToken();
     this.getUser();
+    this.getPrivKey();
     this.state = {
       user: null,
       token: null,
+      private_key: null,
       isLogin: false,
       page: 'login',
     };
@@ -62,10 +65,15 @@ export class App extends React.Component {
       this.setState({token: data});
     });
   };
-
+  getPrivKey = async () => {
+    await AsyncStorage.getItem('private_key').then((data) => {
+      console.log('got private Key:', data);
+      this.setState({private_key: data});
+    });
+  };
   render() {
     // if (this.state.user && this.state.token && this.state.isLogin) {
-      if(true){
+    if (true) {
       return (
         <Drawer
           ref={(ref) => (this._drawer = ref)}
@@ -105,6 +113,7 @@ export class App extends React.Component {
           <LoginComponent
             loginHandler={this.loginHandler}
             pageHandler={this.pageHandler}
+            private_key={this.state.private_key}
           />
         );
       } else if (this.state.page === 'register') {

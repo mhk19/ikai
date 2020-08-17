@@ -1,1 +1,1 @@
-export const IKAISERVER = 'ff081dabffb3.ngrok.io';
+export const IKAISERVER = '73cbbc63b4b2.ngrok.io';

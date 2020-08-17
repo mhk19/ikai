@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
     borderColor: '#13C2C2',
     borderRadius: 500,
     borderWidth: 2,
+    textAlign: 'center',
   },
 });
 
@@ -113,14 +114,21 @@ export class LoginComponent extends React.Component {
         .then((data) => {
           if (data.key) {
             console.log('user is logged in');
-            this.setToken(data.key);
-            this.setUsername(this.state.username);
-            this.props.loginHandler();
+            if (this.props.private_key) {
+              this.setToken(data.key);
+              this.setUsername(this.state.username);
+              this.props.loginHandler();
+            } else {
+              Toast.show(
+                'This account was not set on this device. Private Key not found',
+              );
+            }
           } else {
             Toast.show('Invalid Credentials, not authenticated.');
           }
         })
         .catch((error) => {
+          console.log(error);
           Toast.show('Check your internet connection and try again.');
         });
     }
