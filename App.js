@@ -48,9 +48,14 @@ export class App extends React.Component {
   openControlPanel = () => {
     this._drawer.open();
   };
-  loginHandler() {
+  loginHandler(user, token, private_key) {
     console.log('user is logged in');
-    this.setState({isLogin: true});
+    this.setState({
+      user: user,
+      token: token,
+      private_key: private_key,
+      isLogin: true,
+    });
   }
   pageHandler(page) {
     this.setState({page: page});
@@ -107,7 +112,16 @@ export class App extends React.Component {
       return (
         <Drawer
           ref={(ref) => (this._drawer = ref)}
-          content={<Menu logoutHandler={this.logOutHander} />}
+          content={
+            <Menu
+              logoutHandler={this.logOutHander}
+              userDetails={{
+                currentUsername: this.state.user,
+                private_key: JSON.parse(this.state.private_key),
+                token: this.state.token,
+              }}
+            />
+          }
           type="overlay"
           openDrawerOffset={100}
           disabled={false}
@@ -120,7 +134,14 @@ export class App extends React.Component {
               <Tab.Screen
                 name="share"
                 component={Share}
-                initialParams={{user: this.openControlPanel}}></Tab.Screen>
+                initialParams={{
+                  user: this.openControlPanel,
+                  userDetails: {
+                    currentUsername: this.state.user,
+                    private_key: JSON.parse(this.state.private_key),
+                    token: this.state.token,
+                  },
+                }}></Tab.Screen>
               <Tab.Screen
                 name="edit"
                 component={Editor}
@@ -132,7 +153,14 @@ export class App extends React.Component {
               <Tab.Screen
                 name="chat"
                 component={Chat}
-                initialParams={{user: this.openControlPanel}}></Tab.Screen>
+                initialParams={{
+                  user: this.openControlPanel,
+                  userDetails: {
+                    currentUsername: this.state.user,
+                    private_key: JSON.parse(this.state.private_key),
+                    token: this.state.token,
+                  },
+                }}></Tab.Screen>
             </Tab.Navigator>
           </NavigationContainer>
         </Drawer>

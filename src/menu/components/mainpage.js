@@ -96,7 +96,7 @@ export class MenuMainPage extends React.Component {
               fontWeight: 'medium',
               minWidth: '60%',
             }}>
-            Burnerlee
+            {this.props.route.params.name}
           </Text>
         </View>
         <View

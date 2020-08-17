@@ -5,6 +5,7 @@ import axios from 'axios';
 import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
 import {IKAISERVER} from '../../ikai/constants';
 import {BreathingLoader} from 'react-native-indicator';
+import {callAPI} from './find';
 const styles = StyleSheet.create({
   outerContainer: {
     height: '100%',
@@ -48,18 +49,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
-export const callAPI = (url) => {
-  return new Promise((resolve, reject) => {
-    axios
-      .get(url)
-      .then((res) => {
-        resolve(res.data);
-      })
-      .catch((err) => reject(err));
-  });
-};
 
 export const PendingRequests = (props) => {
+  console.log(props.route.params.token);
   const [username, setUsername] = useState('burnerlee');
   const [searchedUsers, setSearchedUsers] = useState([]);
   const [userLoggedin, setUserLoggedin] = useState(true);
@@ -69,7 +61,10 @@ export const PendingRequests = (props) => {
     searchUsers();
   }, []);
   const searchUsers = () => {
-    callAPI('http://' + IKAISERVER + '/users/pending').then((res) => {
+    callAPI(
+      'http://' + IKAISERVER + '/users/pending',
+      props.route.params.token,
+    ).then((res) => {
       setLoading(false);
       setSearchedUsers(res.users);
     });
@@ -92,11 +87,17 @@ export const PendingRequests = (props) => {
               frequency={800}></BreathingLoader>
           </View>
         )}
-        {searchedUsers.map((user) => {
+        {/* {searchedUsers.map((user) => {
           return <Request name={user.username} status={user.status} />;
-        })}
+        })} */}
         {searchedUsers.map((user) => {
-          return <Request name={user.username} status={'requested'} />;
+          return (
+            <Request
+              name={user.username}
+              status={'requested'}
+              token={props.route.params.token}
+            />
+          );
         })}
       </ScrollView>
     </View>

@@ -59,41 +59,44 @@ export class Request extends React.Component {
     };
   }
   accept(name) {
-    callAPI('http://' + IKAISERVER + '/users/accept?user=' + name).then(
-      (res) => {
-        //after request accepted
-        this.setState({
-          status: 'accepted',
-          disabled: true,
-          image: require('../assets/done.png'),
-        });
-      },
-    );
+    callAPI(
+      'http://' + IKAISERVER + '/users/accept?user=' + name,
+      this.props.token,
+    ).then((res) => {
+      //after request accepted
+      this.setState({
+        status: 'accepted',
+        disabled: true,
+        image: require('../assets/done.png'),
+      });
+    });
   }
   decline(name) {
-    callAPI('http://' + IKAISERVER + '/users/decline?user=' + name).then(
-      (res) => {
-        //after request accepted
-        this.setState({
-          status: 'new',
-          disabled: false,
-          image: require('../assets/add.png'),
-        });
-      },
-    );
+    callAPI(
+      'http://' + IKAISERVER + '/users/decline?user=' + name,
+      this.props.token,
+    ).then((res) => {
+      //after request accepted
+      this.setState({
+        status: 'new',
+        disabled: false,
+        image: require('../assets/add.png'),
+      });
+    });
   }
   request(name) {
-    callAPI('http://' + IKAISERVER + '/users/request?user=' + name).then(
-      (res) => {
-        //after request
-        console.log('request sent.');
-        this.setState({
-          status: 'pending',
-          disabled: true,
-          image: require('../assets/pending.png'),
-        });
-      },
-    );
+    callAPI(
+      'http://' + IKAISERVER + '/users/request?user=' + name,
+      this.props.token,
+    ).then((res) => {
+      //after request
+      console.log('request sent.');
+      this.setState({
+        status: 'pending',
+        disabled: true,
+        image: require('../assets/pending.png'),
+      });
+    });
   }
   render() {
     console.log(this.state.status);

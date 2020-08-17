@@ -5,6 +5,7 @@ import axios from 'axios';
 import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
 import {IKAISERVER} from '../../ikai/constants';
 import {BreathingLoader} from 'react-native-indicator';
+import {Toast} from 'native-base';
 const styles = StyleSheet.create({
   outerContainer: {
     height: '100%',
@@ -48,12 +49,24 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
-export const callAPI = (url) => {
+export const callAPI = (url, token, setLoading) => {
+  if (setLoading) {
+    setLoading(true);
+  }
   return new Promise((resolve, reject) => {
     axios
-      .get(url)
+      .get(url, {headers: {Authorization: `Token ${token}`}})
       .then((res) => {
-        resolve(res.data);
+        console.log(res.data);
+        if (res.status !== 200) {
+          if (setLoading) {
+            setLoading(false);
+          }
+          Toast.show('Error Received with status code: ' + res.status);
+          return;
+        } else {
+          resolve(res.data);
+        }
       })
       .catch((err) => reject(err));
   });
@@ -67,17 +80,18 @@ export const FindPage = (props) => {
   const [isLoading, setLoading] = useState(false);
   const [query, setQuery] = useState('');
   const searchUsers = () => {
-    setLoading(true);
     if (query === '') {
       return;
     }
     console.log;
-    callAPI('http://' + IKAISERVER + '/users/search?query=' + query).then(
-      (res) => {
-        setSearchedUsers(res.users);
-        setLoading(false);
-      },
-    );
+    callAPI(
+      'http://' + IKAISERVER + '/users/search?query=' + query,
+      props.route.params.token,
+      setLoading,
+    ).then((res) => {
+      setSearchedUsers(res.users);
+      setLoading(false);
+    });
   };
   return (
     <View style={styles.outerContainer}>
@@ -113,7 +127,14 @@ export const FindPage = (props) => {
           </View>
         )}
         {searchedUsers.map((user) => {
-          return <Request name={user.username} status={user.status} />;
+          return (
+            <Request
+              name={user.username}
+              status={user.status}
+              token={props.route.params.token}
+              setLoading={setLoading}
+            />
+          );
         })}
       </ScrollView>
     </View>

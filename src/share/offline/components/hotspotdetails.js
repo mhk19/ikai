@@ -3,7 +3,7 @@ import {View, StyleSheet, Text, TouchableOpacity, Image} from 'react-native';
 import {makeServer, encryptIP} from '../utils/hotspot';
 import Toast from 'react-native-simple-toast';
 import {ReceiveFileOffline} from './receiveFile';
-// import {traverse} from '@babel/core';
+
 const styles = StyleSheet.create({
   outerContainer: {
     backgroundColor: 'white',
@@ -18,12 +18,12 @@ const styles = StyleSheet.create({
     height: '55%',
   },
   shareImageContainer: {
-    marginTop: '25%',
-    height: '50%',
+    marginTop: '30%',
+    height: '40%',
     resizeMode: 'contain',
   },
   descContainer: {
-    marginTop: '2%',
+    marginTop: '5%',
     fontFamily: 'roboto',
     fontStyle: 'normal',
     fontSize: 20,
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     color: '#979797',
   },
   buttonContainer: {
-    height: '57%',
+    height: '45%',
     width: '100%',
     backgroundColor: 'white',
     flexDirection: 'column',
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
   },
   buttonDetail: {
     width: '60%',
-    height: '13%',
+    height: '18%',
     borderRadius: 30,
     backgroundColor: 'white',
     borderColor: '#13C2C2',
@@ -72,26 +72,10 @@ const styles = StyleSheet.create({
   },
   buttonPair: {
     width: '60%',
-    height: '13%',
+    height: '18%',
     borderRadius: 30,
     backgroundColor: '#13C2C2',
-    margin: '3%',
-  },
-  textInfo: {
-    textAlign: 'center',
-    textAlignVertical: 'center',
-    marginTop: 12,
-    color: 'white',
-    fontSize: 20,
-    fontFamily: 'roboto',
-  },
-  textInfo2: {
-    textAlign: 'center',
-    textAlignVertical: 'center',
-    marginTop: 12,
-    color: '#13C2C2',
-    fontSize: 20,
-    fontFamily: 'roboto',
+    margin: '5%',
   },
   cameraButton: {
     minHeight: '10%',
@@ -113,6 +97,22 @@ const styles = StyleSheet.create({
     resizeMode: 'center',
     height: '100%',
     width: '100%',
+  },
+  textInfo: {
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    marginTop: 12,
+    color: 'white',
+    fontSize: 20,
+    fontFamily: 'roboto',
+  },
+  textInfo2: {
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    marginTop: 12,
+    color: '#13C2C2',
+    fontSize: 20,
+    fontFamily: 'roboto',
   },
 });
 

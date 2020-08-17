@@ -14,7 +14,10 @@ export class Menu extends React.Component {
           <MenuStack.Screen
             name="main"
             component={MenuMainPage}
-            initialParams={{logoutHandler: this.props.logoutHandler}}
+            initialParams={{
+              logoutHandler: this.props.logoutHandler,
+              name: this.props.userDetails.currentUsername,
+            }}
             options={{
               header: () => {
                 return <MainHeader view={false} />;
@@ -22,10 +25,16 @@ export class Menu extends React.Component {
             }}></MenuStack.Screen>
           <MenuStack.Screen
             name="Find Friends"
-            component={FindPage}></MenuStack.Screen>
+            component={FindPage}
+            initialParams={{
+              token: this.props.userDetails.token,
+            }}></MenuStack.Screen>
           <MenuStack.Screen
             name="Your Requests"
-            component={PendingRequests}></MenuStack.Screen>
+            component={PendingRequests}
+            initialParams={{
+              token: this.props.userDetails.token,
+            }}></MenuStack.Screen>
         </MenuStack.Navigator>
       </NavigationContainer>
     );

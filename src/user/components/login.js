@@ -122,7 +122,11 @@ export class LoginComponent extends React.Component {
                 console.log('user is logged in');
                 this.setToken(data.key);
                 this.setUsername(this.state.username);
-                this.props.loginHandler();
+                this.props.loginHandler(
+                  this.state.username,
+                  data.key,
+                  this.props.private_key,
+                );
               } else {
                 Toast.show(
                   'This account was not set on this device. Private Key not found',
