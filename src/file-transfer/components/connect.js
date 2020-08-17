@@ -66,7 +66,7 @@ export const Connect = (props) => {
   let receivedBuffers = [];
 
   useEffect(() => {
-    setUserName('aviral');
+    setUserName('mahak');
     if (props.route.params.file !== undefined) {
       setClientType('sender');
     } else {
@@ -191,32 +191,52 @@ export const Connect = (props) => {
       updateConnection(localConnection);
       setConnected(true);
       setSelectingReceiver(true);
-      localConnection.onicecandidate = ({candidate}) => {
-        let connectedTo = connectedRef.current;
-        if (candidate && !!connectedTo) {
-          send({
-            name: connectedTo,
-            type: 'candidate',
-            candidate: candidate,
-          });
-        }
-        localConnection.ondatachannel = (event) => {
-          console.log('Data channel is created!');
-          let receiveChannel = event.channel;
-          receiveChannel.onopen = () => {
-            console.log('Data channel is open and ready to be used.');
-          };
-          receiveChannel.binaryType = 'arraybuffer';
-          receiveChannel.onmessage = handleDataChannelFileReceived;
-          updateChannel(receiveChannel);
-        };
-      };
+      // localConnection.onicecandidate = ({candidate}) => {
+      //   let connectedTo = connectedRef.current;
+      //   if (candidate && !!connectedTo) {
+      //     send({
+      //       name: connectedTo,
+      //       type: 'candidate',
+      //       candidate: candidate,
+      //     });
+      //   }
+      //   localConnection.ondatachannel = (event) => {
+      //     console.log('Data channel is created!');
+      //     let receiveChannel = event.channel;
+      //     receiveChannel.onopen = () => {
+      //       console.log('Data channel is open and ready to be used.');
+      //     };
+      //     receiveChannel.binaryType = 'arraybuffer';
+      //     receiveChannel.onmessage = handleDataChannelFileReceived;
+      //     updateChannel(receiveChannel);
+      //   };
+      //};
     } else {
       console.log(message);
       setError(true);
     }
   };
 
+  connection.onicecandidate = ({candidate}) => {
+    let connectedTo = connectedRef.current;
+    if (candidate && !!connectedTo) {
+      send({
+        name: connectedTo,
+        type: 'candidate',
+        candidate: candidate,
+      });
+    }
+    connection.ondatachannel = (event) => {
+      console.log('Data channel is created!');
+      let receiveChannel = event.channel;
+      receiveChannel.onopen = () => {
+        console.log('Data channel is open and ready to be used.');
+      };
+      receiveChannel.binaryType = 'arraybuffer';
+      receiveChannel.onmessage = handleDataChannelFileReceived;
+      updateChannel(receiveChannel);
+    };
+  };
   const handleConnection = (name) => {
     setSelectingReceiver(false);
     setConnecting(true);
