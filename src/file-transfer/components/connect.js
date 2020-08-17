@@ -10,6 +10,7 @@ import ContactThumbnail from './contactThumbnail';
 import ReceiveRequests from './receiveRequests';
 import WaitingPage from './waiting';
 import ErrorPage from './errorPage';
+import SendFilePage from './send_file';
 
 const styles = StyleSheet.create({
   outerContainer: {
