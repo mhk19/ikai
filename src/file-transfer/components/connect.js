@@ -202,6 +202,7 @@ export const Connect = (props) => {
 
   const onAnswer = ({answer}) => {
     connection.setRemoteDescription(new RTCSessionDescription(answer));
+    console.log(connection.remoteDescription);
   };
 
   const onCandidate = ({candidate}) => {
@@ -232,12 +233,13 @@ export const Connect = (props) => {
             // updateChannel(receiveChannel);
             receiveChannel.send('ikaiopen');
             console.log('Data channel is open and ready to be used.');
-            receiveChannel.onmessage = ({data}) => {
-              handleDataChannelFileReceived(data);
-            };
+
             // receiveChannel.onmessage = handleDataChannelFileReceived;
           };
           receiveChannel.binaryType = 'arraybuffer';
+          receiveChannel.onmessage = ({data}) => {
+            handleDataChannelFileReceived(data);
+          };
           // receiveChannel.onmessage = handleDataChannelFileReceived;
           updateChannel(receiveChannel);
         };
@@ -307,7 +309,6 @@ export const Connect = (props) => {
       console.log('File transfer failed');
     }
   };
-
 
   const ReadFile = (file, datachannel) => {
     const realPath = file.path;
