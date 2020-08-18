@@ -43,6 +43,7 @@ const styles = StyleSheet.create({
     width: '43%',
     alignItems: 'center',
     borderRadius: 5,
+    justifyContent: 'center',
   },
   offlineButton: {
     backgroundColor: 'white',
@@ -52,6 +53,8 @@ const styles = StyleSheet.create({
     borderColor: '#13C2C2',
     borderWidth: 2,
     borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   image: {
     resizeMode: 'contain',
@@ -97,7 +100,6 @@ export class ShareMainPage extends React.Component {
                   color: 'white',
                   fontSize: 20,
                   fontFamily: 'roboto',
-                  marginTop: '7%',
                 }}>
                 ONLINE
               </Text>
@@ -123,7 +125,6 @@ export class ShareMainPage extends React.Component {
                   color: '#13C2C2',
                   fontSize: 20,
                   fontFamily: 'roboto',
-                  marginTop: '7%',
                 }}>
                 OFFLINE
               </Text>
