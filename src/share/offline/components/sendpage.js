@@ -119,6 +119,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: '50%',
   },
+  iconImgContainer: {
+    // marginTop: 10,
+    resizeMode: 'contain',
+    height: 35,
+  },
 });
 
 export const SendPage = (props) => {
@@ -238,7 +243,9 @@ export const SendPage = (props) => {
                   selectFile();
                 }}>
                 <View style={styles.iconContainer}>
-                  <Image source={require('../assets/video_icon.png')} />
+                  <Image source={require('../assets/file_icon.png')} 
+                  style={styles.iconImgContainer}
+                  />
                   <Text style={{color: '#979797'}}>FILE</Text>
                 </View>
                 <View style={styles.filenameContainer}>

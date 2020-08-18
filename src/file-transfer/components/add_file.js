@@ -100,6 +100,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: 10,
   },
+  iconImgContainer: {
+    // marginTop: 10,
+    resizeMode: 'contain',
+    height: 35,
+  },
 });
 
 export const AddFile = (props) => {
@@ -163,8 +168,9 @@ export const AddFile = (props) => {
                 selectFile();
               }}>
               <View style={styles.iconContainer}>
-                <Image source={require('../assets/video_icon.png')} />
-                <Text style={{color: '#979797'}}>PDF</Text>
+                <Image source={require('../assets/file_icon.png')} 
+                style={styles.iconImgContainer}/>
+                <Text style={{color: '#979797'}}>FILE</Text>
               </View>
               <View style={styles.filenameContainer}>
                 <Text style={{color: '#979797'}}>{fileName}</Text>

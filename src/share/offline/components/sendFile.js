@@ -74,6 +74,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  iconImgContainer: {
+    // marginTop: 10,
+    resizeMode: 'contain',
+    height: 35,
+  },
 });
 
 export class SendFileOffline extends React.Component {
@@ -104,8 +109,10 @@ export class SendFileOffline extends React.Component {
         )}
         <View style={styles.fileContainer}>
           <View style={styles.iconContainer}>
-            <Image source={require('../assets/video_icon.png')} />
-            <Text style={{color: '#979797'}}>PDF</Text>
+            <Image source={require('../assets/file_icon.png')} 
+            style={styles.iconImgContainer}
+            />
+            <Text style={{color: '#979797'}}>FILE</Text>
           </View>
           <View style={styles.filenameContainer}>
             <Text style={{color: '#979797'}}>{this.props.fileName}</Text>
