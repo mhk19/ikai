@@ -20,10 +20,7 @@ const styles = StyleSheet.create({
   upperContainer: {
     height: '80%',
     backgroundColor: 'white',
-  },
-  descContainer: {
-    height: '30%',
-    margin: 0,
+    justifyContent: 'center'
   },
   imageContainer: {
     height: '70%',
@@ -75,7 +72,7 @@ export class ShareMainPage extends React.Component {
                 source={require('./assets/share_main.png')}
                 style={styles.image}></Image>
             </View>
-            <View style={styles.descContainer}>
+            <View>
               <Text
                 style={{
                   color: '#979797',
