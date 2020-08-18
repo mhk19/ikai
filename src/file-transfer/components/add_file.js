@@ -29,6 +29,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#979797',
   },
+  upperContainer: {
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
   emptyFileContainer: {
     backgroundColor: '#FAFAFA',
     borderStyle: 'dashed',
@@ -50,7 +54,6 @@ const styles = StyleSheet.create({
     height: 40,
     fontFamily: 'roboto',
     fontStyle: 'normal',
-    textAlign: 'center',
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 15,
@@ -135,7 +138,8 @@ export const AddFile = (props) => {
           Start by choosing file you want to share.
         </Text>
         {fileName === '' ? (
-          <View>
+          <View style={styles.upperContainer}>
+            <View>
             <TouchableOpacity
               style={styles.emptyFileContainer}
               onPress={() => {
@@ -144,6 +148,7 @@ export const AddFile = (props) => {
               <Image source={require('../assets/plus.png')} />
               <Text style={{color: '#979797'}}>ADD FILE</Text>
             </TouchableOpacity>
+            </View>
             <View style={styles.disabledButton}>
               <Text style={{color: 'white', fontSize: 18, fontWeight: 'bold'}}>
                 SEND
