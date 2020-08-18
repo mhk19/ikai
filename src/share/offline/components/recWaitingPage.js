@@ -16,13 +16,13 @@ const styles = StyleSheet.create({
   },
 });
 
-export class WaitingPage extends React.Component {
+export class RecWaitingPage extends React.Component {
   render() {
     return (
       <View style={styles.innerContainer}>
         <Image
           style={styles.imageContainer}
-          source={require('../assets/sendfile.png')}
+          source={require('../assets/files.png')}
         />
         <Text
           style={{
@@ -40,4 +40,4 @@ export class WaitingPage extends React.Component {
   }
 }
 
-export default WaitingPage;
+export default RecWaitingPage;
