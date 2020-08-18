@@ -17,6 +17,7 @@ export class Chat extends React.Component {
         <ChatStack.Screen
           name="shareOnlineContacts"
           component={ShareOnlineContacts}
+          initialParams={{userDetails: this.props.route.params.userDetails}}
           options={{
             header: (props) => {
               return (
@@ -31,6 +32,7 @@ export class Chat extends React.Component {
         <ChatStack.Screen
           name="shareOnlineChatWindow"
           component={ShareOnlineChatWindow}
+          initialParams={{userDetails: this.props.route.params.userDetails}}
           options={{
             header: () => {
               return <MainHeader view={false} />;

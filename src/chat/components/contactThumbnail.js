@@ -39,6 +39,9 @@ export class ContactThumbnail extends React.Component {
             username: this.props.username,
             chatname: this.props.name,
             chatroom_id: this.props.chatroom_id,
+            publickey: this.props.publickey,
+            privatekey: this.props.privatekey,
+            token: this.props.token,
           });
         }}>
         <Image

@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
-import IKAISERVER from '../../ikai/constants';
+import {IKAISERVER} from '../../ikai/constants';
 import {
   View,
   StyleSheet,
@@ -11,7 +11,8 @@ import {
   KeyboardAvoidingView,
   Keyboard,
 } from 'react-native';
-
+import {Toast} from 'react-native-simple-toast';
+import {virgilCrypto} from 'react-native-virgil-crypto';
 const styles = StyleSheet.create({
   outerContainer: {
     backgroundColor: 'white',
@@ -63,7 +64,7 @@ const styles = StyleSheet.create({
   },
   sentMessage: {
     minWidth: '10%',
-    maxWidth: '45%',
+    maxWidth: '60%',
     backgroundColor: '#13C2C2',
     alignSelf: 'flex-end',
     borderRadius: 15,
@@ -73,7 +74,7 @@ const styles = StyleSheet.create({
   },
   receivedMessage: {
     minWidth: '10%',
-    maxWidth: '45%',
+    maxWidth: '60%',
     marginLeft: 0,
     backgroundColor: '#C4C4C4',
     alignSelf: 'flex-start',
@@ -85,10 +86,16 @@ const styles = StyleSheet.create({
 });
 
 export const ShareOnlineChatWindow = (props) => {
+  const encryptionKeypair = virgilCrypto.generateKeys();
   let data = props.route.params;
+  console.log(data.publickey);
+  const [privatekey] = useState(data.privatekey);
+  const [publickey] = useState(encryptionKeypair.publicKey);
+  const token = data.token;
   const scroller = useRef();
   const [messages, setMessages] = useState([]);
   const chatroom = data.chatroom_id;
+  console.log('chatroom', chatroom);
   const [chatSocket, setChatSocket] = useState(null);
   const [typedMessage, setTypedMessage] = useState('');
   const [wbConn, setWbConn] = useState(false);
@@ -103,6 +110,7 @@ export const ShareOnlineChatWindow = (props) => {
       return;
     }
     chatSocket.onopen = function () {
+      console.log(props);
       setWbConn(true);
       setMessages([]);
       fetchPageMessages();
@@ -112,6 +120,10 @@ export const ShareOnlineChatWindow = (props) => {
     };
   });
   const messageReceiveHandler = (e) => {
+    if (JSON.parse(e.data).err) {
+      console.log(e);
+      return;
+    }
     const messageData = JSON.parse(e.data);
     if (messageData.messages.length === 0) {
       return;
@@ -151,9 +163,12 @@ export const ShareOnlineChatWindow = (props) => {
     if (wbConn) {
       chatSocket.send(
         JSON.stringify({
-          message: typedMessage,
+          message: virgilCrypto
+            .encrypt(typedMessage, publickey)
+            .toString('base64'),
           username: data.username,
           command: 'new_message',
+          token: token,
         }),
       );
     } else {
@@ -165,6 +180,7 @@ export const ShareOnlineChatWindow = (props) => {
     chatSocket.send(
       JSON.stringify({
         command: 'fetch_messages',
+        token: token,
       }),
     );
   };
@@ -172,6 +188,7 @@ export const ShareOnlineChatWindow = (props) => {
     chatSocket.send(
       JSON.stringify({
         command: 'fetch_prev_messages',
+        token: token,
         time: messages[0].timestamp,
       }),
     );
@@ -200,7 +217,7 @@ export const ShareOnlineChatWindow = (props) => {
         onContentSizeChange={() => {
           setPrevButton(true);
         }}>
-        {wbConn && prevButton && (
+        {wbConn && prevButton && messages.length > 0 && (
           <TouchableOpacity
             style={{
               alignSelf: 'center',
@@ -234,7 +251,12 @@ export const ShareOnlineChatWindow = (props) => {
               return <SendMessageBox msg={message.content} typ={message.typ} />;
             }
             return (
-              <ReceiveMessageBox msg={message.content} typ={message.typ} />
+              <ReceiveMessageBox
+                msg={virgilCrypto
+                  .decrypt(message.content, privatekey)
+                  .toString('utf-8')}
+                typ={message.typ}
+              />
             );
           })}
         {!wbConn && (
@@ -268,6 +290,7 @@ export const ShareOnlineChatWindow = (props) => {
             value={typedMessage}></TextInput>
           <TouchableOpacity
             onPress={() => {
+              setTypedMessage('');
               sendMessage();
             }}
             disabled={typedMessage === ''}>

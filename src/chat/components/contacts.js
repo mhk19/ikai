@@ -21,10 +21,10 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
 });
-const callAPI = (url) => {
+const callAPI = (url, token) => {
   return new Promise((resolve, reject) => {
     axios
-      .get(url)
+      .get(url, {headers: {Authorization: `Token ${token}`}})
       .then((res) => {
         resolve(res.data);
       })
@@ -33,7 +33,6 @@ const callAPI = (url) => {
 };
 
 export const ShareOnlineContacts = (props) => {
-  const [username, setUsername] = useState('burnerlee');
   const [chatrooms, setChatrooms] = useState([]);
   const [dataReceived, setDataReceived] = useState(false);
   const [connectError, setConnectError] = useState(false);
@@ -51,7 +50,10 @@ export const ShareOnlineContacts = (props) => {
       });
   };
   useEffect(() => {
-    callAPI('http://' + IKAISERVER + '/users/chatrooms')
+    callAPI(
+      'http://' + IKAISERVER + '/users/chatrooms',
+      props.route.params.userDetails.token,
+    )
       .then((res) => {
         console.log('Data is received.');
         setDataReceived(true);
@@ -79,22 +81,18 @@ export const ShareOnlineContacts = (props) => {
           style={styles.innerContainer}
           showsVerticalScrollIndicator={false}>
           {chatrooms.map((chatroom) => {
-            let member_names = chatroom.name.split('-');
-            let contactName;
-            if (member_names[0] === username) {
-              contactName = member_names[1];
-            } else {
-              contactName = member_names[0];
-            }
             return (
               <ContactThumbnail
-                name={contactName}
+                name={chatroom.name}
                 time={chatroom.updated_at}
                 date={chatroom.updated_at_date}
                 last={chatroom.last_message}
                 chatroom_id={chatroom.id}
                 navigation={props.navigation}
-                username={username}
+                username={props.route.params.userDetails.currentUsername}
+                privatekey={props.route.params.userDetails.private_key}
+                token={props.route.params.userDetails.token}
+                publickey={JSON.parse(chatroom.publickey)}
               />
             );
           })}
