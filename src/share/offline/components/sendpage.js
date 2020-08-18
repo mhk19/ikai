@@ -200,7 +200,7 @@ export const SendPage = (props) => {
     data.client.write('SOF');
     sleep(1000).then(() => {
       data.client.write(file.fileName);
-      sleep(500).then(() => {
+      sleep(1500).then(() => {
         ReadFile();
       });
     });
@@ -243,8 +243,9 @@ export const SendPage = (props) => {
                   selectFile();
                 }}>
                 <View style={styles.iconContainer}>
-                  <Image source={require('../assets/file_icon.png')} 
-                  style={styles.iconImgContainer}
+                  <Image
+                    source={require('../assets/file_icon.png')}
+                    style={styles.iconImgContainer}
                   />
                   <Text style={{color: '#979797'}}>FILE</Text>
                 </View>

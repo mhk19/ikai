@@ -54,13 +54,6 @@ export class ContactThumbnail extends React.Component {
               {this.props.name}
             </Text>
           </View>
-          <View style={styles.contactName}>
-            <Text style={{fontSize: 13, color: '#979797'}}>
-              {this.props.last
-                ? this.props.last
-                : 'Start a new Conversation with ' + this.props.name}
-            </Text>
-          </View>
         </View>
         <View style={styles.time}>
           <Text style={{fontSize: 13, color: '#979797'}}>

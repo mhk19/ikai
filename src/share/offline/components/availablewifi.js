@@ -101,20 +101,26 @@ export const AvailableWifi = (props) => {
   const verifySender = () => {
     let ip = decrypt(passcode);
     console.log('starting to connect to receiver at ip', ip);
-    let client = net.createConnection(8000, ip, () => {
-      client.write('CONNECTME');
-    });
-    client.on('data', (data) => {
-      console.log('Client Received: ' + data);
-      if (data == 'SERI') {
-        props.navigation.push('sendpage', {
-          port: 8000,
-          ip: ip,
-          client: client,
-          navigation: props.navigation,
-        });
-      }
-    });
+    try {
+      let client = net.createConnection(8000, ip, () => {
+        client.write('CONNECTME');
+      });
+      client.on('data', (data) => {
+        console.log('Client Received: ' + data);
+        if (data == 'SERI') {
+          props.navigation.push('sendpage', {
+            port: 8000,
+            ip: ip,
+            client: client,
+            navigation: props.navigation,
+          });
+        }
+      });
+    } catch (err) {
+      Toast.show(
+        'Make sure you are connected with hostpot of your partner and try again.',
+      );
+    }
   };
   //   setNearbyNetworks(getNearbyWifi());
   return (
@@ -135,7 +141,10 @@ export const AvailableWifi = (props) => {
           onChange={(e) => {
             setPasscode(e.nativeEvent.text);
           }}></TextInput>
-        <TouchableOpacity style={styles.buttonPair} onPress={verifySender}>
+        <TouchableOpacity
+          style={styles.buttonPair}
+          onPress={verifySender}
+          disabled={!passcode}>
           <Text style={styles.textInfo}> Pair </Text>
         </TouchableOpacity>
       </View>

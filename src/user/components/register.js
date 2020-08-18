@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   ImageBackground,
 } from 'react-native';
-import {RSA} from 'react-native-rsa-native';
+import {virgilCrypto} from 'react-native-virgil-crypto';
 import AsyncStorage from '@react-native-community/async-storage';
 import Toast from 'react-native-simple-toast';
 import {IKAISERVER} from '../../ikai/constants';
@@ -72,9 +72,17 @@ export class RegisterComponent extends React.Component {
     this.setState({password2: text});
   };
 
-  generateKeyPair = async () => {
-    const keys = await RSA.generateKeys(4096); // set key size
-    return keys;
+  generateKeyPair = () => {
+    const keyPair = virgilCrypto.generateKeys();
+    console.log(keyPair);
+    return {
+      publicKey: virgilCrypto
+        .exportPublicKey(keyPair.publicKey)
+        .toString('base64'),
+      privateKey: virgilCrypto
+        .exportPrivateKey(keyPair.privateKey)
+        .toString('base64'),
+    };
   };
 
   setToken = async (token) => {
@@ -85,7 +93,7 @@ export class RegisterComponent extends React.Component {
     }
   };
 
-  registerUser = async () => {
+  registerUser = () => {
     this.setState({showLoader: true});
     if (this.state.password1 !== this.state.password2) {
       console.log(this.state.password1);
@@ -93,10 +101,8 @@ export class RegisterComponent extends React.Component {
       Toast.show('Your Passwords do not match');
       return;
     }
-    const keys = await this.generateKeyPair();
-    console.log('keys');
-    console.log(keys);
-    console.log('keys');
+    const keys = this.generateKeyPair();
+    console.log(JSON.stringify(keys.publicKey));
     fetch('http://' + IKAISERVER + '/rest-auth/registration/', {
       method: 'POST',
       headers: {
@@ -108,7 +114,7 @@ export class RegisterComponent extends React.Component {
         username: `${this.state.username}`,
         password1: `${this.state.password1}`,
         password2: `${this.state.password2}`,
-        publickey: keys.public,
+        publickey: keys.publicKey,
       }),
     })
       .then((response) => response.json())
@@ -116,7 +122,7 @@ export class RegisterComponent extends React.Component {
         this.setState({showLoader: false});
         console.log(data);
         if (data.key) {
-          this.props.setPrivateKey(this.state.username, keys.private);
+          this.props.setPrivateKey(this.state.username, keys.privateKey);
           this.props.pageHandler('login');
         }
         if (data.detail) {

@@ -132,14 +132,19 @@ export const HotspotDetails = (props) => {
     Toast.show('File Received! Continue enjoying ikai!');
     Toast.show('Redirecting You Back');
     sleep(5000).then(() => {
-      console.log('closing the client');
+      console.log('closing the server');
       serverService.close();
       props.navigation.navigate('shareMainscreen');
     });
   }, [sent]);
   async function readyHandler() {
-    let server = await makeServer(8000, setIsReceiving, setFileName, setSent);
-    setServerService(server);
+    let server = await makeServer(
+      8000,
+      setIsReceiving,
+      setFileName,
+      setSent,
+      setServerService,
+    );
     console.log('server started', server, serverService);
     setPasscode(encryptIP(server.ip));
   }

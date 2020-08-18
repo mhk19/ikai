@@ -2,6 +2,7 @@ import {HotspotWizard} from 'react-native-wifi-and-hotspot-wizard';
 import {NetworkInfo} from 'react-native-network-info';
 import {ExternalDirectoryPath} from 'react-native-fs';
 import RNFetchBlob from 'rn-fetch-blob';
+import Toast from 'react-native-simple-toast';
 let fileName = '';
 let gotFileName = false;
 let fileMode = false;
@@ -26,20 +27,29 @@ export async function connectToHotspot() {
   return {status: status, password: password, ssid: ssid};
 }
 
-export async function makeServer(port, setIsReceiving, setFileName, setSent) {
+export async function makeServer(
+  port,
+  setIsReceiving,
+  setFileName,
+  setSent,
+  setServerService,
+) {
   console.log('starting to make a server');
   let x;
-
-  await NetworkInfo.getIPV4Address().then((ipv4Address) => {
-    x = ipv4Address;
-  });
+  try {
+    await NetworkInfo.getIPV4Address().then((ipv4Address) => {
+      x = ipv4Address;
+    });
+  } catch (err) {
+    Toast.show('Please turn on wifi hostpot and try again.');
+  }
   console.log('Local ip is ', x);
   let server = net
     .createServer((socket) => {
       console.log('socket created');
       socket.on('data', (data) => {
         console.log('on receiving data, value of fileMode is ', fileMode);
-        // console.log('received data: ', data);
+        console.log('received data: ', data);
         if (fileMode) {
           if (data == 'EOF') {
             setSent(true);
@@ -49,6 +59,7 @@ export async function makeServer(port, setIsReceiving, setFileName, setSent) {
           } else {
             if (!gotFileName) {
               fileName = data.toString('utf-8');
+              console.log('filename is ', fileName);
               setFileName(fileName);
               gotFileName = true;
             } else {
@@ -74,6 +85,7 @@ export async function makeServer(port, setIsReceiving, setFileName, setSent) {
         console.log(error);
         console.log('error aviral');
         console.log('Error: ' + error);
+        Toast.show(error);
       });
 
       socket.on('close', (error) => {
@@ -86,14 +98,17 @@ export async function makeServer(port, setIsReceiving, setFileName, setSent) {
     });
 
   server.on('error', (error) => {
+    Toast.show(error);
     fileMode = false;
     console.log('Server already listening on this port.');
   });
 
   server.on('close', () => {
+    Toast.show('Server is closed. Bye Bye!');
     fileMode = false;
     console.log('server is closed.');
   });
+  setServerService(server);
   return {port: port, ip: x, server: server};
 }
 

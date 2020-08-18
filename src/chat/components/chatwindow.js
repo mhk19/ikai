@@ -12,8 +12,8 @@ import {
   Keyboard,
 } from 'react-native';
 import Toast from 'react-native-simple-toast';
-import {RSA} from 'react-native-rsa-native';
-
+import {virgilCrypto} from 'react-native-virgil-crypto';
+// import {ICrypto} from '@virgilsecurity/crypto-types/index';
 const styles = StyleSheet.create({
   outerContainer: {
     backgroundColor: 'white',
@@ -86,25 +86,17 @@ const styles = StyleSheet.create({
   },
 });
 export const ShareOnlineChatWindow = (props) => {
-  let message = 'my secret message';
-  RSA.generateKeys(4096) // set key size
-    .then((keys) => {
-      console.log('4096 private:', keys.private); // the private key
-      console.log('4096 public:', keys.public); // the public key
-      RSA.encrypt(message, keys.public).then((encodedMessage) => {
-        console.log(`the encoded message is ${encodedMessage}`);
-        RSA.decrypt(encodedMessage, keys.private).then((decryptedMessage) => {
-          console.log(`The original message was ${decryptedMessage}`);
-        });
-      });
-    });
   let data = props.route.params;
-  const [privatekey] = useState(data.privatekey);
-  const [publickey] = useState(data.publicKey);
-  const my_publickey = useState(data.my_publickey);
-  // RSA.encrypt('hello', publickey).then((encodedMessage) => {
-  //   console.log(`the encoded message is ${encodedMessage}`);
-  // });
+  const [privatekey] = useState(
+    virgilCrypto.importPrivateKey(props.route.params.userDetails.private_key),
+  );
+  const [publickey] = useState(
+    virgilCrypto.importPublicKey(props.route.params.publickey),
+  );
+  const [my_publickey] = useState(
+    virgilCrypto.importPublicKey(props.route.params.my_publickey),
+  );
+
   const token = data.token;
   const scroller = useRef();
   const [messages, setMessages] = useState([]);
@@ -114,46 +106,73 @@ export const ShareOnlineChatWindow = (props) => {
   const [wbConn, setWbConn] = useState(false);
   const [prevButton, setPrevButton] = useState(true);
   useEffect(() => {
-    setChatSocket(
-      new WebSocket('ws://' + IKAISERVER + '/ws/chat/' + chatroom + '/'),
+    console.log(publickey);
+    let socket = new WebSocket(
+      'ws://' + IKAISERVER + '/ws/chat/' + chatroom + '/',
     );
-  }, []);
-  useEffect(() => {
-    if (!chatSocket) {
-      return;
-    }
-    chatSocket.onopen = function () {
-      console.log(props);
+    socket.onopen = () => {
+      console.log('socket is opened');
+      setChatSocket(socket);
       setWbConn(true);
       setMessages([]);
-      fetchPageMessages();
-      chatSocket.onmessage = function (e) {
-        messageReceiveHandler(e);
+      fetchPageMessages(socket);
+      socket.onmessage = function (e) {
+        messageReceiveHandler(e, socket);
       };
     };
-  });
-  const messageReceiveHandler = (e) => {
-    if (JSON.parse(e.data).err) {
-      console.log(e);
-      return;
-    }
-    const messageData = JSON.parse(e.data);
-    if (messageData.messages.length === 0) {
-      return;
-    }
+  }, []);
+  // useEffect(() => {
+  //   if (!chatSocket) {
+  //     return;
+  //   }
+  //   // chatSocket.onopen = function () {
+  // setWbConn(true);
+  // setMessages([]);
+  // fetchPageMessages();
+  // chatSocket.onmessage = function (e) {
+  //   messageReceiveHandler(e);
+  // };
+  //   // };
+  // }, [chatSocket]);
+  const messageReceiveHandler = (e, socket) => {
+    console.log('Data is received.');
     try {
-      console.log(messageData.messages);
-      if (messageData.typ == 'new') {
-        for (let i = 0; i < messageData.messages.length; i++) {
-          setMessages((messages) => [...messages, messageData.messages[i]]);
-        }
-      } else if (messageData.typ == 'old') {
-        for (let i = 0; i < messageData.messages.length; i++) {
-          setMessages((messages) => [messageData.messages[i], ...messages]);
-        }
+      console.log('aviral', e.data);
+      if (JSON.parse(e.data).err) {
+        console.log(e);
+        return;
       }
-      Keyboard.dismiss();
-      setTypedMessage('');
+      if (JSON.parse(e.data).typ === 'refresh') {
+        socket.send(
+          JSON.stringify({
+            command: 'last',
+            token: token,
+          }),
+        );
+      }
+      const messageData = JSON.parse(e.data);
+      if (!messageData.messages) {
+        return;
+      }
+      if (messageData.messages.length === 0) {
+        return;
+      }
+      try {
+        console.log(messageData.messages);
+        if (messageData.typ == 'new') {
+          for (let i = 0; i < messageData.messages.length; i++) {
+            setMessages((messages) => [...messages, messageData.messages[i]]);
+          }
+        } else if (messageData.typ == 'old') {
+          for (let i = 0; i < messageData.messages.length; i++) {
+            setMessages((messages) => [messageData.messages[i], ...messages]);
+          }
+        }
+        Keyboard.dismiss();
+        setTypedMessage('');
+      } catch (e) {
+        console.log(e);
+      }
     } catch (e) {
       console.log(e);
     }
@@ -176,7 +195,12 @@ export const ShareOnlineChatWindow = (props) => {
     if (wbConn) {
       chatSocket.send(
         JSON.stringify({
-          message: data.message,
+          message1: virgilCrypto
+            .encrypt(typedMessage, my_publickey)
+            .toString('base64'),
+          message2: virgilCrypto
+            .encrypt(typedMessage, publickey)
+            .toString('base64'),
           username: data.chatname,
           command: 'new_message',
           token: token,
@@ -187,8 +211,8 @@ export const ShareOnlineChatWindow = (props) => {
     }
   };
 
-  const fetchPageMessages = () => {
-    chatSocket.send(
+  const fetchPageMessages = (socket) => {
+    socket.send(
       JSON.stringify({
         command: 'fetch_messages',
         token: token,
@@ -259,7 +283,14 @@ export const ShareOnlineChatWindow = (props) => {
           messages.length > 0 &&
           messages.map((message) => {
             if (message.author === data.username) {
-              return <SendMessageBox msg={message.content} typ={message.typ} />;
+              return (
+                <SendMessageBox
+                  msg={virgilCrypto
+                    .decrypt(message.content, privatekey)
+                    .toString('utf-8')}
+                  typ={message.typ}
+                />
+              );
             }
             return (
               <ReceiveMessageBox
