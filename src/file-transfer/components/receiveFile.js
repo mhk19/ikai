@@ -110,8 +110,10 @@ export class ReceiveFilePage extends React.Component {
         )}
         <View style={styles.fileContainer}>
           <View style={styles.iconContainer}>
-            <Image source={require('../assets/file_icon.png')} 
-            style={styles.iconImgContainer}/>
+            <Image
+              source={require('../assets/file_icon.png')}
+              style={styles.iconImgContainer}
+            />
             <Text style={{color: '#979797'}}>FILE</Text>
           </View>
           <View style={styles.filenameContainer}>

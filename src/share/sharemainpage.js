@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
   upperContainer: {
     height: '80%',
     backgroundColor: 'white',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   imageContainer: {
     height: '70%',
@@ -50,7 +50,6 @@ const styles = StyleSheet.create({
     borderColor: '#13C2C2',
     borderWidth: 2,
     borderRadius: 5,
-    alignItems: 'center',
     justifyContent: 'center',
   },
   image: {
