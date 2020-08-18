@@ -92,7 +92,8 @@ export const ShareOnlineContacts = (props) => {
                 username={props.route.params.userDetails.currentUsername}
                 privatekey={props.route.params.userDetails.private_key}
                 token={props.route.params.userDetails.token}
-                publickey={JSON.parse(chatroom.publickey)}
+                publickey={chatroom.publickey}
+                my_publickey={chatroom.my_publickey}
               />
             );
           })}

@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   ImageBackground,
 } from 'react-native';
-import {virgilCrypto} from 'react-native-virgil-crypto';
+import {RSA} from 'react-native-rsa-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import Toast from 'react-native-simple-toast';
 import {IKAISERVER} from '../../ikai/constants';
@@ -72,10 +72,9 @@ export class RegisterComponent extends React.Component {
     this.setState({password2: text});
   };
 
-  generateKeyPair = () => {
-    const keyPair = virgilCrypto.generateKeys();
-    console.log(keyPair);
-    return keyPair;
+  generateKeyPair = async () => {
+    const keys = await RSA.generateKeys(4096); // set key size
+    return keys;
   };
 
   setToken = async (token) => {
@@ -86,7 +85,7 @@ export class RegisterComponent extends React.Component {
     }
   };
 
-  registerUser = () => {
+  registerUser = async () => {
     this.setState({showLoader: true});
     if (this.state.password1 !== this.state.password2) {
       console.log(this.state.password1);
@@ -94,8 +93,10 @@ export class RegisterComponent extends React.Component {
       Toast.show('Your Passwords do not match');
       return;
     }
-    const keys = this.generateKeyPair();
-    console.log(JSON.stringify(keys.publicKey));
+    const keys = await this.generateKeyPair();
+    console.log('keys');
+    console.log(keys);
+    console.log('keys');
     fetch('http://' + IKAISERVER + '/rest-auth/registration/', {
       method: 'POST',
       headers: {
@@ -107,7 +108,7 @@ export class RegisterComponent extends React.Component {
         username: `${this.state.username}`,
         password1: `${this.state.password1}`,
         password2: `${this.state.password2}`,
-        publickey: JSON.stringify(keys.publicKey),
+        publickey: keys.public,
       }),
     })
       .then((response) => response.json())
@@ -115,10 +116,7 @@ export class RegisterComponent extends React.Component {
         this.setState({showLoader: false});
         console.log(data);
         if (data.key) {
-          this.props.setPrivateKey(
-            this.state.username,
-            JSON.stringify(keys.privateKey),
-          );
+          this.props.setPrivateKey(this.state.username, keys.private);
           this.props.pageHandler('login');
         }
         if (data.detail) {

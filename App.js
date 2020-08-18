@@ -117,7 +117,7 @@ export class App extends React.Component {
               logoutHandler={this.logOutHander}
               userDetails={{
                 currentUsername: this.state.user,
-                private_key: JSON.parse(this.state.private_key),
+                private_key: this.state.private_key,
                 token: this.state.token,
               }}
             />
@@ -138,7 +138,7 @@ export class App extends React.Component {
                   user: this.openControlPanel,
                   userDetails: {
                     currentUsername: this.state.user,
-                    private_key: JSON.parse(this.state.private_key),
+                    private_key: this.state.private_key,
                     token: this.state.token,
                   },
                 }}></Tab.Screen>
@@ -157,7 +157,7 @@ export class App extends React.Component {
                   user: this.openControlPanel,
                   userDetails: {
                     currentUsername: this.state.user,
-                    private_key: JSON.parse(this.state.private_key),
+                    private_key: this.state.private_key,
                     token: this.state.token,
                   },
                 }}></Tab.Screen>
