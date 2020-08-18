@@ -1,1 +1,1 @@
-export const IKAISERVER = 'ikai-server.herokuapp.com';
+export const IKAISERVER = 'sinpi.wtf';

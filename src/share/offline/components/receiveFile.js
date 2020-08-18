@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { color } from 'react-native-reanimated';
+import {View, Text, Image, StyleSheet} from 'react-native';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {color} from 'react-native-reanimated';
 import RecWaitingPage from './recWaitingPage';
 const styles = StyleSheet.create({
   outerContainer: {
@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    alignContent: 'center'
+    alignContent: 'center',
   },
   imageContainer: {
     // marginTop: 10,
@@ -101,54 +101,31 @@ export class ReceiveFileOffline extends React.Component {
         {!this.props.sent ? (
           <RecWaitingPage desc={'Receiving File...'} />
         ) : (
-            <View style={{ alignItems: 'center' }}>
-              <Image
-                style={styles.imageContainer}
-                source={require('../assets/files.png')}
-              />
-              <Text style={(styles.descContainer2)}>
-                File successfully received!
+          <View style={{alignItems: 'center'}}>
+            <Image
+              style={styles.imageContainer}
+              source={require('../assets/files.png')}
+            />
+            <Text style={styles.descContainer2}>
+              File successfully received!
             </Text>
-              <Text style={(styles.descContainer2)}>
-                Check your Downloads folder
+            <Text style={styles.descContainer2}>
+              Check your Downloads folder
             </Text>
-            </View>
-          )}
+          </View>
+        )}
         <View style={styles.fileContainer}>
           <View style={styles.iconContainer}>
-            <Image source={require('../assets/file_icon.png')}
+            <Image
+              source={require('../assets/file_icon.png')}
               style={styles.iconImgContainer}
             />
-            <Text style={{ color: '#979797' }}>FILE</Text>
+            <Text style={{color: '#979797'}}>FILE</Text>
           </View>
           <View style={styles.filenameContainer}>
-            <Text style={{ color: '#979797' }}>{this.props.fileName}</Text>
+            <Text style={{color: '#979797'}}>{this.props.fileName}</Text>
           </View>
         </View>
-        {/* {this.props.sent ? (
-          <TouchableOpacity style={styles.buttonContainer}>
-            <Text
-              style={{
-                fontFamily: 'roboto',
-                fontStyle: 'normal',
-                fontSize: 14,
-                color: 'white',
-              }}>
-              SEND FILE
-            </Text>
-          </TouchableOpacity>
-        ) : (
-          <View style={styles.pgOuterContainer}>
-            <View style={styles.pgInnerContainer}>
-              <View>
-                <Text>{this.props.percentage}%</Text>
-              </View>
-            </View>
-            <TouchableOpacity style={{marginLeft: '5%', marginTop: '8%'}}>
-              <Image source={require('../assets/cancel.png')} />
-            </TouchableOpacity>
-          </View>
-        )} */}
       </View>
     );
   }

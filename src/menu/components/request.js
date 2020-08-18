@@ -60,7 +60,7 @@ export class Request extends React.Component {
   }
   accept(name) {
     callAPI(
-      'http://' + IKAISERVER + '/users/accept?user=' + name,
+      'https://' + IKAISERVER + '/users/accept?user=' + name,
       this.props.token,
     ).then((res) => {
       //after request accepted
@@ -73,7 +73,7 @@ export class Request extends React.Component {
   }
   decline(name) {
     callAPI(
-      'http://' + IKAISERVER + '/users/decline?user=' + name,
+      'https://' + IKAISERVER + '/users/decline?user=' + name,
       this.props.token,
     ).then((res) => {
       //after request accepted
@@ -86,7 +86,7 @@ export class Request extends React.Component {
   }
   request(name) {
     callAPI(
-      'http://' + IKAISERVER + '/users/request?user=' + name,
+      'https://' + IKAISERVER + '/users/request?user=' + name,
       this.props.token,
     ).then((res) => {
       //after request

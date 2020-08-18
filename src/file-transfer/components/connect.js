@@ -4,13 +4,14 @@ import {
   RTCIceCandidate,
   RTCSessionDescription,
 } from 'react-native-webrtc';
-import {View, Text, StyleSheet, ScrollView} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, Image} from 'react-native';
 import RNFetchBlob from 'rn-fetch-blob';
 import ContactThumbnail from './contactThumbnail';
 import ReceiveRequests from './receiveRequests';
 import WaitingPage from './waiting';
 import ErrorPage from './errorPage';
 import SendFilePage from './send_file';
+import {EatBeanLoader} from 'react-native-indicator';
 
 const styles = StyleSheet.create({
   outerContainer: {
@@ -39,13 +40,76 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginRight: 35,
   },
+  descContainer2: {
+    fontFamily: 'roboto',
+    fontStyle: 'normal',
+    fontSize: 20,
+    flexDirection: 'row',
+    textAlign: 'center',
+    color: '#13C2C2',
+  },
+  iconContainer: {
+    backgroundColor: '#FAFAFA',
+    borderWidth: 1,
+    borderStyle: 'dashed',
+    borderColor: '#D9D9D9',
+    borderRadius: 2,
+    alignItems: 'center',
+    flex: 0.2,
+    flexDirection: 'column',
+    justifyContent: 'center',
+  },
+  fileContainer: {
+    flexDirection: 'row',
+    width: 300,
+    height: 70,
+    marginTop: 20,
+    justifyContent: 'center',
+  },
+  filenameContainer: {
+    flex: 0.7,
+    fontFamily: 'roboto',
+    fontStyle: 'normal',
+    fontSize: 14,
+    borderStyle: 'solid',
+    borderColor: '#D9D9D9',
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  iconImgContainer: {
+    // marginTop: 10,
+    resizeMode: 'contain',
+    height: 35,
+  },
 });
 
 const MAXIMUM_MESSAGE_SIZE = 65535;
 const END_OF_FILE_MESSAGE = 'EOF';
 let fileName = '';
 const configuration = {
-  iceServers: [{url: 'stun:stun.1.google.com:19302'}],
+  iceServers: [
+    {url: 'stun:stun.1.google.com:19302'},
+    {url: 'stun1.l.google.com:19302'},
+    {url: 'stun2.l.google.com:19302'},
+    {url: 'stun3.l.google.com:19302'},
+    {url: 'stun4.l.google.com:19302'},
+    {url: 'stun01.sipphone.com'},
+    {url: 'stun.ekiga.net'},
+    {url: 'stun.fwdnet.net'},
+    {url: 'stun.ideasip.com'},
+    {url: 'stun.ideasip.com'},
+    {url: 'stun.iptel.org'},
+    {url: 'stun.rixtelecom.se'},
+    {url: 'stun.schlund.de'},
+    {url: 'stunserver.org'},
+    {url: 'stun.softjoys.com'},
+    {url: 'stun.voiparound.com'},
+    {url: 'stun.voipbuster.com'},
+    {url: 'stun.voipstunt.com'},
+    {url: 'stun.voxgratia.org'},
+    {url: 'stun.xten.com'},
+  ],
 };
 export const Connect = (props) => {
   console.log(props.route.params);
@@ -63,6 +127,8 @@ export const Connect = (props) => {
   const [error, setError] = useState(false);
   const [senders, setSenders] = useState([]);
   const [selectingSender, setSelectingSender] = useState(true);
+  const [sent, setSent] = useState(false);
+  const [receive, setReceive] = useState(false);
   const connectedRef = useRef();
   let receivedBuffers = [];
 
@@ -305,6 +371,7 @@ export const Connect = (props) => {
             }
             console.log(receivedBuffers);
             console.log('File completely received');
+            setReceive(true);
             fileName = '';
             receivedBuffers = [];
             return stream.close();
@@ -338,7 +405,9 @@ export const Connect = (props) => {
           ifstream.onEnd(() => {
             datachannel.send(END_OF_FILE_MESSAGE);
             console.log('read successful');
+            setSent(true);
             fileName = '';
+            setRece;
           });
         })
         .catch((err) => {
@@ -381,7 +450,7 @@ export const Connect = (props) => {
         ) : connecting ? (
           <WaitingPage desc="Waiting for receiver to accept." />
         ) : (
-          <Text>Sending Page</Text>
+          <SendingPage sent={sent}></SendingPage>
         )
       ) : selectingSender ? (
         senders.length === 0 ? (
@@ -390,10 +459,78 @@ export const Connect = (props) => {
           <ReceiveRequests users={senders} acceptOffer={accept} />
         )
       ) : (
-        <Text>Receiving page</Text>
+        <ReceivingPage
+          receive={receive}
+          desc={'Receiving your file, hold tight'}></ReceivingPage>
       )}
     </View>
   );
+};
+
+const SendingPage = (props) => {
+  return (
+    <View>
+      {!props.sent && <WaitingPage desc={'Sending file ...'} />}
+      {props.sent && (
+        <View style={{alignItems: 'center'}}>
+          <Image
+            style={styles.imageContainer}
+            source={require('../assets/sentfile.png')}
+          />
+          <Text style={styles.descContainer2}>File successfully sent!</Text>
+        </View>
+      )}
+    </View>
+  );
+};
+
+const ReceivingPage = (props) => {
+  if (!props.receive) {
+    return (
+      <View style={styles.innerContainer}>
+        <Image
+          style={styles.imageContainer}
+          source={require('../assets/files.png')}
+        />
+        <Text
+          style={{
+            color: '#979797',
+            fontFamily: 'roboto',
+            fontStyle: 'normal',
+            fontSize: 20,
+            marginBottom: '15%',
+          }}>
+          {props.desc}
+        </Text>
+        <EatBeanLoader color={'#13C2C2'} size={40}></EatBeanLoader>
+      </View>
+    );
+  } else {
+    return (
+      <View>
+        <View style={{alignItems: 'center'}}>
+          <Image
+            style={styles.imageContainer}
+            source={require('../assets/files.png')}
+          />
+          <Text style={styles.descContainer2}>File successfully received!</Text>
+          <Text style={styles.descContainer2}>Check your Downloads folder</Text>
+        </View>
+        <View style={styles.fileContainer}>
+          <View style={styles.iconContainer}>
+            <Image
+              source={require('../assets/file_icon.png')}
+              style={styles.iconImgContainer}
+            />
+            <Text style={{color: '#979797'}}>FILE</Text>
+          </View>
+          <View style={styles.filenameContainer}>
+            <Text style={{color: '#979797'}}>{fileName}</Text>
+          </View>
+        </View>
+      </View>
+    );
+  }
 };
 
 export default Connect;

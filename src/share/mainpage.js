@@ -73,7 +73,7 @@ export class Share extends React.Component {
                 <MainHeader
                   source={require('./assets/share_header.png')}
                   view={true}
-                  open={false}
+                  open={this.open}
                 />
               );
             },
@@ -88,7 +88,7 @@ export class Share extends React.Component {
                 <MainHeader
                   source={require('./assets/share_header.png')}
                   view={true}
-                  open={false}
+                  open={this.open}
                 />
               );
             },
@@ -104,7 +104,7 @@ export class Share extends React.Component {
                 <MainHeader
                   source={require('./assets/share_header.png')}
                   view={true}
-                  open={false}
+                  open={this.open}
                 />
               );
             },
@@ -118,8 +118,8 @@ export class Share extends React.Component {
               return (
                 <MainHeader
                   source={require('./assets/share_header.png')}
-                  view={true}
-                  open={false}
+                  view={false}
+                  open={this.open}
                 />
               );
             },
@@ -133,8 +133,8 @@ export class Share extends React.Component {
               return (
                 <MainHeader
                   source={require('./assets/share_header.png')}
-                  view={true}
-                  open={false}
+                  view={false}
+                  open={this.open}
                 />
               );
             },
@@ -148,8 +148,8 @@ export class Share extends React.Component {
               return (
                 <MainHeader
                   source={require('./assets/share_header.png')}
-                  view={true}
-                  open={false}
+                  view={false}
+                  open={this.open}
                 />
               );
             },

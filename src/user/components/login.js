@@ -104,7 +104,7 @@ export class LoginComponent extends React.Component {
     this.setState({showLoader: true});
     if (this.getPrivateKey(this.state.username)) {
       console.log('login is clicked');
-      fetch('http://' + IKAISERVER + '/rest-auth/login/', {
+      fetch('https://' + IKAISERVER + '/rest-auth/login/', {
         method: 'POST',
         headers: {
           Accept: 'application/json',

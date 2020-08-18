@@ -20,6 +20,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     flexDirection: 'column',
   },
+  showingContactsDesc: {
+    marginTop: 10,
+    color: '#595959',
+    fontFamily: 'roboto',
+    fontStyle: 'normal',
+    fontSize: 16,
+  },
 });
 const callAPI = (url, token) => {
   return new Promise((resolve, reject) => {
@@ -37,7 +44,7 @@ export const ShareOnlineContacts = (props) => {
   const [dataReceived, setDataReceived] = useState(false);
   const [connectError, setConnectError] = useState(false);
   const refreshFunction = async () => {
-    await callAPI('http://' + IKAISERVER + '/users/chatrooms')
+    await callAPI('https://' + IKAISERVER + '/users/chatrooms')
       .then((res) => {
         console.log('Data is received.');
         setConnectError(false);
@@ -51,7 +58,7 @@ export const ShareOnlineContacts = (props) => {
   };
   useEffect(() => {
     callAPI(
-      'http://' + IKAISERVER + '/users/chatrooms',
+      'https://' + IKAISERVER + '/users/chatrooms',
       props.route.params.userDetails.token,
     )
       .then((res) => {
@@ -63,7 +70,7 @@ export const ShareOnlineContacts = (props) => {
         setConnectError(true);
         console.log(err);
       });
-  }, []);
+  });
   if (connectError) {
     return <ErrorPage refreshFunction={refreshFunction}></ErrorPage>;
   }
@@ -77,6 +84,16 @@ export const ShareOnlineContacts = (props) => {
     // }
     return (
       <View style={styles.outerContainer}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            marginTop: '10%',
+          }}>
+          <Text style={styles.showingContactsDesc}>
+            Showing all available contacts. Tap to connect.
+          </Text>
+        </View>
         <ScrollView
           style={styles.innerContainer}
           showsVerticalScrollIndicator={false}>
