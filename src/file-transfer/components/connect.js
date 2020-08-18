@@ -69,7 +69,7 @@ export const Connect = (props) => {
   let receivedBuffers = [];
 
   useEffect(() => {
-    setUserName('oneplus');
+    setUserName('cypher');
     if (props.route.params.file !== undefined) {
       setClientType('sender');
     } else {

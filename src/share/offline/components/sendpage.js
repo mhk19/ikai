@@ -5,6 +5,7 @@ import {ScreenStackHeaderCenterView} from 'react-native-screens';
 import {EatBeanLoader} from 'react-native-indicator';
 import RNFetchBlob from 'rn-fetch-blob';
 import Toast from 'react-native-simple-toast';
+import WaitingPage from './waitingPage';
 const MAXIMUM_BUFFER_SIZE = 4095;
 const styles = StyleSheet.create({
   outerContainer: {
@@ -267,13 +268,7 @@ export const SendPage = (props) => {
         </View>
       )}
       {sent && !connected && (
-        <View style={styles.innerContainer}>
-          <Image
-            style={styles.imageContainer}
-            source={require('../assets/sendfile.png')}
-          />
-          <Text style={styles.descContainer1}>Sending your file!</Text>
-        </View>
+        <WaitingPage desc={'Sending file ...'} />
       )}
       {sent && connected && (
         <View style={{alignItems: 'center'}}>

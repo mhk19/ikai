@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { color } from 'react-native-reanimated';
+import RecWaitingPage from './recWaitingPage';
 const styles = StyleSheet.create({
   outerContainer: {
     backgroundColor: 'white',
@@ -98,16 +99,7 @@ export class ReceiveFileOffline extends React.Component {
     return (
       <View style={styles.outerContainer}>
         {!this.props.sent ? (
-          <View>
-            <Image
-              style={styles.imageContainer}
-              source={require('../assets/files.png')}
-            />
-            <Text style={(styles.descContainer1)}>
-              Receiving file...
-              <Text style={{ color: '#13C2C2' }}> {this.props.sender}</Text>
-            </Text>
-          </View>
+          <RecWaitingPage desc={'Receiving File...'} />
         ) : (
             <View style={{ alignItems: 'center' }}>
               <Image
