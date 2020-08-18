@@ -11,7 +11,6 @@ import ReceiveRequests from './receiveRequests';
 import WaitingPage from './waiting';
 import ErrorPage from './errorPage';
 import SendFilePage from './send_file';
-
 const styles = StyleSheet.create({
   outerContainer: {
     backgroundColor: 'white',
@@ -40,10 +39,8 @@ const styles = StyleSheet.create({
     marginRight: 35,
   },
 });
-
 const MAXIMUM_MESSAGE_SIZE = 65535;
 const END_OF_FILE_MESSAGE = 'EOF';
-
 const configuration = {
   iceServers: [{url: 'stun:stun.1.google.com:19302'}],
 };
@@ -66,6 +63,7 @@ export const Connect = (props) => {
   let receivedBuffers = [];
 
   useEffect(() => {
+    setUserName('aviral');
     setUserName('mahak');
     if (props.route.params.file !== undefined) {
       setClientType('sender');
@@ -88,7 +86,6 @@ export const Connect = (props) => {
     };
     return () => webSocket.current.close();
   }, []);
-
   useEffect(() => {
     let data = socketMessages.pop();
     if (data) {
@@ -126,11 +123,9 @@ export const Connect = (props) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socketMessages]);
-
   const send = (data) => {
     webSocket.current.send(JSON.stringify(data));
   };
-
   const handleLogin = () => {
     console.log('logging in with name:', username);
     send({
@@ -138,17 +133,14 @@ export const Connect = (props) => {
       name: username,
     });
   };
-
   const sendPing = () => {
     send({type: 'ping'});
   };
-
   setInterval(() => {
     if (connected) {
       sendPing();
     }
   }, 25000);
-
   const request = (name) => {
     setSelectingReceiver(false);
     setConnecting(true);
@@ -157,7 +149,6 @@ export const Connect = (props) => {
       name: name,
     });
   };
-
   const accept = (name) => {
     setSelectingSender(false);
     send({
@@ -165,26 +156,21 @@ export const Connect = (props) => {
       name: name,
     });
   };
-
   const onRequest = ({name}) => {
     setSenders((prev) => [...prev, name]);
   };
-
   const onAccept = ({name}) => {
     setConnecting(false);
     handleConnection(name);
   };
-
   const updateUsersList = ({user}) => {
     console.log(user.username, typeof user.username);
     setUsers((prev) => [...prev, user]);
     console.log(users);
   };
-
   const removeUser = ({user}) => {
     setUsers((prev) => prev.filter((u) => u.username !== user.username));
   };
-
   const onOffer = ({offer, name}) => {
     setConnectedTo(name);
     connectedRef.current = name;
@@ -199,50 +185,12 @@ export const Connect = (props) => {
         console.log({e});
       });
   };
-
   const onAnswer = ({answer}) => {
     connection.setRemoteDescription(new RTCSessionDescription(answer));
-    console.log(connection);
   };
-
   const onCandidate = ({candidate}) => {
     connection.addIceCandidate(new RTCIceCandidate(candidate));
   };
-
-  // const onLogin = ({success, message, user: loggedIn}) => {
-  //   setLoggingIn(false);
-  //   if (success) {
-  //     //alert "logged in successfully"
-  //     setIsLoggedIn(true);
-  //     //setUsers(JSON.stringify(loggedIn));
-  //     let localConnection = new RTCPeerConnection(configuration);
-  //     console.log('local connection', localConnection);
-  //     localConnection.onicecandidate = ({candidate}) => {
-  //       let connectedTo = connectedRef.current;
-  //       if (candidate && !!connectedTo) {
-  //         send({
-  //           name: connectedTo,
-  //           type: 'candidate',
-  //           candidate: candidate,
-  //         });
-  //       }
-  //       localConnection.ondatachannel = (event) => {
-  //         console.log('Data channel is created!');
-  //         let receiveChannel = event.channel;
-  //         receiveChannel.onopen = () => {
-  //           console.log('Data channel is open and ready to be used.');
-  //         };
-  //         receiveChannel.binaryType = 'arraybuffer';
-  //         receiveChannel.onmessage = handleDataChannelFileReceived;
-  //         updateChannel(receiveChannel);
-  //       };
-  //     };
-  //     updateConnection(localConnection);
-  //   } else {
-  //     //alert failed
-  //   }
-  // };
-
   const onLogin = ({success, message, users: loggedIn}) => {
     if (success) {
       setUsers(loggedIn);
@@ -264,17 +212,11 @@ export const Connect = (props) => {
           console.log('Data channel is created!');
           let receiveChannel = event.channel;
           receiveChannel.onopen = () => {
-            updateChannel(receiveChannel);
             receiveChannel.send('ikaiopen');
             console.log('Data channel is open and ready to be used.');
-
-            // receiveChannel.onmessage = handleDataChannelFileReceived;
           };
           receiveChannel.binaryType = 'arraybuffer';
-          receiveChannel.onmessage = ({data}) => {
-            handleDataChannelFileReceived(data);
-          };
-          // receiveChannel.onmessage = handleDataChannelFileReceived;
+          receiveChannel.onmessage = handleDataChannelFileReceived;
           updateChannel(receiveChannel);
         };
       };
@@ -283,54 +225,21 @@ export const Connect = (props) => {
       setError(true);
     }
   };
-
-  // const handleConnection = (name) => {
-  //   var dataChannelOptions = {
-  //     reliable: true,
-  //   };
-
-  //   let dataChannel = connection.createDataChannel('file');
-  //   console.log('datachannels');
-  //   console.log(dataChannel);
-
-  //   dataChannel.onerror = (error) => {
-  //     console.log('datachannel error');
-  //     console.log(error);
-  //   };
-  //   dataChannel.binaryType = 'arraybuffer';
-  //   dataChannel.onmessage = handleDataChannelFileReceived;
-  //   updateChannel(dataChannel);
-  //   console.log('reached here');
-  //   connection
-  //     .createOffer()
-  //     .then((desc) => {
-  //       connection.setLocalDescription(desc).then(() => {
-  //         send({type: 'offer', offer: connection.localDescription, name: name});
-  //       });
-  //     })
-  //     .catch((e) => setAlert(e));
-  // };
-
   const handleConnection = (name) => {
     setConnectedTo(name);
     let dataChannel = connection.createDataChannel('file');
     console.log('datachannels');
     console.log(dataChannel);
-
     dataChannel.onerror = (error) => {
       console.log('datachannel error');
       console.log(error);
     };
     dataChannel.binaryType = 'arraybuffer';
     dataChannel.onmessage = ({data}) => {
-      console.log(data);
       if (data === 'ikaiopen') {
         // dataChannel.send(JSON.stringify(props.route.params.file));
         // dataChannel.send('SOF');
-        console.log('starting to call readfile');
-        console.log('here channel is', dataChannel);
-        updateChannel(dataChannel);
-        ReadFile(props.route.params.file, dataChannel);
+        ReadFile(props.route.params.file);
       }
       handleDataChannelFileReceived(data);
     };
@@ -345,9 +254,7 @@ export const Connect = (props) => {
       })
       .catch((e) => setError(e));
   };
-
-  const handleDataChannelFileReceived = ({data}) => {
-    console.log(data);
+  const handleDataChannelFileReceived = (data) => {
     try {
       if (data !== END_OF_FILE_MESSAGE) {
         receivedBuffers.push(data);
@@ -370,8 +277,7 @@ export const Connect = (props) => {
       console.log('File transfer failed');
     }
   };
-
-  const ReadFile = (file, datachannel) => {
+  const ReadFile = (file) => {
     const realPath = file.path;
     if (realPath !== null) {
       console.log('path is', realPath);
@@ -381,14 +287,14 @@ export const Connect = (props) => {
           ifstream.open();
           ifstream.onData((chunk) => {
             console.log('reading file');
-            console.log('channel', channel);
-            datachannel.send(chunk);
+            console.log(chunk);
+            channel.send(chunk);
           });
           ifstream.onError((err) => {
             console.log('error in reading file', err);
           });
           ifstream.onEnd(() => {
-            datachannel.send(END_OF_FILE_MESSAGE);
+            channel.send(END_OF_FILE_MESSAGE);
             console.log('read successful');
           });
         })
@@ -397,7 +303,6 @@ export const Connect = (props) => {
         });
     }
   };
-
   return (
     <View style={styles.outerContainer}>
       {!connected ? (
@@ -446,5 +351,4 @@ export const Connect = (props) => {
     </View>
   );
 };
-
 export default Connect;
