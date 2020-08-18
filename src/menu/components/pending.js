@@ -6,6 +6,7 @@ import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
 import {IKAISERVER} from '../../ikai/constants';
 import {BreathingLoader} from 'react-native-indicator';
 import {callAPI} from './find';
+import Toast from 'native-base';
 const styles = StyleSheet.create({
   outerContainer: {
     height: '100%',
@@ -64,7 +65,9 @@ export const PendingRequests = (props) => {
     callAPI(
       'http://' + IKAISERVER + '/users/pending',
       props.route.params.token,
-    ).then((res) => {
+      setLoading
+    ).then(
+      (res) => {
       setLoading(false);
       setSearchedUsers(res.users);
     });
