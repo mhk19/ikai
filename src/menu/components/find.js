@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
   },
 });
 export const callAPI = (url, token, setLoading) => {
-  if (!setLoading) {
+  if (setLoading) {
     setLoading(true);
   }
   return new Promise((resolve, reject) => {
