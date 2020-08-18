@@ -149,7 +149,10 @@ export class App extends React.Component {
               <Tab.Screen
                 name="scan"
                 component={Scanner}
-                initialParams={{user: this.openControlPanel}}></Tab.Screen>
+                initialParams={{
+                  user: this.openControlPanel,
+                  username: this.state.user,
+                }}></Tab.Screen>
               <Tab.Screen
                 name="chat"
                 component={Chat}

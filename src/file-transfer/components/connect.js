@@ -43,13 +43,14 @@ const styles = StyleSheet.create({
 
 const MAXIMUM_MESSAGE_SIZE = 65535;
 const END_OF_FILE_MESSAGE = 'EOF';
-
+let fileName = '';
 const configuration = {
   iceServers: [{url: 'stun:stun.1.google.com:19302'}],
 };
 export const Connect = (props) => {
+  console.log(props.route.params);
   const [socketMessages, setSocketMessages] = useState([]);
-  const [username, setUserName] = useState('');
+  const [username, setUserName] = useState(props.route.params.username);
   const [users, setUsers] = useState([]);
   const webSocket = useRef(null);
   const [connection, updateConnection] = useState(null);
@@ -66,7 +67,6 @@ export const Connect = (props) => {
   let receivedBuffers = [];
 
   useEffect(() => {
-    setUserName('oneplus');
     if (props.route.params.file !== undefined) {
       setClientType('sender');
     } else {
@@ -287,16 +287,25 @@ export const Connect = (props) => {
     console.log(data);
     try {
       if (data !== END_OF_FILE_MESSAGE) {
-        receivedBuffers.push(data);
+        if (fileName === '') {
+          fileName = data;
+          console.log('filename is', fileName);
+        } else {
+          receivedBuffers.push(data);
+        }
       } else if (data === END_OF_FILE_MESSAGE) {
         RNFetchBlob.fs
-          .writeStream(RNFetchBlob.fs.dirs.DownloadDir + '/test2.pdf', 'base64')
+          .writeStream(
+            RNFetchBlob.fs.dirs.DownloadDir + '/' + fileName,
+            'base64',
+          )
           .then((stream) => {
             for (let i = 0; i < receivedBuffers.length; i++) {
               stream.write(receivedBuffers[i]);
             }
             console.log(receivedBuffers);
             console.log('File completely received');
+            fileName = '';
             receivedBuffers = [];
             return stream.close();
           });
@@ -304,15 +313,16 @@ export const Connect = (props) => {
         console.log('file cannot be received completely');
       }
     } catch (err) {
+      console.log(err);
       console.log('File transfer failed');
     }
   };
-
 
   const ReadFile = (file, datachannel) => {
     const realPath = file.path;
     if (realPath !== null) {
       console.log('path is', realPath);
+      datachannel.send(file.fileName);
       RNFetchBlob.fs
         .readStream(realPath, 'base64', MAXIMUM_MESSAGE_SIZE)
         .then((ifstream) => {
@@ -328,6 +338,7 @@ export const Connect = (props) => {
           ifstream.onEnd(() => {
             datachannel.send(END_OF_FILE_MESSAGE);
             console.log('read successful');
+            fileName = '';
           });
         })
         .catch((err) => {

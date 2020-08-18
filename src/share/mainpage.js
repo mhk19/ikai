@@ -1,21 +1,22 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
+import {createStackNavigator} from '@react-navigation/stack';
 import ShareMainPage from './sharemainpage';
 import MainHeader from '../ikai/components/header';
-import { OfflineMainPage } from './offline/mainpage';
-import { HotspotDetails } from './offline/components/hotspotdetails';
-import { AvailableWifi } from './offline/components/availablewifi';
-import { SendPage } from './offline/components/sendpage';
-import { ReceiveFileOffline } from './offline/components/receiveFile';
-import { ActionPage } from '../file-transfer/components/action';
-import { AddFile } from '../file-transfer/components/add_file';
-import { Connect } from '../file-transfer/components/connect';
+import {OfflineMainPage} from './offline/mainpage';
+import {HotspotDetails} from './offline/components/hotspotdetails';
+import {AvailableWifi} from './offline/components/availablewifi';
+import {SendPage} from './offline/components/sendpage';
+import {ReceiveFileOffline} from './offline/components/receiveFile';
+import {ActionPage} from '../file-transfer/components/action';
+import {AddFile} from '../file-transfer/components/add_file';
+import {Connect} from '../file-transfer/components/connect';
 const ShareStack = createStackNavigator();
 
 export class Share extends React.Component {
   constructor(props) {
     super(props);
     this.open = props.route.params.user;
+    this.username = props.route.params.userDetails.currentUsername;
   }
 
   render() {
@@ -96,6 +97,7 @@ export class Share extends React.Component {
         <ShareStack.Screen
           name="shareConnectPage"
           component={Connect}
+          initialParams={{username: this.username}}
           open={{
             header: () => {
               return (
