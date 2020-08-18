@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     height: '70%',
   },
   buttonContainer: {
-    height: '30%',
+    height: '37%',
     backgroundColor: 'white',
     flexDirection: 'row',
     fontStyle: 'normal',
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   onlineButton: {
-    minHeight: '40%',
+    minHeight: '35%',
     backgroundColor: '#13C2C2',
     width: '43%',
     alignItems: 'center',
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
   },
   offlineButton: {
     backgroundColor: 'white',
-    minHeight: '40%',
+    minHeight: '35%',
     width: '43%',
     alignItems: 'center',
     borderColor: '#13C2C2',
