@@ -66,7 +66,7 @@ export const Connect = (props) => {
   let receivedBuffers = [];
 
   useEffect(() => {
-    setUserName('oneplus');
+    setUserName('mahak');
     if (props.route.params.file !== undefined) {
       setClientType('sender');
     } else {
@@ -202,11 +202,46 @@ export const Connect = (props) => {
 
   const onAnswer = ({answer}) => {
     connection.setRemoteDescription(new RTCSessionDescription(answer));
+    console.log(connection);
   };
 
   const onCandidate = ({candidate}) => {
     connection.addIceCandidate(new RTCIceCandidate(candidate));
   };
+
+  // const onLogin = ({success, message, user: loggedIn}) => {
+  //   setLoggingIn(false);
+  //   if (success) {
+  //     //alert "logged in successfully"
+  //     setIsLoggedIn(true);
+  //     //setUsers(JSON.stringify(loggedIn));
+  //     let localConnection = new RTCPeerConnection(configuration);
+  //     console.log('local connection', localConnection);
+  //     localConnection.onicecandidate = ({candidate}) => {
+  //       let connectedTo = connectedRef.current;
+  //       if (candidate && !!connectedTo) {
+  //         send({
+  //           name: connectedTo,
+  //           type: 'candidate',
+  //           candidate: candidate,
+  //         });
+  //       }
+  //       localConnection.ondatachannel = (event) => {
+  //         console.log('Data channel is created!');
+  //         let receiveChannel = event.channel;
+  //         receiveChannel.onopen = () => {
+  //           console.log('Data channel is open and ready to be used.');
+  //         };
+  //         receiveChannel.binaryType = 'arraybuffer';
+  //         receiveChannel.onmessage = handleDataChannelFileReceived;
+  //         updateChannel(receiveChannel);
+  //       };
+  //     };
+  //     updateConnection(localConnection);
+  //   } else {
+  //     //alert failed
+  //   }
+  // };
 
   const onLogin = ({success, message, users: loggedIn}) => {
     if (success) {
@@ -229,15 +264,16 @@ export const Connect = (props) => {
           console.log('Data channel is created!');
           let receiveChannel = event.channel;
           receiveChannel.onopen = () => {
-            // updateChannel(receiveChannel);
+            updateChannel(receiveChannel);
             receiveChannel.send('ikaiopen');
             console.log('Data channel is open and ready to be used.');
-            receiveChannel.onmessage = ({data}) => {
-              handleDataChannelFileReceived(data);
-            };
+
             // receiveChannel.onmessage = handleDataChannelFileReceived;
           };
           receiveChannel.binaryType = 'arraybuffer';
+          receiveChannel.onmessage = ({data}) => {
+            handleDataChannelFileReceived(data);
+          };
           // receiveChannel.onmessage = handleDataChannelFileReceived;
           updateChannel(receiveChannel);
         };
@@ -247,6 +283,33 @@ export const Connect = (props) => {
       setError(true);
     }
   };
+
+  // const handleConnection = (name) => {
+  //   var dataChannelOptions = {
+  //     reliable: true,
+  //   };
+
+  //   let dataChannel = connection.createDataChannel('file');
+  //   console.log('datachannels');
+  //   console.log(dataChannel);
+
+  //   dataChannel.onerror = (error) => {
+  //     console.log('datachannel error');
+  //     console.log(error);
+  //   };
+  //   dataChannel.binaryType = 'arraybuffer';
+  //   dataChannel.onmessage = handleDataChannelFileReceived;
+  //   updateChannel(dataChannel);
+  //   console.log('reached here');
+  //   connection
+  //     .createOffer()
+  //     .then((desc) => {
+  //       connection.setLocalDescription(desc).then(() => {
+  //         send({type: 'offer', offer: connection.localDescription, name: name});
+  //       });
+  //     })
+  //     .catch((e) => setAlert(e));
+  // };
 
   const handleConnection = (name) => {
     setConnectedTo(name);
@@ -283,7 +346,7 @@ export const Connect = (props) => {
       .catch((e) => setError(e));
   };
 
-  const handleDataChannelFileReceived = (data) => {
+  const handleDataChannelFileReceived = ({data}) => {
     console.log(data);
     try {
       if (data !== END_OF_FILE_MESSAGE) {
@@ -307,7 +370,6 @@ export const Connect = (props) => {
       console.log('File transfer failed');
     }
   };
-
 
   const ReadFile = (file, datachannel) => {
     const realPath = file.path;
