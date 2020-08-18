@@ -89,7 +89,7 @@ export class SendFilePage extends React.Component {
           <View>
             <Image
               style={styles.imageContainer}
-              source={require('../assets/sendfile.png')}
+              source={require('../../../assets/images/file-transfer/sendfile.png')}
             />
             <Text style={(styles.descContainer, {color: '#979797'})}>
               Sending your file to
@@ -100,7 +100,7 @@ export class SendFilePage extends React.Component {
           <View style={{alignItems: 'center'}}>
             <Image
               style={styles.imageContainer}
-              source={require('../assets/sentfile.png')}
+              source={require('../../../assets/images/file-transfer/sentfile.png')}
             />
             <Text style={(styles.descContainer, {color: '#13C2C2'})}>
               File successfully sent!
@@ -109,8 +109,10 @@ export class SendFilePage extends React.Component {
         )}
         <View style={styles.fileContainer}>
           <View style={styles.iconContainer}>
-            <Image source={require('../assets/file_icon.png')} 
-            style={styles.iconImgContainer}/>
+            <Image
+              source={require('../../../assets/images/file-transfer/file_icon.png')}
+              style={styles.iconImgContainer}
+            />
             <Text style={{color: '#979797'}}>FILE</Text>
           </View>
           <View style={styles.filenameContainer}>
@@ -137,7 +139,9 @@ export class SendFilePage extends React.Component {
               </View>
             </View>
             <TouchableOpacity style={{marginLeft: '5%', marginTop: '8%'}}>
-              <Image source={require('../assets/cancel.png')} />
+              <Image
+                source={require('../../../assets/images/file-transfer/cancel.png')}
+              />
             </TouchableOpacity>
           </View>
         )}

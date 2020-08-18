@@ -127,7 +127,7 @@ export const AvailableWifi = (props) => {
     <View style={styles.outerContainer}>
       <View style={styles.innerContainer}>
         <Image
-          source={require('../assets/network.png')}
+          source={require('../../../../assets/images/share/offline/network.png')}
           style={styles.shareImageContainer}
         />
         <Text style={styles.descContainer}>

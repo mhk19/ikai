@@ -20,7 +20,7 @@ export class Editor extends React.Component {
             header: () => {
               return (
                 <MainHeader
-                  source={require('../assets/edit_header.png')}
+                  source={require('../../../assets/images/editor/edit_header.png')}
                   view={true}
                   open={this.open}
                 />

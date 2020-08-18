@@ -33,7 +33,7 @@ export class ContactThumbnail extends React.Component {
           }
         }}>
         <Image
-          source={require('../assets/contact_avatar.png')}
+          source={require('../../../assets/images/file-transfer/contact_avatar.png')}
           style={{width: 40, height: 40}}
         />
         <View style={styles.contactInfo}>

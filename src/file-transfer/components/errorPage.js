@@ -48,7 +48,7 @@ export class ErrorPage extends React.Component {
         <View style={styles.innerContainer}>
           <Image
             style={styles.imageContainer}
-            source={require('../assets/networkfail.png')}
+            source={require('../../../assets/images/file-transfer/networkfail.png')}
           />
           <Text
             style={{

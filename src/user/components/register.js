@@ -155,7 +155,7 @@ export class RegisterComponent extends React.Component {
   render() {
     return (
       <ImageBackground
-        source={require('../assets/background.png')}
+        source={require('../../../assets/images/user/background.png')}
         style={styles.background}>
         <View style={styles.outerContainer}>
           <View style={styles.formContainer}>
