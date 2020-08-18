@@ -62,9 +62,6 @@ export const Connect = (props) => {
   const [error, setError] = useState(false);
   const [senders, setSenders] = useState([]);
   const [selectingSender, setSelectingSender] = useState(true);
-  const [established, setEstablished] = useState(false);
-  const [receivingFile, setReceivingFile] = useState(false);
-  const [rfile, setrfile] = useState('');
   const connectedRef = useRef();
   let receivedBuffers = [];
 
@@ -76,7 +73,7 @@ export const Connect = (props) => {
       setClientType('receiver');
     }
     webSocket.current = new WebSocket(
-      'wss://excelsior-signalling-server.herokuapp.com/',
+      'ws://excelsior-signalling-server.herokuapp.com/',
     );
     console.log('Connected to websocket');
     webSocket.current.onmessage = (message) => {
@@ -232,7 +229,6 @@ export const Connect = (props) => {
           console.log('Data channel is created!');
           let receiveChannel = event.channel;
           receiveChannel.onopen = () => {
-            setEstablished(true);
             // updateChannel(receiveChannel);
             receiveChannel.send('ikaiopen');
             console.log('Data channel is open and ready to be used.');
@@ -266,9 +262,8 @@ export const Connect = (props) => {
     dataChannel.onmessage = ({data}) => {
       console.log(data);
       if (data === 'ikaiopen') {
-        setEstablished(true);
-        dataChannel.send(JSON.stringify(props.route.params.file));
-        dataChannel.send('SOF');
+        // dataChannel.send(JSON.stringify(props.route.params.file));
+        // dataChannel.send('SOF');
         console.log('starting to call readfile');
         console.log('here channel is', dataChannel);
         updateChannel(dataChannel);
@@ -291,18 +286,11 @@ export const Connect = (props) => {
   const handleDataChannelFileReceived = (data) => {
     console.log(data);
     try {
-      if (data === 'SOF') {
-        setReceivingFile(true);
-      } else if (!receivingFile) {
-        setrfile(data);
-      } else if (data !== END_OF_FILE_MESSAGE && receivingFile) {
+      if (data !== END_OF_FILE_MESSAGE) {
         receivedBuffers.push(data);
-      } else if (data === END_OF_FILE_MESSAGE && receivingFile) {
+      } else if (data === END_OF_FILE_MESSAGE) {
         RNFetchBlob.fs
-          .writeStream(
-            RNFetchBlob.fs.dirs.DownloadDir + rfile.fileName,
-            'base64',
-          )
+          .writeStream(RNFetchBlob.fs.dirs.DownloadDir + '/test2.pdf', 'base64')
           .then((stream) => {
             for (let i = 0; i < receivedBuffers.length; i++) {
               stream.write(receivedBuffers[i]);
@@ -319,6 +307,7 @@ export const Connect = (props) => {
       console.log('File transfer failed');
     }
   };
+
 
   const ReadFile = (file, datachannel) => {
     const realPath = file.path;
