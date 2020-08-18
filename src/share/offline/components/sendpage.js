@@ -1,9 +1,10 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import FilePickerManager from 'react-native-file-picker';
 import {View, Image, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {ScreenStackHeaderCenterView} from 'react-native-screens';
 import {EatBeanLoader} from 'react-native-indicator';
 import RNFetchBlob from 'rn-fetch-blob';
+import Toast from 'react-native-simple-toast';
 const MAXIMUM_BUFFER_SIZE = 4095;
 const styles = StyleSheet.create({
   outerContainer: {
@@ -11,14 +12,14 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
-    width: '100%'
+    width: '100%',
   },
   innerContainer: {
     backgroundColor: 'white',
     flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
-    width: '100%'
+    width: '100%',
   },
   shareImageContainer: {
     marginTop: '20%',
@@ -117,7 +118,7 @@ const styles = StyleSheet.create({
   imageContainer: {
     alignItems: 'center',
     marginTop: '50%',
-  }
+  },
 });
 
 export const SendPage = (props) => {
@@ -131,7 +132,18 @@ export const SendPage = (props) => {
     let temp = fileName.split('.');
     return temp[temp.length - 1];
   };
-
+  useEffect(() => {
+    if (!sent) {
+      return;
+    }
+    Toast.show('File shared! Continue enjoying ikai!');
+    Toast.show('Redirecting You Back');
+    sleep(5000).then(() => {
+      console.log('closing the client');
+      props.route.params.client.destroy();
+      props.route.params.navigation.navigate('shareMainscreen');
+    });
+  }, [sent]);
   const selectFile = async () => {
     FilePickerManager.showFilePicker(null, (response) => {
       console.log('Response = ', response);
@@ -253,9 +265,7 @@ export const SendPage = (props) => {
             style={styles.imageContainer}
             source={require('../assets/sendfile.png')}
           />
-          <Text style={(styles.descContainer1)}>
-            Sending your file!
-          </Text>
+          <Text style={styles.descContainer1}>Sending your file!</Text>
         </View>
       )}
       {sent && connected && (
@@ -264,9 +274,7 @@ export const SendPage = (props) => {
             style={styles.imageContainer}
             source={require('../assets/sentfile.png')}
           />
-          <Text style={(styles.descContainer2)}>
-            File successfully sent!
-          </Text>
+          <Text style={styles.descContainer2}>File successfully sent!</Text>
         </View>
       )}
     </View>

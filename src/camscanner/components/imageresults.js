@@ -190,6 +190,7 @@ export class ImageResultScreen extends BaseScreen {
         Pages.getImageUris(),
         'FIXED_A4',
       );
+      console.log(this.props.route.params.navigation);
       ViewUtils.showAlert('PDF file created: ' + result.pdfFileUri);
     } catch (e) {
       ViewUtils.showAlert('ERROR: ' + JSON.stringify(e));

@@ -119,6 +119,7 @@ export class LoginComponent extends React.Component {
         .then((data) => {
           this.setState({showLoader: false});
           if (data.key) {
+            console.log(this.state.username);
             this.props.getPrivKey(this.state.username).then(() => {
               if (this.props.private_key) {
                 console.log('user is logged in');

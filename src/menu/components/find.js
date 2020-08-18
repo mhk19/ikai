@@ -5,7 +5,7 @@ import axios from 'axios';
 import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
 import {IKAISERVER} from '../../ikai/constants';
 import {BreathingLoader} from 'react-native-indicator';
-import {Toast} from 'native-base';
+import {Toast} from 'react-native-simple-toast';
 const styles = StyleSheet.create({
   outerContainer: {
     height: '100%',

@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
-import { decrypt } from '../utils/wifi';
+import React, {useState, useEffect} from 'react';
+import {View, StyleSheet, Text, TouchableOpacity, Image} from 'react-native';
+import {decrypt} from '../utils/wifi';
 import Toast from 'react-native-simple-toast';
-import { TextInput } from 'react-native-gesture-handler';
+import {TextInput} from 'react-native-gesture-handler';
 var net = require('net');
 const styles = StyleSheet.create({
   outerContainer: {
@@ -69,6 +69,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderColor: '#13C2C2',
     borderWidth: 2,
+    textAlign: 'center',
   },
   buttonPair: {
     width: '60%',
@@ -99,14 +100,19 @@ export const AvailableWifi = (props) => {
   const [passcode, setPasscode] = useState('');
   const verifySender = () => {
     let ip = decrypt(passcode);
-    console.log('starting to connect to receiver');
+    console.log('starting to connect to receiver at ip', ip);
     let client = net.createConnection(8000, ip, () => {
       client.write('CONNECTME');
     });
     client.on('data', (data) => {
       console.log('Client Received: ' + data);
       if (data == 'SERI') {
-        props.navigation.push('sendpage', { port: 8000, ip: ip, client: client });
+        props.navigation.push('sendpage', {
+          port: 8000,
+          ip: ip,
+          client: client,
+          navigation: props.navigation,
+        });
       }
     });
   };
@@ -120,20 +126,18 @@ export const AvailableWifi = (props) => {
         />
         <Text style={styles.descContainer}>
           Connect to hotspot and enter the passocde
-          </Text>
-        </View >
+        </Text>
+      </View>
 
-        <View style={styles.buttonContainer}>
-          <TextInput
-            style={styles.buttonDetail}
-            onChange={(e) => {
-              setPasscode(e.nativeEvent.text);
-            }}></TextInput>
-          <TouchableOpacity
-            style={styles.buttonPair}
-            onPress={verifySender}>
-            <Text style={styles.textInfo}> Pair </Text>
-          </TouchableOpacity>
+      <View style={styles.buttonContainer}>
+        <TextInput
+          style={styles.buttonDetail}
+          onChange={(e) => {
+            setPasscode(e.nativeEvent.text);
+          }}></TextInput>
+        <TouchableOpacity style={styles.buttonPair} onPress={verifySender}>
+          <Text style={styles.textInfo}> Pair </Text>
+        </TouchableOpacity>
       </View>
     </View>
   );

@@ -76,9 +76,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export class SendFileOffline extends React.Component {   
-
-    render() {
+export class SendFileOffline extends React.Component {
+  render() {
     return (
       <View style={styles.outerContainer}>
         {!this.props.sent ? (

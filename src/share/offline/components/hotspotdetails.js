@@ -1,9 +1,11 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, Text, TouchableOpacity, Image} from 'react-native';
 import {makeServer, encryptIP} from '../utils/hotspot';
 import Toast from 'react-native-simple-toast';
 import {ReceiveFileOffline} from './receiveFile';
-
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 const styles = StyleSheet.create({
   outerContainer: {
     backgroundColor: 'white',
@@ -121,9 +123,24 @@ export const HotspotDetails = (props) => {
   const [isReceiving, setIsReceiving] = useState(false);
   const [sent, setSent] = useState(false);
   const [fileName, setFileName] = useState(false);
+  const [serverService, setServerService] = useState(null);
+  useEffect(() => {
+    console.log('value of sent is changed.');
+    if (!sent) {
+      return;
+    }
+    Toast.show('File Received! Continue enjoying ikai!');
+    Toast.show('Redirecting You Back');
+    sleep(5000).then(() => {
+      console.log('closing the client');
+      serverService.close();
+      props.navigation.navigate('shareMainscreen');
+    });
+  }, [sent]);
   async function readyHandler() {
     let server = await makeServer(8000, setIsReceiving, setFileName, setSent);
-    console.log('server started', server);
+    setServerService(server);
+    console.log('server started', server, serverService);
     setPasscode(encryptIP(server.ip));
   }
   if (isReceiving) {

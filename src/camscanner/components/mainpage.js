@@ -21,7 +21,10 @@ export class Scanner extends React.Component {
           component={ImageDetailScreen}></CamscannerStack.Screen>
         <CamscannerStack.Screen
           name="imageResults"
-          component={ImageResultScreen}></CamscannerStack.Screen>
+          component={ImageResultScreen}
+          initialParams={{
+            navigation: this.props.navigation,
+          }}></CamscannerStack.Screen>
         <CamscannerStack.Screen
           name="scannerMainscreen"
           component={ScannerMainPage}
