@@ -11,8 +11,9 @@ import {
   KeyboardAvoidingView,
   Keyboard,
 } from 'react-native';
-import {Toast} from 'react-native-simple-toast';
-import {virgilCrypto} from 'react-native-virgil-crypto';
+import Toast from 'react-native-simple-toast';
+import {RSA} from 'react-native-rsa-native';
+
 const styles = StyleSheet.create({
   outerContainer: {
     backgroundColor: 'white',
@@ -84,18 +85,30 @@ const styles = StyleSheet.create({
     marginLeft: '2%',
   },
 });
-
 export const ShareOnlineChatWindow = (props) => {
-  const encryptionKeypair = virgilCrypto.generateKeys();
+  let message = 'my secret message';
+  RSA.generateKeys(4096) // set key size
+    .then((keys) => {
+      console.log('4096 private:', keys.private); // the private key
+      console.log('4096 public:', keys.public); // the public key
+      RSA.encrypt(message, keys.public).then((encodedMessage) => {
+        console.log(`the encoded message is ${encodedMessage}`);
+        RSA.decrypt(encodedMessage, keys.private).then((decryptedMessage) => {
+          console.log(`The original message was ${decryptedMessage}`);
+        });
+      });
+    });
   let data = props.route.params;
-  console.log(data.publickey);
   const [privatekey] = useState(data.privatekey);
-  const [publickey] = useState(encryptionKeypair.publicKey);
+  const [publickey] = useState(data.publicKey);
+  const my_publickey = useState(data.my_publickey);
+  // RSA.encrypt('hello', publickey).then((encodedMessage) => {
+  //   console.log(`the encoded message is ${encodedMessage}`);
+  // });
   const token = data.token;
   const scroller = useRef();
   const [messages, setMessages] = useState([]);
   const chatroom = data.chatroom_id;
-  console.log('chatroom', chatroom);
   const [chatSocket, setChatSocket] = useState(null);
   const [typedMessage, setTypedMessage] = useState('');
   const [wbConn, setWbConn] = useState(false);
@@ -163,10 +176,8 @@ export const ShareOnlineChatWindow = (props) => {
     if (wbConn) {
       chatSocket.send(
         JSON.stringify({
-          message: virgilCrypto
-            .encrypt(typedMessage, publickey)
-            .toString('base64'),
-          username: data.username,
+          message: data.message,
+          username: data.chatname,
           command: 'new_message',
           token: token,
         }),

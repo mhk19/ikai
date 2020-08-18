@@ -94,14 +94,6 @@ export class ImageResultScreen extends BaseScreen {
                   Styles.INSTANCE.modal.button,
                   Styles.INSTANCE.modal.actionButton,
                 ]}
-                onPress={() => this.onSaveAsPDFWithOCR()}>
-                PDF with OCR
-              </Text>
-              <Text
-                style={[
-                  Styles.INSTANCE.modal.button,
-                  Styles.INSTANCE.modal.actionButton,
-                ]}
                 onPress={() => this.onSaveAsTIFF(true)}>
                 TIFF (1-bit B&W)
               </Text>

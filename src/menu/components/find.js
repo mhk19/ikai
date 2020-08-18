@@ -1,11 +1,11 @@
-import React, {useState, useEffect, useReducer} from 'react';
-import {View, StyleSheet, ScrollView, Text, Image} from 'react-native';
+import React, { useState, useEffect, useReducer } from 'react';
+import { View, StyleSheet, ScrollView, Text, Image } from 'react-native';
 import Request from './request';
 import axios from 'axios';
-import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
-import {IKAISERVER} from '../../ikai/constants';
-import {BreathingLoader} from 'react-native-indicator';
-import {Toast} from 'react-native-simple-toast';
+import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
+import { IKAISERVER } from '../../ikai/constants';
+import { BreathingLoader } from 'react-native-indicator';
+import Toast from 'react-native-simple-toast';
 const styles = StyleSheet.create({
   outerContainer: {
     height: '100%',
@@ -50,13 +50,14 @@ const styles = StyleSheet.create({
   },
 });
 export const callAPI = (url, token, setLoading) => {
-  if (setLoading) {
+  if (!setLoading) {
     setLoading(true);
   }
   return new Promise((resolve, reject) => {
     axios
-      .get(url, {headers: {Authorization: `Token ${token}`}})
-      .then((res) => {
+      .get(url, { headers: { Authorization: `Token ${token}` } })
+      .then(
+        (res) => {
         console.log(res.data);
         if (res.status !== 200) {
           if (setLoading) {
@@ -67,8 +68,27 @@ export const callAPI = (url, token, setLoading) => {
         } else {
           resolve(res.data);
         }
+        (error) => { 
+          console.log(error); 
+          if (setLoading) {
+            setLoading(false);
+          }
+          Toast.show('Error Received with status code: ' + res.status);
+          return;
+        }
       })
-      .catch((err) => reject(err));
+      .catch((err) => 
+      errorHandle(err)
+      );
+
+    async function errorHandle(error) {
+      console.log(error);
+        if (setLoading) {
+          setLoading(false);
+        }
+        Toast.show('Check your internet connection and try again');
+        return;
+      }
   });
 };
 
@@ -107,7 +127,7 @@ export const FindPage = (props) => {
         <TouchableOpacity onPress={searchUsers}>
           <Image
             source={require('../assets/search.png')}
-            style={{width: 30, height: 30, resizeMode: 'center'}}></Image>
+            style={{ width: 30, height: 30, resizeMode: 'center' }}></Image>
         </TouchableOpacity>
       </View>
       <ScrollView
