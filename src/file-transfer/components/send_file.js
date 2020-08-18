@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, Text, Image, StyleSheet} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import {EatBeanLoader} from 'react-native-indicator';
 
 const styles = StyleSheet.create({
   outerContainer: {
@@ -130,16 +131,7 @@ export class SendFilePage extends React.Component {
             </Text>
           </TouchableOpacity>
         ) : (
-          <View style={styles.pgOuterContainer}>
-            <View style={styles.pgInnerContainer}>
-              <View>
-                <Text>{this.props.percentage}%</Text>
-              </View>
-            </View>
-            <TouchableOpacity style={{marginLeft: '5%', marginTop: '8%'}}>
-              <Image source={require('../assets/cancel.png')} />
-            </TouchableOpacity>
-          </View>
+          <EatBeanLoader color={'#13C2C2'} size={40}></EatBeanLoader>
         )}
       </View>
     );
