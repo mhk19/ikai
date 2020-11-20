@@ -101,7 +101,7 @@ export class OfflineMainPage extends React.Component {
                 this.sendHandler();
               }}>
               <Image
-                source={require('./assets/send.png')}
+                source={require('../../../assets/images/share/offline/send.png')}
                 style={styles.image}
               />
             </TouchableOpacity>
@@ -111,7 +111,7 @@ export class OfflineMainPage extends React.Component {
                 this.receiveHandler();
               }}>
               <Image
-                source={require('./assets/receive.png')}
+                source={require('../../../assets/images/share/offline/receive.png')}
                 style={styles.image}
               />
             </TouchableOpacity>

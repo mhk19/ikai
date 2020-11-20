@@ -213,7 +213,7 @@ export const SendPage = (props) => {
         <View style={styles.innerContainer}>
           <Image
             style={styles.shareImageContainer}
-            source={require('../assets/share.png')}
+            source={require('../../../../assets/images/share/offline/share.png')}
           />
           <Text style={styles.descContainer1}>
             Start by choosing file you want to share.
@@ -225,7 +225,7 @@ export const SendPage = (props) => {
                 onPress={() => {
                   selectFile();
                 }}>
-                <Image source={require('../assets/plus.png')} />
+                <Image source={require('../../../../assets/images/share/offline/plus.png')} />
                 <Text style={{color: '#979797'}}>ADD FILE</Text>
               </TouchableOpacity>
               <View style={styles.disabledButton}>
@@ -245,7 +245,7 @@ export const SendPage = (props) => {
                 }}>
                 <View style={styles.iconContainer}>
                   <Image
-                    source={require('../assets/file_icon.png')}
+                    source={require('../../../../assets/images/share/offline/file_icon.png')}
                     style={styles.iconImgContainer}
                   />
                   <Text style={{color: '#979797'}}>FILE</Text>
@@ -275,7 +275,7 @@ export const SendPage = (props) => {
         <View style={{alignItems: 'center'}}>
           <Image
             style={styles.imageContainer}
-            source={require('../assets/sentfile.png')}
+            source={require('../../../../assets/images/share/offline/sentfile.png')}
           />
           <Text style={styles.descContainer2}>File successfully sent!</Text>
         </View>

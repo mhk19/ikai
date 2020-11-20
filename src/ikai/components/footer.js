@@ -19,16 +19,16 @@ const styles = StyleSheet.create({
 });
 
 const images = {
-  menu: require('../assets/menu.png'),
-  edit: require('../assets/edit.png'),
-  share: require('../assets/share.png'),
-  scan: require('../assets/scan.png'),
-  chat: require('../assets/chat.png'),
-  menu_active: require('../assets/menu_active.png'),
-  edit_active: require('../assets/edit_active.png'),
-  share_active: require('../assets/share_active.png'),
-  scan_active: require('../assets/scan_active.png'),
-  chat_active: require('../assets/chat_active.png'),
+  menu: require('../../../assets/images/ikai/menu.png'),
+  edit: require('../../../assets/images/ikai/edit.png'),
+  share: require('../../../assets/images/ikai/share.png'),
+  scan: require('../../../assets/images/ikai/scan.png'),
+  chat: require('../../../assets/images/ikai/chat.png'),
+  menu_active: require('../../../assets/images/ikai/menu_active.png'),
+  edit_active: require('../../../assets/images/ikai/edit_active.png'),
+  share_active: require('../../../assets/images/ikai/share_active.png'),
+  scan_active: require('../../../assets/images/ikai/scan_active.png'),
+  chat_active: require('../../../assets/images/ikai/chat_active.png'),
 };
 
 export function IkaiFooter(props) {

@@ -68,7 +68,7 @@ export class ShareMainPage extends React.Component {
           <View style={styles.upperContainer}>
             <View style={styles.imageContainer}>
               <Image
-                source={require('./assets/share_main.png')}
+                source={require('../../assets/images/share/share_main.png')}
                 style={styles.image}></Image>
             </View>
             <View>

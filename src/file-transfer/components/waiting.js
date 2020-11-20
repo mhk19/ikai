@@ -22,7 +22,7 @@ export class WaitingPage extends React.Component {
       <View style={styles.innerContainer}>
         <Image
           style={styles.imageContainer}
-          source={require('../assets/network.png')}
+          source={require('../../../assets/images/file-transfer/network.png')}
         />
         <Text
           style={{

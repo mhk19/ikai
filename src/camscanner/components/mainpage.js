@@ -32,7 +32,7 @@ export class Scanner extends React.Component {
             header: () => {
               return (
                 <MainHeader
-                  source={require('../assets/scanner_header.png')}
+                  source={require('../../../assets/images/camscanner/scanner_header.png')}
                   view={true}
                   open={this.open}
                 />

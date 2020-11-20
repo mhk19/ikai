@@ -103,7 +103,7 @@ export class LoginComponent extends React.Component {
   loginUser = () => {
     this.setState({showLoader: true});
     if (this.getPrivateKey(this.state.username)) {
-      console.log('http://' + IKAISERVER + '/rest-auth/login/');
+      console.log('login is clicked');
       fetch('http://' + IKAISERVER + '/rest-auth/login/', {
         method: 'POST',
         headers: {
@@ -158,7 +158,7 @@ export class LoginComponent extends React.Component {
   render() {
     return (
       <ImageBackground
-        source={require('../assets/background.png')}
+        source={require('../../../assets/images/user/background.png')}
         style={styles.background}>
         <View style={styles.outerContainer}>
           <View style={styles.formContainer}>

@@ -29,7 +29,7 @@ export class ReceiveRequests extends React.Component {
       <View style={styles.outerContainer}>
         <Image
           style={styles.imageContainer}
-          source={require('../assets/network.png')}
+          source={require('../../../assets/images/file-transfer/network.png')}
         />
         <Text style={styles.descContainer}>
           Please tap to accept connection request and continue.

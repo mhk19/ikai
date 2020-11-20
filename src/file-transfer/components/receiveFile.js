@@ -90,7 +90,7 @@ export class ReceiveFilePage extends React.Component {
           <View>
             <Image
               style={styles.imageContainer}
-              source={require('../assets/files.png')}
+              source={require('../../../assets/images/file-transfer/files.png')}
             />
             <Text style={(styles.descContainer, {color: '#979797'})}>
               Receiving file from
@@ -101,7 +101,7 @@ export class ReceiveFilePage extends React.Component {
           <View style={{alignItems: 'center'}}>
             <Image
               style={styles.imageContainer}
-              source={require('../assets/files.png')}
+              source={require('../../../assets/images/file-transfer/files.png')}
             />
             <Text style={(styles.descContainer, {color: '#13C2C2'})}>
               File successfully received!
@@ -111,7 +111,7 @@ export class ReceiveFilePage extends React.Component {
         <View style={styles.fileContainer}>
           <View style={styles.iconContainer}>
             <Image
-              source={require('../assets/file_icon.png')}
+              source={require('../../../assets/images/file-transfer/file_icon.png')}
               style={styles.iconImgContainer}
             />
             <Text style={{color: '#979797'}}>FILE</Text>
@@ -140,7 +140,9 @@ export class ReceiveFilePage extends React.Component {
               </View>
             </View>
             <TouchableOpacity style={{marginLeft: '5%', marginTop: '8%'}}>
-              <Image source={require('../assets/cancel.png')} />
+              <Image
+                source={require('../../../assets/images/file-transfer/cancel.png')}
+              />
             </TouchableOpacity>
           </View>
         )}

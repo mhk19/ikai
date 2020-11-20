@@ -64,7 +64,7 @@ export class MenuMainPage extends React.Component {
             justifyContent: 'center',
           }}>
           <Image
-            source={require('../assets/ikai.png')}
+            source={require('../../../assets/images/menu/ikai.png')}
             style={{
               width: '50%',
               height: '90%',
@@ -81,7 +81,7 @@ export class MenuMainPage extends React.Component {
             minWidth: '90%',
           }}>
           <Image
-            source={require('../../chat/assets/contact_avatar.png')}
+            source={require('../../../assets/images/chat/contact_avatar.png')}
             style={{
               height: 60,
               width: 60,
@@ -106,24 +106,24 @@ export class MenuMainPage extends React.Component {
             alignItems: 'center',
           }}>
           <MenuButton
-            source={require('../assets/find.png')}
+            source={require('../../../assets/images/menu/find.png')}
             text={'Find Friends'}
             page={'Find Friends'}
             navigation={this.props.navigation}
           />
           <MenuButton
-            source={require('../assets/request.png')}
+            source={require('../../../assets/images/menu/request.png')}
             text={'Your Requests'}
             page={'Your Requests'}
             navigation={this.props.navigation}
           />
           <MenuButton
-            source={require('../assets/settings.png')}
+            source={require('../../../assets/images/menu/settings.png')}
             text={'Settings'}
             disable={true}
           />
           <MenuButton
-            source={require('../assets/logout.png')}
+            source={require('../../../assets/images/menu/logout.png')}
             text={'Log out'}
             press={() => {
               Toast.show('Logging You out');

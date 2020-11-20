@@ -11,7 +11,7 @@ export class ScannerMainHeader extends React.Component {
           paddingBottom: 0,
         }}>
         <Image
-          source={require('../assets/scanner_header.png')}
+          source={require('../../../assets/images/camscanner/scanner_header.png')}
           style={{
             width: 120,
             height: 30,

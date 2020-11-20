@@ -124,7 +124,7 @@ export const FindPage = (props) => {
 
         <TouchableOpacity onPress={searchUsers}>
           <Image
-            source={require('../assets/search.png')}
+            source={require('../../../assets/images/menu/search.png')}
             style={{width: 30, height: 30, resizeMode: 'center'}}></Image>
         </TouchableOpacity>
       </View>

@@ -69,7 +69,7 @@ export class EditorMainPage extends React.Component {
             <View style={styles.imageContainer}>
               <Image
                 style={styles.image}
-                source={require('../assets/edit_main.png')}></Image>
+                source={require('../../../assets/images/editor/edit_main.png')}></Image>
             </View>
             <View style={styles.descrContainer}>
               <Text
