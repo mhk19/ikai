@@ -103,7 +103,7 @@ export class RegisterComponent extends React.Component {
     }
     const keys = this.generateKeyPair();
     console.log(JSON.stringify(keys.publicKey));
-    fetch('https://' + IKAISERVER + '/rest-auth/registration/', {
+    fetch('http://' + IKAISERVER + '/rest-auth/registration/', {
       method: 'POST',
       headers: {
         Accept: 'application/json',

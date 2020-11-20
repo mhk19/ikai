@@ -1,4 +1,4 @@
-package com.learnnative;
+package com.ikai;
 
 import com.facebook.react.ReactActivity;
 

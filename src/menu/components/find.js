@@ -102,7 +102,7 @@ export const FindPage = (props) => {
     }
     console.log;
     callAPI(
-      'https://' + IKAISERVER + '/users/search?query=' + query,
+      'http://' + IKAISERVER + '/users/search?query=' + query,
       props.route.params.token,
       setLoading,
     ).then((res) => {

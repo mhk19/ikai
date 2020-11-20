@@ -1,20 +1,20 @@
 import {DocumentDirectoryPath, ExternalDirectoryPath} from 'react-native-fs';
 import ScanbotSDK from 'react-native-scanbot-sdk';
-const licenseKey =
-  'GkmiDxmiPjzvYafbcn+AAP2h2rPRhM' +
-  '0nqYjVrlW3FVoLhaa4+R4WrwqQltvz' +
-  'Oux49e0wyIAW+HTU1lQ+gxS5uK9ZbB' +
-  'CwwxIhqx1LL3fdoJxRSVR/4tvzIgkF' +
-  'brOc8vZmXz4UzaOwuzykhWw5SS1w/b' +
-  'xg31CcBMDIFXpfaMum34q+zNR/8aRi' +
-  'YJ4La+hxgtFv3G8mWVZ97QWKHr/tea' +
-  'pOR474KB7bFghGKsbbsPwmj7x9yCSA' +
-  'hDSBavGeSAVHj+XnRFPMM106cEV9ZF' +
-  'qApx853w59uHsLVn3t1evPZ2QMGgBV' +
-  '55f1H9yeo+/VvTyrwppev5F1ij8axZ' +
-  'klaqv9m+tFMQ==\nU2NhbmJvdFNESw' +
-  'pjb20ubGVhcm5uYXRpdmUKMTU5OTYw' +
-  'OTU5OQoxMDcxMDIKMw==\n';
+const licenseKey=
+  "Gg9QeEyuQnaZnepKZKznE41hA5LWTt"+
+  "oHqUdUYcKpnLXfjciosgfqZlTm6Yqi"+
+  "Q/EbfgkoHwzXAA+ctx/jgNLedtwDB8"+
+  "m1kw1gXheY3g93qMZUAQG/200lZ1Fz"+
+  "NUwh4oRk5Kb1YxTEKGSC1WpNjrzMKW"+
+  "7YKAJg4cR/OcBkPlVBDrPdsl477ifM"+
+  "ubT0o2zjKYMgA8wrQdDlgnfu70xWZk"+
+  "Zl4AP7bPmJLHHDcm7F/cq9BdnS2WK3"+
+  "fuFeheLbKyKaGP17Q3lpfvI0N522Pn"+
+  "pjU5bK/65kVlgOMJm16588TXCsSgGy"+
+  "cI3Y9wuLpgUR+6B/cSJqbwgLKOemGw"+
+  "V0heW+BMxlVA==\nU2NhbmJvdFNESw"+
+  "pjb20uaWthaQoxNjA4MjQ5NTk5CjIw"+
+  "OTcxNTEKMw==\n";
 
 async function initScanBotSdk() {
   const options = {
