@@ -475,7 +475,7 @@ const SendingPage = (props) => {
         <View style={{alignItems: 'center'}}>
           <Image
             style={styles.imageContainer}
-            source={require('../assets/sentfile.png')}
+            source={require('../../../assets/images/file-transfer/sentfile.png')}
           />
           <Text style={styles.descContainer2}>File successfully sent!</Text>
         </View>
@@ -490,7 +490,7 @@ const ReceivingPage = (props) => {
       <View style={styles.innerContainer}>
         <Image
           style={styles.imageContainer}
-          source={require('../assets/files.png')}
+          source={require('../../../assets/images/file-transfer/files.png')}
         />
         <Text
           style={{
@@ -511,7 +511,7 @@ const ReceivingPage = (props) => {
         <View style={{alignItems: 'center'}}>
           <Image
             style={styles.imageContainer}
-            source={require('../assets/files.png')}
+            source={require('../../../assets/images/file-transfer/files.png')}
           />
           <Text style={styles.descContainer2}>File successfully received!</Text>
           <Text style={styles.descContainer2}>Check your Downloads folder</Text>
@@ -519,7 +519,7 @@ const ReceivingPage = (props) => {
         <View style={styles.fileContainer}>
           <View style={styles.iconContainer}>
             <Image
-              source={require('../assets/file_icon.png')}
+              source={require('../../../assets/images/file-transfer/file_icon.png')}
               style={styles.iconImgContainer}
             />
             <Text style={{color: '#979797'}}>FILE</Text>

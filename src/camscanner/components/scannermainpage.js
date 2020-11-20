@@ -85,7 +85,7 @@ export class ScannerMainPage extends BaseScreen {
           <View style={styles.upperContainer}>
             <View style={styles.imageContainer}>
               <Image
-                source={require('../assets/scanner_main.png')}
+                source={require('../../../assets/images/camscanner/scanner_main.png')}
                 style={styles.image}></Image>
             </View>
             <View style={styles.descContainer}>

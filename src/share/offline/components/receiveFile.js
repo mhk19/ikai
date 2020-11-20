@@ -104,7 +104,7 @@ export class ReceiveFileOffline extends React.Component {
           <View style={{alignItems: 'center'}}>
             <Image
               style={styles.imageContainer}
-              source={require('../assets/files.png')}
+              source={require('../../../../assets/images/share/offline/files.png')}
             />
             <Text style={styles.descContainer2}>
               File successfully received!
@@ -117,7 +117,7 @@ export class ReceiveFileOffline extends React.Component {
         <View style={styles.fileContainer}>
           <View style={styles.iconContainer}>
             <Image
-              source={require('../assets/file_icon.png')}
+              source={require('../../../../assets/images/share/offline/file_icon.png')}
               style={styles.iconImgContainer}
             />
             <Text style={{color: '#979797'}}>FILE</Text>

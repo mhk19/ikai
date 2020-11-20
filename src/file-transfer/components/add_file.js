@@ -137,7 +137,7 @@ export const AddFile = (props) => {
       <View style={styles.innerContainer}>
         <Image
           style={styles.shareImageContainer}
-          source={require('../assets/share.png')}
+          source={require('../../../assets/images/file-transfer/share.png')}
         />
         <Text style={styles.descContainer}>
           Start by choosing file you want to share.
@@ -145,14 +145,16 @@ export const AddFile = (props) => {
         {fileName === '' ? (
           <View style={styles.upperContainer}>
             <View>
-            <TouchableOpacity
-              style={styles.emptyFileContainer}
-              onPress={() => {
-                selectFile();
-              }}>
-              <Image source={require('../assets/plus.png')} />
-              <Text style={{color: '#979797'}}>ADD FILE</Text>
-            </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.emptyFileContainer}
+                onPress={() => {
+                  selectFile();
+                }}>
+                <Image
+                  source={require('../../../assets/images/file-transfer/plus.png')}
+                />
+                <Text style={{color: '#979797'}}>ADD FILE</Text>
+              </TouchableOpacity>
             </View>
             <View style={styles.disabledButton}>
               <Text style={{color: 'white', fontSize: 18, fontWeight: 'bold'}}>
@@ -168,8 +170,10 @@ export const AddFile = (props) => {
                 selectFile();
               }}>
               <View style={styles.iconContainer}>
-                <Image source={require('../assets/file_icon.png')} 
-                style={styles.iconImgContainer}/>
+                <Image
+                  source={require('../../../assets/images/file-transfer/file_icon.png')}
+                  style={styles.iconImgContainer}
+                />
                 <Text style={{color: '#979797'}}>FILE</Text>
               </View>
               <View style={styles.filenameContainer}>

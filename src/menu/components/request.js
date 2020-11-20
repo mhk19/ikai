@@ -41,13 +41,13 @@ export class Request extends React.Component {
     let image;
     switch (this.props.status) {
       case 'new':
-        image = require('../assets/add.png');
+        image = require('../../../assets/images/menu/add.png');
         break;
       case 'pending':
-        image = require('../assets/pending.png');
+        image = require('../../../assets/images/menu/pending.png');
         break;
       case 'accepted':
-        image = require('../assets/done.png');
+        image = require('../../../assets/images/menu/done.png');
         break;
     }
     this.state = {
@@ -67,7 +67,7 @@ export class Request extends React.Component {
       this.setState({
         status: 'accepted',
         disabled: true,
-        image: require('../assets/done.png'),
+        image: require('../../../assets/images/menu/done.png'),
       });
     });
   }
@@ -80,7 +80,7 @@ export class Request extends React.Component {
       this.setState({
         status: 'new',
         disabled: false,
-        image: require('../assets/add.png'),
+        image: require('../../../assets/images/menu/add.png'),
       });
     });
   }
@@ -94,7 +94,7 @@ export class Request extends React.Component {
       this.setState({
         status: 'pending',
         disabled: true,
-        image: require('../assets/pending.png'),
+        image: require('../../../assets/images/menu/pending.png'),
       });
     });
   }
@@ -104,7 +104,7 @@ export class Request extends React.Component {
     return (
       <View style={styles.contactContainer}>
         <Image
-          source={require('../../chat/assets/contact_avatar.png')}
+          source={require('../../../assets/images/chat/contact_avatar.png')}
           style={{
             width: 40,
             height: 40,
@@ -120,14 +120,14 @@ export class Request extends React.Component {
               onPress={() => this.accept(this.state.name)}
               style={{marginRight: '10%'}}>
               <Image
-                source={require('../assets/accept.png')}
+                source={require('../../../assets/images/menu/accept.png')}
                 style={{width: 20, height: 20, resizeMode: 'center'}}></Image>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => this.decline(this.state.name)}
               style={{marginRight: '10%'}}>
               <Image
-                source={require('../assets/decline.png')}
+                source={require('../../../assets/images/menu/decline.png')}
                 style={{
                   width: 20,
                   height: 20,

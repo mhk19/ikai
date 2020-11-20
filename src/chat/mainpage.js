@@ -22,7 +22,7 @@ export class Chat extends React.Component {
             header: (props) => {
               return (
                 <MainHeader
-                  source={require('./assets/chat_header.png')}
+                  source={require('../../assets/images/chat/chat_header.png')}
                   view={true}
                   open={this.open}
                 />

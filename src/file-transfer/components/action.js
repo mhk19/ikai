@@ -76,7 +76,7 @@ export const ActionPage = (props) => {
                 }}>
                 <Image
                   style={styles.imageContainer}
-                  source={require('../assets/send.png')}
+                  source={require('../../../assets/images/file-transfer/send.png')}
                 />
                 <View style={styles.buttonContainer}>
                   <Text
@@ -99,7 +99,7 @@ export const ActionPage = (props) => {
                 }}>
                 <Image
                   style={styles.imageContainer}
-                  source={require('../assets/receive.png')}
+                  source={require('../../../assets/images/file-transfer/receive.png')}
                 />
                 <View style={styles.buttonContainer}>
                   <Text

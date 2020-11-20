@@ -15,7 +15,7 @@ export class MainHeader extends React.Component {
           }}>
           <TouchableOpacity onPress={this.props.open}>
             <Image
-              source={require('../assets/menu.png')}
+              source={require('../../../assets/images/ikai/menu.png')}
               style={{
                 width: 30,
                 height: 30,

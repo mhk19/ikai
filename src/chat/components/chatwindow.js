@@ -238,11 +238,11 @@ export const ShareOnlineChatWindow = (props) => {
             props.navigation.pop();
           }}>
           <Image
-            source={require('../assets/back.png')}
+            source={require('../../../assets/images/chat/back.png')}
             style={{height: 30, width: 30}}></Image>
         </TouchableOpacity>
         <Image
-          source={require('../assets/contact_avatar.png')}
+          source={require('../../../assets/images/chat/contact_avatar.png')}
           style={{width: 40, height: 40, marginRight: '10%'}}></Image>
         <Text style={{color: 'white', fontSize: 25}}>{data.chatname}</Text>
       </View>
@@ -337,7 +337,7 @@ export const ShareOnlineChatWindow = (props) => {
             }}
             disabled={typedMessage === ''}>
             <Image
-              source={require('../assets/send.png')}
+              source={require('../../../assets/images/chat/send.png')}
               style={{height: 40, width: 40}}></Image>
           </TouchableOpacity>
         </View>
