@@ -44,7 +44,7 @@ export const ShareOnlineContacts = (props) => {
   const [dataReceived, setDataReceived] = useState(false);
   const [connectError, setConnectError] = useState(false);
   const refreshFunction = async () => {
-    await callAPI('https://' + IKAISERVER + '/users/chatrooms')
+    await callAPI('http://' + IKAISERVER + '/users/chatrooms')
       .then((res) => {
         console.log('Data is received.');
         setConnectError(false);
@@ -58,7 +58,7 @@ export const ShareOnlineContacts = (props) => {
   };
   useEffect(() => {
     callAPI(
-      'https://' + IKAISERVER + '/users/chatrooms',
+      'http://' + IKAISERVER + '/users/chatrooms',
       props.route.params.userDetails.token,
     )
       .then((res) => {

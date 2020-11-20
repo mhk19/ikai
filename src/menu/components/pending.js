@@ -63,7 +63,7 @@ export const PendingRequests = (props) => {
   }, []);
   const searchUsers = () => {
     callAPI(
-      'https://' + IKAISERVER + '/users/pending',
+      'http://' + IKAISERVER + '/users/pending',
       props.route.params.token,
       setLoading,
     ).then((res) => {
