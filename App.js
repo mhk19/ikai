@@ -142,10 +142,10 @@ export class App extends React.Component {
                     token: this.state.token,
                   },
                 }}></Tab.Screen>
-              <Tab.Screen
+              {/* <Tab.Screen
                 name="edit"
                 component={Editor}
-                initialParams={{user: this.openControlPanel}}></Tab.Screen>
+                initialParams={{user: this.openControlPanel}}></Tab.Screen> */}
               <Tab.Screen
                 name="scan"
                 component={Scanner}
